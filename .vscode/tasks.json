@@ -1,0 +1,31 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build",
+			"path": "be/",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "reflect-ai: build"
+		},
+		{
+			"type": "npm",
+			"script": "dev",
+			"path": "be/",
+			"group": "none",
+			"problemMatcher": [],
+			"label": "reflect-ai: dev",
+			"detail": "Run the development server with ts-node"
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"path": "be/",
+			"group": "none",
+			"problemMatcher": [],
+			"label": "reflect-ai: start",
+			"detail": "Start the production server"
+		}
+	]
+}

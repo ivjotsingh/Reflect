@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "Launch Program (reflect-ai)",
+      "program": "${workspaceFolder}/be/dist/aiMain.js",
+      "cwd": "${workspaceFolder}/be",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node",
+      "preLaunchTask": "reflect-ai: build",
+      "env": {
+        "REFLECT_ENVIRONMENT": "${config:REFLECT_ENVIRONMENT}",
+        "REFLECT_REGION": "${config:REFLECT_REGION}",
+        "REFLECT_OPENAI_API_KEY": "${config:REFLECT_OPENAI_API_KEY}",
+        "REFLECT_FIREBASE_CREDENTIALS": "${config:REFLECT_FIREBASE_CREDENTIALS}",
+      },
+      "outputCapture": "std"
+    }
+  ]
+}

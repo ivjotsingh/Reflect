@@ -1,0 +1,22 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true,
+        "**/dist": false
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true
+    },
+    "REFLECT_ENVIRONMENT": "development",
+    "REFLECT_REGION": "us-east-1",
+    "REFLECT_ENABLE_CONSOLE_LOGS": "true",
+    "REFLECT_ENABLE_DEBUG_LOGS": "true"
+}
