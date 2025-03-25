@@ -4,10 +4,10 @@
  * All Rights Reserved
  */
 
-import express, { Express, Request, Response, NextFunction } from 'express';
-import cors from 'cors';
+import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import cors from '@fastify/cors';
 import { conf } from '../conf';
-import { log } from '../log';
+import { log } from '../log/log';
 import { srvLogInfoWithRequestId } from './srvLog';
 
 export type AuthUser = {
@@ -17,17 +17,22 @@ export type AuthUser = {
     emailVerified?: boolean;
 }
 
-// Extend Express Request interface to include authUser
-declare global {
-    namespace Express {
-        interface Request {
-            authUser?: AuthUser;
-            requestId?: string;
-        }
+declare module 'fastify' {
+    export interface FastifyRequest {
+        authUser?: AuthUser;
+        requestId?: string;
+    }
+    export interface FastifyReply {
+        ngResponse: unknown;
+        ngError: boolean;
     }
 }
 
-export const srvServer: Express = express();
+export const srvServer: FastifyInstance = fastify({ 
+    logger: false, 
+    keepAliveTimeout: 60000, 
+    bodyLimit: 10 * 1024 * 1024 // 10MB
+});
 let server: any;
 
 export const srvLogsExcludedEndpoints: string[] = [
@@ -39,6 +44,12 @@ export const srvRoutesWithoutBodyLogging: string[] = [
     '/reflect/api/user/register'
 ];
 
+export interface SrvClientInfo {
+    clientIp: string;
+    userAgent: string;
+    referrer: string;
+}
+
 function srvLogsEnabled(requestUrl: string): boolean {
     for (let i = 0; i < srvLogsExcludedEndpoints.length; i++) {
         if (requestUrl.includes(srvLogsExcludedEndpoints[i])) {
@@ -48,17 +59,11 @@ function srvLogsEnabled(requestUrl: string): boolean {
     return true;
 }
 
-export interface SrvClientInfo {
-    clientIp: string;
-    userAgent: string;
-    referrer: string;
-}
-
-export function srvGetClientInfo(request: Request): SrvClientInfo {
+export function srvGetClientInfo(request: FastifyRequest): SrvClientInfo {
     const clientInfo: SrvClientInfo = {
         clientIp: request.ip || 'NA',
-        userAgent: request.headers['user-agent'] || 'NA',
-        referrer: request.headers['referer'] || 'NA'
+        userAgent: request.headers['user-agent'] as string || 'NA',
+        referrer: request.headers['referer'] as string || 'NA'
     };
 
     return clientInfo;
@@ -66,98 +71,121 @@ export function srvGetClientInfo(request: Request): SrvClientInfo {
 
 export async function srvInit() {
     // Enable CORS
-    srvServer.use(cors({
-        origin: ['http://localhost:3000', 'https://reflectai.com'],
+    await srvServer.register(cors, {
+        origin: ['https://cdn-bgp.bluestacks.com', 'http://localhost:3000',
+            'http://local.testngg.net', 'https://local.testngg.net', 'http://nitin.testngg.net:8000',
+            'https://local.now.gg', 'https://wsup.ai', 'https://ifp-demo.abctest.in', 'https://reflectai.com'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization']
-    }));
-
-    // Parse JSON bodies
-    srvServer.use(express.json({ limit: '10mb' }));
-
-    // Parse URL-encoded bodies
-    srvServer.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-    // Request logging middleware
-    srvServer.use((req: Request, res: Response, next: NextFunction) => {
-        // Generate a unique request ID
-        req.requestId = Date.now().toString() + Math.random().toString(36).substring(2, 15);
-
-        // Log incoming requests
-        if (srvLogsEnabled(req.url)) {
-            const logData = {
-                method: req.method,
-                url: req.url,
-                body: srvRoutesWithoutBodyLogging.includes(req.url) ? '[REDACTED]' : req.body
-            };
-
-            srvLogInfoWithRequestId(req,
-                `Incoming request, method: ${logData.method}, url: ${logData.url}`,
-                { body: logData.body });
-        }
-
-        next();
     });
 
-    // Error handling middleware
-    srvServer.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-        log.error('Error in handling request', {
-            error: err,
-            request: srvGetRequestInfoForLogging(req, true)
-        });
-
-        if (err.name === 'UnauthorizedError') {
-            return res.status(401).json({
-                status: 'error',
-                message: 'Unauthorized'
-            });
-        }
-
-        if (err.name === 'BadRequestError') {
-            return res.status(400).json({
-                status: 'error',
-                message: err.message
-            });
-        }
-
-        return res.status(500).json({
-            status: 'error',
-            message: 'Internal Server Error'
-        });
+    // Hook to set initial state for each request
+    srvServer.addHook('onRequest', async function srvOnRequestHook(request, reply) {
+        reply.ngError = false;
     });
 
-    log.info('Server initialized');
+    // Set error handler
+    srvServer.setErrorHandler(async function (error, request, reply) {
+        reply.ngError = true;
+        log.error('Error in handling request', { 
+            error: error.message,
+            stack: error.stack, 
+            url: request.url,
+            method: request.method
+        });
+        
+        // Handle different error types
+        if (error.statusCode === 401) {
+            return await reply.status(401).send({ 
+                status: 'error', 
+                message: 'Unauthorized' 
+            });
+        } else if (error.statusCode === 400) {
+            return await reply.status(400).send({ 
+                status: 'error', 
+                message: error.message || 'Bad request' 
+            });
+        } else {
+            return await reply.status(500).send({ 
+                status: 'error', 
+                message: 'Internal server error' 
+            });
+        }
+    });
+
+    // Logging for incoming requests
+    srvServer.addHook('preHandler', (request, reply, done) => {
+        const logData = { method: request.method, url: request.url, body: request.body };
+        if (srvLogsEnabled(request.url)) {
+            if (srvRoutesWithoutBodyLogging.includes(request.url)) {
+                logData.body = '[REDACTED]';
+            }
+            srvLogInfoWithRequestId(request,
+                `Incoming request, method: ${logData.method}, url: ${logData.url}`, { body: logData.body });
+        }
+        done();
+    });
+
+    // Capture response for logging
+    srvServer.addHook('onSend', (request, reply, payload, done) => {
+        reply.ngResponse = payload;
+        if (srvLogsEnabled(request.url)) {
+            if (srvRoutesWithoutBodyLogging.includes(request.url)) {
+                reply.ngResponse = '[REDACTED]';
+            }
+            srvLogInfoWithRequestId(request, 'onSend',
+                {
+                    requestUrl: request.url,
+                    statusCode: reply.statusCode
+                }
+            );
+        }
+        done();
+    });
+
+    // Log response completion time
+    srvServer.addHook('onResponse', async (request, reply) => {
+        if (srvLogsEnabled(request.url)) {
+            srvLogInfoWithRequestId(request, `Response completed in ${reply.getResponseTime()} ms`);
+        }
+    });
+
+    log.info('srv initialized');
 }
 
 export async function srvListen() {
-    const port = conf.env.port;
-    server = srvServer.listen(port, () => {
-        log.info(`Server listening on port ${port}`);
-    });
-    return server;
+    try {
+        const port = Number(conf.env.port) || 3000;
+        const host = conf.env.host || '0.0.0.0';
+        
+        server = await srvServer.listen({ port, host });
+        log.info(`Server is running on ${host}:${port}`);
+    } catch (error) {
+        log.error('Error starting server', { error });
+        process.exit(1);
+    }
 }
 
 export async function srvFini() {
     if (server) {
-        server.close();
+        await srvServer.close();
         log.info('Server closed');
     }
 }
 
-export function srvGetRequestInfoForLogging(request: Request, logRequestId: boolean = false) {
-    const info: any = {
-        method: request.method,
+export function srvGetRequestInfoForLogging(request: FastifyRequest, logRequestId: boolean = false) {
+    const requestInfo: any = {
         url: request.url,
-        ip: request.ip,
-        headers: {
-            'user-agent': request.headers['user-agent'],
-            'referer': request.headers['referer']
-        }
+        method: request.method,
+        headers: request.headers,
+        query: request.query,
+        params: request.params,
+        ip: request.ip
     };
-
+    
     if (logRequestId && request.requestId) {
-        info.requestId = request.requestId;
+        requestInfo.requestId = request.requestId;
     }
-
-    return info;
+    
+    return requestInfo;
 }

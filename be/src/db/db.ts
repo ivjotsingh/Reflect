@@ -285,13 +285,17 @@ export async function dbUpdateFields<T extends dbDocument>(
 
 export function dbInit(firebaseCredentials: string): void {
     try {
-        const serviceAccount = JSON.parse(firebaseCredentials);
-        firebase.initializeApp({
-            credential: firebase.credential.cert(serviceAccount)
-        });
+        type DdbFirestoreSettings = {
+            project_id: string;
+            private_key: string;
+            client_email: string;
+        };
+        const ddbFirestoreSettings = JSON.parse(firebaseCredentials) as DdbFirestoreSettings;
 
-        db = new dbFirestore({});
-        log.info('Database initialized');
+        db = new dbFirestore({
+            projectId: ddbFirestoreSettings.project_id,
+            credentials: { client_email: ddbFirestoreSettings.client_email, private_key: ddbFirestoreSettings.private_key }
+        });
     } catch (error) {
         log.error('Failed to initialize database', { error });
         throw error;

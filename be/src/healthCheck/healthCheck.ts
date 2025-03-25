@@ -5,9 +5,9 @@
  */
 
 import os from 'os';
-import { Request, Response } from 'express';
+import { FastifyRequest, FastifyReply } from 'fastify';
 import { conf } from '../conf';
-import { log } from '../log';
+import { log } from '../log/log';
 import { srvServer, srvAddRoute } from '../srv';
 
 interface HealthCheckResponse {
@@ -35,7 +35,7 @@ function secondsToHuman(seconds: number): string {
     return parts.join(' ');
 }
 
-async function healthCheckHandler(req: Request, res: Response): Promise<void> {
+async function healthCheckHandler(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     const response: HealthCheckResponse = {
         status: 'success',
         hostname: os.hostname(),
@@ -43,7 +43,7 @@ async function healthCheckHandler(req: Request, res: Response): Promise<void> {
         uptime: secondsToHuman(process.uptime()),
         version: conf.env.version,
     };
-    res.json(response);
+    reply.send(response);
 }
 
 interface ResourceUsageResponse {
@@ -55,7 +55,7 @@ interface ResourceUsageResponse {
     version: string;
 }
 
-async function resourceUsageHandler(req: Request, res: Response): Promise<void> {
+async function resourceUsageHandler(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     const response: ResourceUsageResponse = {
         status: 'success',
         hostname: os.hostname(),
@@ -64,7 +64,7 @@ async function resourceUsageHandler(req: Request, res: Response): Promise<void> 
         resourceUsage: process.resourceUsage(),
         version: conf.env.version,
     };
-    res.json(response);
+    reply.send(response);
 }
 
 export function healthCheckRoutesInit(path: string): void {

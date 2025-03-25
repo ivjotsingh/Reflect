@@ -31,14 +31,11 @@ export class ChatMessage extends dbDocument {
     }
 
     static override _collection(sessionId?: string): string {
-        if (sessionId) {
-            return `chatSessions/${sessionId}/messages`;
-        }
-        throw new Error('Session ID is required for chat messages');
+        return 'messages';
     }
 
     override _documentId(): string {
-        return this.userId + '_' + this.timestamp.toDate().getTime();
+        return this.chatId;
     }
 
     toResponse(): ChatMessageResponse {

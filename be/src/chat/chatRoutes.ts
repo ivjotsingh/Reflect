@@ -4,7 +4,7 @@
  * All Rights Reserved
  */
 
-import { Request, Response } from 'express';
+import { FastifyRequest, FastifyReply } from 'fastify';
 import { srvAddRoute, srvServer } from '../srv';
 import { log } from '../log/log';
 import { ChatMessage } from './chatModels';
@@ -14,12 +14,12 @@ import { Timestamp } from 'firebase-admin/firestore';
 import { utlNewId } from '../utl/utl';
 
 // Direct chat endpoint handler for v1/chat
-async function chatMessageHandler(req: Request, res: Response): Promise<any> {
+async function chatMessageHandler(request: FastifyRequest, reply: FastifyReply): Promise<any> {
     try {
-        const { message, userId } = req.body;
+        const { message, userId } = request.body as { message: string, userId: string };
 
         if (!message || typeof message !== 'string' || message.trim() === '') {
-            return res.status(400).json({
+            return reply.status(400).send({
                 status: 'error',
                 message: 'Message content is required'
             });
@@ -48,7 +48,7 @@ async function chatMessageHandler(req: Request, res: Response): Promise<any> {
                 log.error('Error processing AI response', { error, userId });
             });
 
-        return res.status(200).json({
+        return reply.status(200).send({
             status: 'success',
             data: {
                 message: {
@@ -59,10 +59,10 @@ async function chatMessageHandler(req: Request, res: Response): Promise<any> {
             }
         });
     } catch (error) {
-        log.error('Failed to send message', { error, userId: req.body.userId });
-        return res.status(500).json({
+        log.error('Error in chat message handler', { error });
+        return reply.status(500).send({
             status: 'error',
-            message: 'Failed to process message'
+            message: 'Internal server error'
         });
     }
 }

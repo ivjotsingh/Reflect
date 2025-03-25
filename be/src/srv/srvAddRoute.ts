@@ -4,43 +4,41 @@
  * All Rights Reserved
  */
 
-import { Express, Request, Response, NextFunction, RequestHandler } from 'express';
+import { FastifyInstance, FastifyRequest, FastifyReply, RouteHandlerMethod } from 'fastify';
 import { srvLogsExcludedEndpoints, srvRoutesWithoutBodyLogging } from './srv';
 
 /**
- * Add a route to the Express server
+ * Add a route to the Fastify server
  * @param method - HTTP method (GET or POST)
- * @param server - Express server instance
+ * @param server - Fastify server instance
  * @param endpoint - API endpoint path
  * @param handler - Route handler function
- * @param enableFeVersionCheck - Whether to enable frontend version check for this endpoint
  * @param enableLogs - Whether to enable request logging for this endpoint
  * @param preHandler - Optional middleware to run before the main handler
  */
 export function srvAddRoute(
     method: 'GET' | 'POST',
-    server: Express,
+    server: FastifyInstance,
     endpoint: string,
-    handler: RequestHandler,
-    enableFeVersionCheck = false,
+    handler: RouteHandlerMethod,
     enableLogs = true,
-    preHandler?: RequestHandler
+    preHandler?: RouteHandlerMethod
 ): void {
-    if (method === 'GET') {
-        if (preHandler) {
-            server.get(endpoint, preHandler, handler);
-        } else {
-            server.get(endpoint, handler);
-        }
-    } else {
-        if (preHandler) {
-            server.post(endpoint, preHandler, handler);
-        } else {
-            server.post(endpoint, handler);
-        }
+    const routeOptions: any = {
+        handler: handler,
+    };
+
+    if (preHandler) {
+        routeOptions.preHandler = preHandler;
     }
 
-    // Disable logs for this endpoint if specified
+    if (method === 'GET') {
+        server.get(endpoint, routeOptions);
+    } else {
+        server.post(endpoint, routeOptions);
+    }
+
+    // Add to excluded logs list if logs are disabled
     if (!enableLogs && !srvLogsExcludedEndpoints.includes(endpoint)) {
         srvLogsExcludedEndpoints.push(endpoint);
     }
