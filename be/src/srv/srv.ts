@@ -31,7 +31,7 @@ export const srvServer: Express = express();
 let server: any;
 
 export const srvLogsExcludedEndpoints: string[] = [
-    '/reflect/api/check/health'
+    '/reflect/api/healthCheck'
 ];
 
 export const srvRoutesWithoutBodyLogging: string[] = [
@@ -74,7 +74,7 @@ export async function srvInit() {
 
     // Parse JSON bodies
     srvServer.use(express.json({ limit: '10mb' }));
-    
+
     // Parse URL-encoded bodies
     srvServer.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -82,47 +82,47 @@ export async function srvInit() {
     srvServer.use((req: Request, res: Response, next: NextFunction) => {
         // Generate a unique request ID
         req.requestId = Date.now().toString() + Math.random().toString(36).substring(2, 15);
-        
+
         // Log incoming requests
         if (srvLogsEnabled(req.url)) {
-            const logData = { 
-                method: req.method, 
-                url: req.url, 
-                body: srvRoutesWithoutBodyLogging.includes(req.url) ? '[REDACTED]' : req.body 
+            const logData = {
+                method: req.method,
+                url: req.url,
+                body: srvRoutesWithoutBodyLogging.includes(req.url) ? '[REDACTED]' : req.body
             };
-            
-            srvLogInfoWithRequestId(req, 
-                `Incoming request, method: ${logData.method}, url: ${logData.url}`, 
+
+            srvLogInfoWithRequestId(req,
+                `Incoming request, method: ${logData.method}, url: ${logData.url}`,
                 { body: logData.body });
         }
-        
+
         next();
     });
 
     // Error handling middleware
     srvServer.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-        log.error('Error in handling request', { 
-            error: err, 
-            request: srvGetRequestInfoForLogging(req, true) 
+        log.error('Error in handling request', {
+            error: err,
+            request: srvGetRequestInfoForLogging(req, true)
         });
-        
+
         if (err.name === 'UnauthorizedError') {
-            return res.status(401).json({ 
-                status: 'error', 
-                message: 'Unauthorized' 
+            return res.status(401).json({
+                status: 'error',
+                message: 'Unauthorized'
             });
         }
-        
+
         if (err.name === 'BadRequestError') {
-            return res.status(400).json({ 
-                status: 'error', 
-                message: err.message 
+            return res.status(400).json({
+                status: 'error',
+                message: err.message
             });
         }
-        
-        return res.status(500).json({ 
-            status: 'error', 
-            message: 'Internal Server Error' 
+
+        return res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error'
         });
     });
 
@@ -154,10 +154,10 @@ export function srvGetRequestInfoForLogging(request: Request, logRequestId: bool
             'referer': request.headers['referer']
         }
     };
-    
+
     if (logRequestId && request.requestId) {
         info.requestId = request.requestId;
     }
-    
+
     return info;
 }

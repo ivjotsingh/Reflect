@@ -10,7 +10,7 @@ import { conf } from '../conf';
 import { log } from '../log';
 import { srvServer, srvAddRoute } from '../srv';
 
-interface CheckHealthResponse {
+interface HealthCheckResponse {
     status: string;
     hostname: string;
     pid: number;
@@ -35,8 +35,8 @@ function secondsToHuman(seconds: number): string {
     return parts.join(' ');
 }
 
-async function checkHealthHandler(req: Request, res: Response): Promise<void> {
-    const response: CheckHealthResponse = {
+async function healthCheckHandler(req: Request, res: Response): Promise<void> {
+    const response: HealthCheckResponse = {
         status: 'success',
         hostname: os.hostname(),
         pid: process.pid,
@@ -46,7 +46,7 @@ async function checkHealthHandler(req: Request, res: Response): Promise<void> {
     res.json(response);
 }
 
-interface CheckResourceUsageResponse {
+interface ResourceUsageResponse {
     status: string;
     hostname: string;
     pid: number;
@@ -55,8 +55,8 @@ interface CheckResourceUsageResponse {
     version: string;
 }
 
-async function checkResourceUsageHandler(req: Request, res: Response): Promise<void> {
-    const response: CheckResourceUsageResponse = {
+async function resourceUsageHandler(req: Request, res: Response): Promise<void> {
+    const response: ResourceUsageResponse = {
         status: 'success',
         hostname: os.hostname(),
         pid: process.pid,
@@ -67,11 +67,11 @@ async function checkResourceUsageHandler(req: Request, res: Response): Promise<v
     res.json(response);
 }
 
-export function checkRoutesInit(path: string): void {
-    srvAddRoute('GET', srvServer, `${path}/health`, checkHealthHandler);
-    srvAddRoute('GET', srvServer, `${path}/resourceUsage`, checkResourceUsageHandler);
+export function healthCheckRoutesInit(path: string): void {
+    srvAddRoute('GET', srvServer, `${path}`, healthCheckHandler);
+    srvAddRoute('GET', srvServer, `${path}/resourceUsage`, resourceUsageHandler);
 }
 
-export function checkInit(): void {
+export function healthCheckInit(): void {
     log.info('Health check module initialized');
 }

@@ -4,4 +4,4 @@
  * All Rights Reserved
  */
 
-export * from './check';
+export * from './healthCheck';
