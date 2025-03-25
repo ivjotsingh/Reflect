@@ -15,6 +15,8 @@ class ConfEnv {
         firebase: process.env.REFLECT_FIREBASE_CREDENTIALS || confThrow('REFLECT_FIREBASE_CREDENTIALS not set'),
         openAIAPIKey: process.env.REFLECT_OPENAI_API_KEY || 'sk-xxxxxx',
     };
+    public enableConsoleLogs = process.env.REFLECT_ENABLE_CONSOLE_LOGS !== 'false';
+    public enableDebugLogs = process.env.REFLECT_ENABLE_DEBUG_LOGS === 'true';
     public environment = process.env.REFLECT_ENVIRONMENT || 'development';
     public host = '';   // initialized later
     public port = process.env.REFLECT_PORT || 8080;

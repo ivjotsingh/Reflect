@@ -5,10 +5,7 @@
  */
 
 import * as firebase from 'firebase-admin';
-import {
-    DocumentData, FieldValue, Firestore, OrderByDirection,
-    Timestamp, WhereFilterOp
-} from 'firebase-admin/firestore';
+import { FieldValue, Firestore, OrderByDirection, Timestamp } from 'firebase-admin/firestore';
 import { log } from '../log';
 import { firestore } from 'firebase-admin';
 
@@ -29,7 +26,7 @@ class DdbFirestore extends Firestore {
         let onSuccessFunctors: Function[] = [];
         const txnMetadata: Record<string, unknown> = {};
         let singleCycleTxnMetadata: Record<string, unknown> = {};
-        
+
         try {
             const txnResult = await super.runTransaction(async txn => {
                 retryCount = retryCount + 1;
@@ -111,9 +108,9 @@ export class DdbDocument {
     static _collection(grandParentId?: string, parentId?: string): string {
         throw new Error(`Should be implemented by derived class, parentId ${parentId}, grandParentId ${grandParentId}`);
     }
-    
-    _documentId(): string { 
-        throw new Error('Should be implemented by derived class.'); 
+
+    _documentId(): string {
+        throw new Error('Should be implemented by derived class.');
     }
 
     async delete(grandParentId?: string, parentId?: string) {
@@ -205,7 +202,7 @@ export async function ddbGetById<T extends DdbDocument>(
     if (!snapshot.exists) return null;
 
     const data = snapshot.data() as Partial<T>;
-    return new cls(data);
+    return new cls(data) as T;
 }
 
 export async function ddbGetByIdOrThrow<T extends DdbDocument>(
@@ -252,7 +249,7 @@ export async function ddbGetByFields<T extends DdbDocument, K extends keyof T>(
     const snapshot = txn ? await txn.get(query) : await query.get();
     return snapshot.docs.map(doc => {
         const data = doc.data() as Partial<T>;
-        return new cls(data);
+        return new cls(data) as T;
     });
 }
 
@@ -283,32 +280,6 @@ export async function ddbUpdateFields<T extends DdbDocument>(
     };
 
     await docRef.update(updateData);
-}
-
-export async function ddbCreateOrUpdate<T extends DdbDocument>(
-    cls: DdbDocumentType<T>,
-    documentId: string,
-    fields: { [key: string]: any },
-    parentId?: string
-): Promise<void> {
-    let docRef;
-    if (parentId) {
-        docRef = ddb.collection(cls._collection(parentId)).doc(documentId);
-    } else {
-        docRef = ddb.collection(cls._collection()).doc(documentId);
-    }
-
-    const snapshot = await docRef.get();
-    const updateData = {
-        ...fields,
-        updatedAt: ddbServerTimestamp()
-    };
-
-    if (!snapshot.exists) {
-        updateData.createdAt = ddbServerTimestamp();
-    }
-
-    await docRef.set(updateData, { merge: true });
 }
 
 export function ddbInit(firebaseCredentials: string): void {
