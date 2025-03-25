@@ -4,20 +4,20 @@
  * All Rights Reserved
  */
 
-import { log, logFini, logInit, LogErrorMonitoringTools } from './log';
+import { log, logFini, logInit, LogErrorMonitoringTools } from './log/log';
 import { conf, confInit } from './conf';
-import { ddbInit } from './ddb';
+import { dbInit } from './db';
 import { healthCheckInit, healthCheckRoutesInit } from './healthCheck';
 import { srvFini, srvInit, srvListen } from './srv';
-// import { chatRoutesInit } from './chat';
-import * as Sentry from '@sentry/node';
+import { chatInit, chatRoutesInit } from './chat';
+import { llmInit } from './llm';
 
 async function reflectRoutesInit() {
     /*
      * Initialize API routes
      */
     healthCheckRoutesInit('/reflect/api/healthCheck');
-    // chatRoutesInit('/reflect/api/chat');
+    chatRoutesInit('/reflect/api/chat');
 }
 
 export async function reflectInit() {
@@ -29,20 +29,11 @@ export async function reflectInit() {
         version: conf.env.version
     }, 'reflect-ai', logErrorTargets);
 
-    // Initialize Sentry for error reporting
-    Sentry.init({
-        dsn: conf.env.credentials.openAIAPIKey, // Using an existing credential as placeholder
-        environment: conf.env.environment,
-        release: conf.env.version,
-        integrations: [
-            new Sentry.Integrations.Http({ tracing: true }),
-        ],
-        tracesSampleRate: 1.0,
-    });
-
     healthCheckInit();
     await confInit();
-    ddbInit(conf.env.credentials.firebase);
+    dbInit(conf.env.credentials.firebase);
+    await llmInit();
+    chatInit();
     await srvInit();
 
     await reflectRoutesInit();

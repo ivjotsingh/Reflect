@@ -4,4 +4,8 @@
  * All Rights Reserved
  */
 
-export * from './ddb';
+import { log } from '../log';
+
+export function chatInit(): void {
+    log.info('Chat module initialized');
+}
