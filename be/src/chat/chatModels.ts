@@ -13,6 +13,25 @@ export interface ChatMessageResponse {
     timestamp: number;
 }
 
+export class ChatSession extends dbDocument {
+    public userId: string;
+    public lastActive: dbTimestamp;
+
+    constructor(init: Partial<ChatSession>) {
+        super(init);
+        this.userId = init.userId || '';
+        this.lastActive = init.lastActive || new Date() as any;
+    }
+
+    static override _collection(): string {
+        return 'ChatSessions';
+    }
+
+    override _documentId(): string {
+        return this.userId; // Using userId as sessionId
+    }
+}
+
 export class ChatMessage extends dbDocument {
     public chatId: string;
     public sessionId: string;  // Using userId as sessionId in our simplified model
@@ -31,7 +50,10 @@ export class ChatMessage extends dbDocument {
     }
 
     static override _collection(sessionId?: string): string {
-        return 'messages';
+        if (sessionId) {
+            return `ChatSessions/${sessionId}/ChatMessages`;
+        }
+        throw new Error('Session ID is required for chat messages');
     }
 
     override _documentId(): string {

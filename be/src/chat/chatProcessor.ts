@@ -15,6 +15,7 @@ import { EventEmitter } from 'events';
 import { chatMemory } from './chatMemory';
 import { Timestamp } from 'firebase-admin/firestore';
 import { db } from '../db/db';
+import { utlNewId } from '../utl/utl';
 
 // System prompt for the AI therapist
 const SYSTEM_PROMPT = `You are ReflectAI, an empathetic and professional AI therapist. 
@@ -188,17 +189,22 @@ export async function chatGetResponse(userId: string, message: string): Promise<
 export async function chatSaveAIResponse(userId: string, content: string): Promise<ChatMessage> {
     try {
         // Create AI message
+        const chatId = utlNewId('chat');
+        const sessionId = userId; // Using userId as sessionId
+        
         const aiMessage = new ChatMessage({
-            sessionId: userId,
+            chatId,
+            sessionId,
             content: content,
             role: 'assistant',
             userId,
             timestamp: Timestamp.now()
         });
         
-        // Save message to database
-        const aiMessageRef = db.collection(ChatMessage._collection(userId)).doc(aiMessage._documentId());
-        await aiMessageRef.set(JSON.parse(JSON.stringify(aiMessage)));
+        // Save message to database - use dbCreateOrUpdate which handles the collection path
+        await db.collection(ChatMessage._collection(sessionId))
+            .doc(aiMessage._documentId())
+            .set(JSON.parse(JSON.stringify(aiMessage)));
         
         log.info('AI response saved', { userId });
         return aiMessage;
