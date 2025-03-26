@@ -7,6 +7,7 @@
     <title>ReflectAI - Therapy Session</title>
     <link rel="stylesheet" href="css/chat.css">
     <link rel="stylesheet" href="css/breathing-exercise.css">
+    <link rel="stylesheet" href="css/cbt.css">
 </head>
 
 <body>
@@ -77,6 +78,24 @@
                                 </svg>
                             </div>
                             <span>De-Stress</span>
+                        </div>
+                        <div class="feature-item" id="cbt-button">
+                            <div class="feature-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M12 12V12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M8 12V12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M16 12V12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <span>Cognitive Behavioral Therapy Tools</span>
                         </div>
                     </div>
                 </div>
@@ -391,6 +410,270 @@
                         </svg>
                         Try Another Technique
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CBT Modal -->
+    <div id="cbt-modal" class="cbt-modal-overlay">
+        <div class="cbt-modal">
+            <div class="cbt-modal-header modal-header">
+                <h2>Cognitive Behavioral Therapy Tools</h2>
+                <button id="close-cbt-modal" class="close-modal-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="cbt-content">
+                <!-- Worksheet Selection Screen -->
+                <div id="worksheet-selection" class="worksheet-selection">
+                    <div class="cbt-reminder">
+                        <h4>CBT Worksheet Selection</h4>
+                        <p>Choose one of these evidence-based Cognitive Behavioral Therapy Tools techniques to help
+                            manage
+                            your thoughts, behaviors, and worries:</p>
+                    </div>
+
+                    <div class="worksheet-option" data-worksheet="thought-record">
+                        <h3><span class="icon-thought-record"></span>Thought Record</h3>
+                        <p>Challenge and reframe negative thoughts by examining the evidence. This technique helps you
+                            identify cognitive distortions and develop more balanced perspectives, reducing anxiety and
+                            depression.</p>
+                        <button class="start-btn">Start Worksheet</button>
+                    </div>
+
+                    <div class="worksheet-option" data-worksheet="behavioral-activation">
+                        <h3><span class="icon-behavioral"></span>Behavioral Activation</h3>
+                        <p>Schedule positive activities to improve your mood and energy. This technique helps break the
+                            cycle of depression by gradually increasing engagement with rewarding experiences.</p>
+                        <button class="start-btn">Start Worksheet</button>
+                    </div>
+
+                    <div class="worksheet-option" data-worksheet="worry-time">
+                        <h3><span class="icon-worry-time"></span>Worry Time</h3>
+                        <p>Set aside dedicated time to address worries, preventing them from interfering with your daily
+                            life. This technique helps reduce anxiety by containing worry to specific periods.</p>
+                        <button class="start-btn">Start Worksheet</button>
+                    </div>
+                </div>
+
+                <!-- Thought Record Section -->
+                <div id="thought-record-section" class="cbt-section">
+                    <button class="back-to-selection">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Back to Worksheets
+                    </button>
+
+                    <div class="cbt-reminder">
+                        <h4>About Thought Records</h4>
+                        <p>Thought records help you identify and challenge negative thinking patterns. By examining the
+                            evidence for and against your thoughts, you can develop more balanced perspectives.</p>
+                    </div>
+
+                    <div class="thought-record-form">
+                        <h3>Create a New Thought Record</h3>
+                        <div class="form-group">
+                            <label for="situation">What happened?</label>
+                            <textarea id="situation"
+                                placeholder="Describe the specific situation that triggered your thoughts..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="automatic-thought">What went through your mind?</label>
+                            <textarea id="automatic-thought"
+                                placeholder="What negative thoughts or beliefs came up for you?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="emotions">How did you feel?</label>
+                            <textarea id="emotions"
+                                placeholder="What emotions did you experience? How intense were they (0-100%)?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="evidence-for">Why might this thought be true?</label>
+                            <textarea id="evidence-for"
+                                placeholder="What facts or experiences support this thought?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="evidence-against">Why might this thought not be true?</label>
+                            <textarea id="evidence-against"
+                                placeholder="What facts or experiences suggest this thought might not be accurate?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="balanced-thought">More helpful perspective</label>
+                            <textarea id="balanced-thought"
+                                placeholder="What's a more realistic or helpful way to think about the situation?"></textarea>
+                        </div>
+                        <button id="save-thought-record" class="cbt-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                <polyline points="7 3 7 8 15 8"></polyline>
+                            </svg>
+                            Save Thought Record
+                        </button>
+                    </div>
+
+                    <div class="thought-records-list">
+                        <h3>Your Thought Records</h3>
+                        <div id="thought-records-container">
+                            <!-- Thought records will be populated here -->
+                            <div class="empty-state">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="9" y1="3" x2="9" y2="21"></line>
+                                </svg>
+                                <p>You haven't created any thought records yet</p>
+                                <button class="cbt-btn">Create Your First Record</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Behavioral Activation Section -->
+                <div id="behavioral-activation-section" class="cbt-section">
+                    <button class="back-to-selection">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Back to Worksheets
+                    </button>
+
+                    <div class="cbt-reminder">
+                        <h4>About Behavioral Activation</h4>
+                        <p>Behavioral activation helps you engage in positive activities to improve your mood. By
+                            scheduling and tracking these activities, you can increase your sense of accomplishment and
+                            pleasure.</p>
+                    </div>
+
+                    <div class="activity-form">
+                        <h3>Schedule a Positive Activity</h3>
+                        <div class="form-group">
+                            <label for="activity-name">Activity Name</label>
+                            <input type="text" id="activity-name" placeholder="e.g., Morning walk, Reading, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="activity-type">Activity Type</label>
+                            <select id="activity-type">
+                                <option value="pleasure">Pleasure</option>
+                                <option value="mastery">Mastery/Achievement</option>
+                                <option value="social">Social Connection</option>
+                                <option value="physical">Physical Health</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="activity-date">Date & Time</label>
+                            <input type="datetime-local" id="activity-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="activity-notes">Notes (Optional)</label>
+                            <textarea id="activity-notes"
+                                placeholder="Any additional details about this activity..."></textarea>
+                        </div>
+                        <button id="save-activity" class="cbt-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            Schedule Activity
+                        </button>
+                    </div>
+
+                    <div class="activity-list">
+                        <h3>Your Scheduled Activities</h3>
+                        <div id="activities-container">
+                            <!-- Activities will be populated here -->
+                            <div class="empty-state">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <p>You haven't scheduled any activities yet</p>
+                                <button class="cbt-btn">Schedule Your First Activity</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Worry Time Section -->
+                <div id="worry-time-section" class="cbt-section">
+                    <button class="back-to-selection">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Back to Worksheets
+                    </button>
+
+                    <div class="cbt-reminder">
+                        <h4>About Worry Time</h4>
+                        <p>Worry Time is a technique where you set aside a specific time to address your worries, rather
+                            than letting them consume you throughout the day. This helps you manage anxiety and develop
+                            effective solutions.</p>
+                    </div>
+
+                    <div class="worry-form">
+                        <h3>Schedule Your Daily Worry Time</h3>
+                        <div class="form-group">
+                            <label for="worry-time-preference">Preferred Worry Time</label>
+                            <input type="time" id="worry-time-preference">
+                        </div>
+                        <div class="form-group">
+                            <label for="worry-duration">Duration (minutes)</label>
+                            <input type="number" id="worry-duration" min="10" max="30" value="15">
+                        </div>
+                        <button id="save-worry-time" class="cbt-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Set Worry Time
+                        </button>
+                    </div>
+
+                    <div class="worry-container">
+                        <div class="worry-list-container">
+                            <h3>Worry List</h3>
+                            <div class="form-group">
+                                <textarea id="new-worry"
+                                    placeholder="Write down a worry to address during your worry time..."></textarea>
+                                <button id="add-worry" class="cbt-btn">Add Worry</button>
+                            </div>
+                            <div id="worries-container" class="worry-list">
+                                <!-- Worries will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="solution-list-container">
+                            <h3>Solutions & Action Plans</h3>
+                            <div class="form-group">
+                                <textarea id="new-solution"
+                                    placeholder="Write down a potential solution or action step..."></textarea>
+                                <button id="add-solution" class="cbt-btn">Add Solution</button>
+                            </div>
+                            <div id="solutions-container" class="solution-list">
+                                <!-- Solutions will be populated here -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1350,6 +1633,562 @@
 
             // Initial state
             showSelectionView();
+        });
+    </script>
+
+    <script>
+        // CBT Modal Functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const cbtButton = document.getElementById('cbt-button');
+            const cbtModal = document.getElementById('cbt-modal');
+            const closeCbtModal = document.getElementById('close-cbt-modal');
+
+            // Open modal
+            cbtButton.addEventListener('click', () => {
+                cbtModal.style.display = 'flex';
+                showWorksheetSelection();
+            });
+
+            // Close modal
+            closeCbtModal.addEventListener('click', () => {
+                cbtModal.style.display = 'none';
+            });
+
+            // Worksheet selection
+            const worksheetSelection = document.getElementById('worksheet-selection');
+            const worksheets = document.querySelectorAll('.cbt-section');
+            const worksheetOptions = document.querySelectorAll('.worksheet-option');
+
+            // Handle worksheet selection
+            worksheetOptions.forEach(option => {
+                const startBtn = option.querySelector('.start-btn');
+                startBtn.addEventListener('click', () => {
+                    const worksheetId = option.getAttribute('data-worksheet');
+                    worksheetSelection.style.display = 'none';
+                    worksheets.forEach(section => section.style.display = 'none');
+                    document.getElementById(`${worksheetId}-section`).style.display = 'block';
+                });
+            });
+
+            // Back to worksheet selection
+            const backToSelection = document.querySelectorAll('.back-to-selection');
+            backToSelection.forEach(button => {
+                button.addEventListener('click', () => {
+                    showWorksheetSelection();
+                });
+            });
+
+            // Initial setup - hide all worksheets, show selection screen
+            function showWorksheetSelection() {
+                worksheetSelection.style.display = 'flex';
+                worksheets.forEach(section => section.style.display = 'none');
+            }
+
+            // When opening modal, always show selection screen first
+            showWorksheetSelection();
+
+            // ============== THOUGHT RECORD FUNCTIONALITY ==============
+            const thoughtRecordForm = document.querySelector('.thought-record-form');
+            const saveThoughtRecordBtn = document.getElementById('save-thought-record');
+            const thoughtRecordsContainer = document.getElementById('thought-records-container');
+            const thoughtRecords = JSON.parse(localStorage.getItem('thoughtRecords') || '[]');
+
+            // Display existing thought records
+            function displayThoughtRecords() {
+                if (thoughtRecords.length === 0) {
+                    thoughtRecordsContainer.innerHTML = `
+                        <div class="empty-state">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="9" y1="3" x2="9" y2="21"></line>
+                            </svg>
+                            <p>You haven't created any thought records yet</p>
+                            <button class="cbt-btn">Create Your First Record</button>
+                        </div>
+                    `;
+
+                    // Add event listener to the "Create Your First Record" button
+                    const createFirstRecordBtn = thoughtRecordsContainer.querySelector('.cbt-btn');
+                    if (createFirstRecordBtn) {
+                        createFirstRecordBtn.addEventListener('click', () => {
+                            // Scroll to the form
+                            thoughtRecordForm.scrollIntoView({ behavior: 'smooth' });
+                        });
+                    }
+                    return;
+                }
+
+                thoughtRecordsContainer.innerHTML = '';
+                thoughtRecords.forEach((record, index) => {
+                    const recordItem = document.createElement('div');
+                    recordItem.className = 'thought-record-item';
+                    recordItem.innerHTML = `
+                        <div class="thought-record-header">
+                            <h4>Thought Record #${index + 1}</h4>
+                            <span class="thought-record-date">${new Date(record.timestamp).toLocaleString()}</span>
+                        </div>
+                        <div class="thought-record-detail"><strong>Situation:</strong> ${record.situation}</div>
+                        <div class="thought-record-detail"><strong>Thought:</strong> ${record.automaticThought}</div>
+                        <div class="thought-record-detail"><strong>Emotions:</strong> ${record.emotions}</div>
+                        <div class="thought-record-detail"><strong>Evidence For:</strong> ${record.evidenceFor}</div>
+                        <div class="thought-record-detail"><strong>Evidence Against:</strong> ${record.evidenceAgainst}</div>
+                        <div class="thought-record-detail"><strong>Balanced Thought:</strong> ${record.balancedThought}</div>
+                        <button class="cbt-btn delete-record" data-index="${index}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Delete
+                        </button>
+                    `;
+                    thoughtRecordsContainer.appendChild(recordItem);
+
+                    // Add event listener to delete button
+                    const deleteBtn = recordItem.querySelector('.delete-record');
+                    deleteBtn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.getAttribute('data-index'));
+                        thoughtRecords.splice(index, 1);
+                        localStorage.setItem('thoughtRecords', JSON.stringify(thoughtRecords));
+                        displayThoughtRecords();
+                    });
+                });
+            }
+
+            // Save thought record
+            saveThoughtRecordBtn.addEventListener('click', () => {
+                const situation = document.getElementById('situation').value.trim();
+                const automaticThought = document.getElementById('automatic-thought').value.trim();
+                const emotions = document.getElementById('emotions').value.trim();
+                const evidenceFor = document.getElementById('evidence-for').value.trim();
+                const evidenceAgainst = document.getElementById('evidence-against').value.trim();
+                const balancedThought = document.getElementById('balanced-thought').value.trim();
+
+                if (!situation || !automaticThought) {
+                    alert('Please fill in at least the Situation and Automatic Thought fields.');
+                    return;
+                }
+
+                const thoughtRecord = {
+                    situation,
+                    automaticThought,
+                    emotions,
+                    evidenceFor,
+                    evidenceAgainst,
+                    balancedThought,
+                    timestamp: new Date().toISOString()
+                };
+
+                thoughtRecords.unshift(thoughtRecord); // Add to beginning of array
+                localStorage.setItem('thoughtRecords', JSON.stringify(thoughtRecords));
+
+                // Clear form
+                document.getElementById('situation').value = '';
+                document.getElementById('automatic-thought').value = '';
+                document.getElementById('emotions').value = '';
+                document.getElementById('evidence-for').value = '';
+                document.getElementById('evidence-against').value = '';
+                document.getElementById('balanced-thought').value = '';
+
+                displayThoughtRecords();
+            });
+
+            // Initialize thought records display
+            displayThoughtRecords();
+
+            // ============== BEHAVIORAL ACTIVATION FUNCTIONALITY ==============
+            const saveActivityBtn = document.getElementById('save-activity');
+            const activitiesContainer = document.getElementById('activities-container');
+            const activities = JSON.parse(localStorage.getItem('activities') || '[]');
+
+            // Activity type icons
+            const activityIcons = {
+                pleasure: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line>
+                           </svg>`,
+                mastery: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                          </svg>`,
+                social: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                         </svg>`,
+                physical: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path>
+                           </svg>`
+            };
+
+            // Display activities
+            function displayActivities() {
+                if (activities.length === 0) {
+                    activitiesContainer.innerHTML = `
+                        <div class="empty-state">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <p>You haven't scheduled any activities yet</p>
+                            <button class="cbt-btn">Schedule Your First Activity</button>
+                        </div>
+                    `;
+
+                    // Add event listener to the "Schedule Your First Activity" button
+                    const scheduleFirstActivityBtn = activitiesContainer.querySelector('.cbt-btn');
+                    if (scheduleFirstActivityBtn) {
+                        scheduleFirstActivityBtn.addEventListener('click', () => {
+                            // Scroll to the form
+                            document.querySelector('.activity-form').scrollIntoView({ behavior: 'smooth' });
+                        });
+                    }
+                    return;
+                }
+
+                activitiesContainer.innerHTML = '';
+
+                // Sort activities by date
+                const sortedActivities = [...activities].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                sortedActivities.forEach((activity, index) => {
+                    const activityDate = new Date(activity.date);
+                    const now = new Date();
+                    const isPast = activityDate < now;
+
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'activity-item';
+                    if (isPast) {
+                        activityItem.classList.add('past-activity');
+                    }
+
+                    activityItem.innerHTML = `
+                        <div class="activity-info">
+                            <div class="activity-title">${activity.name}</div>
+                            <div class="activity-schedule">
+                                ${activityIcons[activity.type]}
+                                <span>${activityDate.toLocaleString()}</span>
+                                ${isPast ? '<span class="activity-completed">Passed</span>' : ''}
+                            </div>
+                            ${activity.notes ? `<div class="activity-notes">${activity.notes}</div>` : ''}
+                        </div>
+                        <div class="activity-controls">
+                            <button class="activity-control mark-complete" title="Mark as completed" data-index="${index}">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                Mark as completed
+                            </button>
+                            <button class="activity-control delete-activity" title="Delete activity" data-index="${index}">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
+                    `;
+
+                    activitiesContainer.appendChild(activityItem);
+
+                    // Add event listeners to controls
+                    const markCompleteBtn = activityItem.querySelector('.mark-complete');
+                    const deleteActivityBtn = activityItem.querySelector('.delete-activity');
+
+                    markCompleteBtn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.getAttribute('data-index'));
+                        activities[index].completed = true;
+                        localStorage.setItem('activities', JSON.stringify(activities));
+                        displayActivities();
+                    });
+
+                    deleteActivityBtn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.getAttribute('data-index'));
+                        activities.splice(index, 1);
+                        localStorage.setItem('activities', JSON.stringify(activities));
+                        displayActivities();
+                    });
+                });
+            }
+
+            // Save activity
+            saveActivityBtn.addEventListener('click', () => {
+                const name = document.getElementById('activity-name').value.trim();
+                const type = document.getElementById('activity-type').value;
+                const date = document.getElementById('activity-date').value;
+                const notes = document.getElementById('activity-notes').value.trim();
+
+                if (!name || !date) {
+                    alert('Please fill in the Activity Name and Date fields.');
+                    return;
+                }
+
+                const activity = {
+                    name,
+                    type,
+                    date,
+                    notes,
+                    completed: false,
+                    timestamp: new Date().toISOString()
+                };
+
+                activities.push(activity);
+                localStorage.setItem('activities', JSON.stringify(activities));
+
+                // Clear form
+                document.getElementById('activity-name').value = '';
+                document.getElementById('activity-type').value = 'pleasure';
+                document.getElementById('activity-notes').value = '';
+
+                displayActivities();
+            });
+
+            // Initialize activities display
+            displayActivities();
+
+            // ============== WORRY TIME FUNCTIONALITY ==============
+            const saveWorryTimeBtn = document.getElementById('save-worry-time');
+            const addWorryBtn = document.getElementById('add-worry');
+            const addSolutionBtn = document.getElementById('add-solution');
+            const worriesContainer = document.getElementById('worries-container');
+            const solutionsContainer = document.getElementById('solutions-container');
+
+            let worryTime = localStorage.getItem('worryTime') || '';
+            let worryDuration = localStorage.getItem('worryDuration') || '15';
+            const worries = JSON.parse(localStorage.getItem('worries') || '[]');
+            const solutions = JSON.parse(localStorage.getItem('solutions') || '[]');
+
+            // Set initial worry time values if they exist
+            if (worryTime) {
+                document.getElementById('worry-time-preference').value = worryTime;
+            }
+            if (worryDuration) {
+                document.getElementById('worry-duration').value = worryDuration;
+            }
+
+            // Save worry time
+            saveWorryTimeBtn.addEventListener('click', () => {
+                worryTime = document.getElementById('worry-time-preference').value;
+                worryDuration = document.getElementById('worry-duration').value;
+
+                if (!worryTime) {
+                    alert('Please set a time for your daily worry time.');
+                    return;
+                }
+
+                localStorage.setItem('worryTime', worryTime);
+                localStorage.setItem('worryDuration', worryDuration);
+
+                alert(`Your daily worry time has been set for ${formatWorryTime(worryTime)} for ${worryDuration} minutes.`);
+            });
+
+            // Format worry time
+            function formatWorryTime(timeString) {
+                const [hours, minutes] = timeString.split(':');
+                const date = new Date();
+                date.setHours(parseInt(hours));
+                date.setMinutes(parseInt(minutes));
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            // Display worries
+            function displayWorries() {
+                worriesContainer.innerHTML = '';
+
+                if (worries.length === 0) {
+                    worriesContainer.innerHTML = '<div class="empty-state-mini">No worries added yet</div>';
+                    return;
+                }
+
+                worries.forEach((worry, index) => {
+                    const worryItem = document.createElement('div');
+                    worryItem.className = 'worry-item';
+                    worryItem.innerHTML = `
+                        <div class="worry-text">${worry.text}</div>
+                        <div class="worry-time">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Added ${new Date(worry.timestamp).toLocaleDateString()}
+                        </div>
+                        <button class="worry-remove" data-index="${index}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    `;
+
+                    worriesContainer.appendChild(worryItem);
+
+                    // Add event listener to remove button
+                    const removeBtn = worryItem.querySelector('.worry-remove');
+                    removeBtn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.getAttribute('data-index'));
+                        worries.splice(index, 1);
+                        localStorage.setItem('worries', JSON.stringify(worries));
+                        displayWorries();
+                    });
+                });
+            }
+
+            // Display solutions
+            function displaySolutions() {
+                solutionsContainer.innerHTML = '';
+
+                if (solutions.length === 0) {
+                    solutionsContainer.innerHTML = '<div class="empty-state-mini">No solutions added yet</div>';
+                    return;
+                }
+
+                solutions.forEach((solution, index) => {
+                    const solutionItem = document.createElement('div');
+                    solutionItem.className = 'solution-item';
+                    solutionItem.innerHTML = `
+                        <div class="solution-text">${solution.text}</div>
+                        <div class="solution-priority">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            Added ${new Date(solution.timestamp).toLocaleDateString()}
+                        </div>
+                        <button class="solution-remove" data-index="${index}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    `;
+
+                    solutionsContainer.appendChild(solutionItem);
+
+                    // Add event listener to remove button
+                    const removeBtn = solutionItem.querySelector('.solution-remove');
+                    removeBtn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.getAttribute('data-index'));
+                        solutions.splice(index, 1);
+                        localStorage.setItem('solutions', JSON.stringify(solutions));
+                        displaySolutions();
+                    });
+                });
+            }
+
+            // Add worry
+            addWorryBtn.addEventListener('click', () => {
+                const worryText = document.getElementById('new-worry').value.trim();
+
+                if (!worryText) {
+                    alert('Please enter a worry.');
+                    return;
+                }
+
+                const worry = {
+                    text: worryText,
+                    timestamp: new Date().toISOString()
+                };
+
+                worries.unshift(worry); // Add to beginning of array
+                localStorage.setItem('worries', JSON.stringify(worries));
+
+                // Clear input
+                document.getElementById('new-worry').value = '';
+
+                displayWorries();
+            });
+
+            // Add solution
+            addSolutionBtn.addEventListener('click', () => {
+                const solutionText = document.getElementById('new-solution').value.trim();
+
+                if (!solutionText) {
+                    alert('Please enter a solution or action step.');
+                    return;
+                }
+
+                const solution = {
+                    text: solutionText,
+                    timestamp: new Date().toISOString()
+                };
+
+                solutions.unshift(solution); // Add to beginning of array
+                localStorage.setItem('solutions', JSON.stringify(solutions));
+
+                // Clear input
+                document.getElementById('new-solution').value = '';
+
+                displaySolutions();
+            });
+
+            // Initialize worry time
+            displayWorries();
+            displaySolutions();
+
+            // Check if it's worry time
+            function checkWorryTime() {
+                if (!worryTime) return;
+
+                const now = new Date();
+                const [hours, minutes] = worryTime.split(':');
+                const worryTimeDate = new Date();
+                worryTimeDate.setHours(parseInt(hours));
+                worryTimeDate.setMinutes(parseInt(minutes));
+                worryTimeDate.setSeconds(0);
+
+                const timeDiff = Math.abs(now - worryTimeDate);
+
+                // If it's within 5 minutes of worry time, show a notification
+                if (timeDiff <= 5 * 60 * 1000) {
+                    // Check if we've already shown a notification today
+                    const lastNotification = localStorage.getItem('lastWorryTimeNotification');
+                    const today = new Date().toDateString();
+
+                    if (lastNotification !== today) {
+                        if (Notification.permission === "granted") {
+                            const notification = new Notification("It's Worry Time", {
+                                body: `Time to address your worries for ${worryDuration} minutes.`,
+                                icon: "/favicon.ico"
+                            });
+
+                            notification.onclick = function () {
+                                window.focus();
+                                cbtModal.style.display = 'flex';
+                                document.querySelector('[data-tab="worry-time"]').click();
+                            };
+
+                            localStorage.setItem('lastWorryTimeNotification', today);
+                        } else if (Notification.permission !== "denied") {
+                            Notification.requestPermission();
+                        }
+                    }
+                }
+            }
+
+            // Request notification permission
+            if ("Notification" in window) {
+                if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+                    Notification.requestPermission();
+                }
+            }
+
+            // Check for worry time every minute
+            setInterval(checkWorryTime, 60 * 1000);
+            checkWorryTime(); // Check immediately on load
+
+            // Add keyboard shortcuts for text areas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+
+                        // Find the closest button and click it
+                        const form = this.closest('.form-group').parentNode;
+                        const button = form.querySelector('button');
+                        if (button) {
+                            button.click();
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>

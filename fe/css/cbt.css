@@ -1,0 +1,518 @@
+/* CBT (Cognitive Behavioral Therapy Tools) Styles */
+.cbt-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.cbt-modal {
+    background: linear-gradient(135deg, #1a2639 0%, #0d1b2a 100%);
+    padding: 0;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    color: #ecf0f1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    animation: modalFadeIn 0.4s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0.1) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cbt-modal-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cbt-modal-header h2::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233498db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpath d='M12 6v6l4 2'%3E%3C/path%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.cbt-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.cbt-tab {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.cbt-tab:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.cbt-tab.active {
+    color: #3498db;
+}
+
+.cbt-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    border-radius: 3px 3px 0 0;
+}
+
+.cbt-content {
+    padding: 2rem;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.cbt-section {
+    display: none;
+}
+
+.cbt-section.active {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Thought Record Styles */
+.thought-record-form {
+    background: rgba(26, 38, 57, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.thought-record-form h3 {
+    color: #3498db;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.form-group textarea,
+.form-group input {
+    width: 100%;
+    background: rgba(13, 27, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.8rem;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-group textarea:focus,
+.form-group input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.cbt-btn {
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cbt-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.cbt-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Thought Records List */
+.thought-records-list {
+    margin-top: 2rem;
+}
+
+.thought-record-item {
+    background: rgba(13, 27, 42, 0.7);
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid #3498db;
+}
+
+.thought-record-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+}
+
+.thought-record-date {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.thought-record-item h4 {
+    color: #fff;
+    margin-bottom: 0.8rem;
+}
+
+.thought-record-detail {
+    margin-bottom: 0.5rem;
+}
+
+.thought-record-detail strong {
+    color: #3498db;
+    margin-right: 0.5rem;
+}
+
+/* Behavioral Activation Styles */
+.activity-list {
+    margin-top: 1.5rem;
+}
+
+.activity-item {
+    background: rgba(26, 38, 57, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    padding: 1.2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activity-info {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.activity-schedule {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.activity-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.activity-control {
+    background: rgba(13, 27, 42, 0.7);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.activity-control:hover {
+    background: rgba(52, 152, 219, 0.3);
+    color: #fff;
+}
+
+.activity-form {
+    background: rgba(26, 38, 57, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+/* Worry Time Styles */
+.worry-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.worry-list,
+.solution-list {
+    background: rgba(26, 38, 57, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    padding: 1.5rem;
+    border-radius: 12px;
+    height: 350px;
+    overflow-y: auto;
+}
+
+.worry-item,
+.solution-item {
+    background: rgba(13, 27, 42, 0.7);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    position: relative;
+}
+
+.worry-text,
+.solution-text {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0.5rem;
+}
+
+.worry-time,
+.solution-priority {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.worry-remove,
+.solution-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.worry-remove:hover,
+.solution-remove:hover {
+    color: #e74c3c;
+}
+
+/* Reminder box */
+.cbt-reminder {
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.2), rgba(52, 152, 219, 0.05));
+    border-left: 3px solid #3498db;
+    padding: 1.2rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.cbt-reminder h4 {
+    color: #3498db;
+    margin-bottom: 0.5rem;
+}
+
+.cbt-reminder p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.empty-state svg {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Worksheet Selection Screen */
+.worksheet-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+.worksheet-option {
+    background: rgba(26, 38, 57, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.worksheet-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-color: #3498db;
+}
+
+.worksheet-option h3 {
+    color: #3498db;
+    margin-bottom: 0.8rem;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.worksheet-option p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.worksheet-option .start-btn {
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.back-to-selection {
+    background: rgba(26, 38, 57, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.back-to-selection:hover {
+    background: rgba(26, 38, 57, 1);
+    color: white;
+}
+
+.back-to-selection svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Icon styles for worksheet options */
+.icon-thought-record,
+.icon-behavioral,
+.icon-worry-time {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.icon-thought-record {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233498db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'%3E%3C/path%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.icon-behavioral {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233498db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'%3E%3C/path%3E%3Cpath d='M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.icon-worry-time {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233498db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cbt-modal {
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .worry-container {
+        grid-template-columns: 1fr;
+    }
+
+    .worry-list,
+    .solution-list {
+        height: 250px;
+    }
+
+    .cbt-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
