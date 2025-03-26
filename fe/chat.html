@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,38 +8,62 @@
     <style>
         :root {
             /* Professional calming colors - light theme */
-            --primary-color: #3498db; /* Bright blue */
-            --secondary-color: #2980b9; /* Darker blue */
-            --accent-color: #4fb0c6; /* Teal blue */
-            --background-color: #f5f8fb; /* Very light blue-white */
-            --text-color: #2c3e50; /* Dark blue-gray */
-            --message-user-bg: #e3f2fd; /* Light blue */
-            --message-ai-bg: #e1f5fe; /* Very light blue */
-            --border-color: #cfd8dc; /* Light gray-blue */
-            --hover-color: #5ac8fa; /* Sky blue */
-            --light-accent: #f1f8fe; /* Very light blue */
+            --primary-color: #3498db;
+            /* Bright blue */
+            --secondary-color: #2980b9;
+            /* Darker blue */
+            --accent-color: #4fb0c6;
+            /* Teal blue */
+            --background-color: #f5f8fb;
+            /* Very light blue-white */
+            --text-color: #2c3e50;
+            /* Dark blue-gray */
+            --message-user-bg: #e3f2fd;
+            /* Light blue */
+            --message-ai-bg: #e1f5fe;
+            /* Very light blue */
+            --border-color: #cfd8dc;
+            /* Light gray-blue */
+            --hover-color: #5ac8fa;
+            /* Sky blue */
+            --light-accent: #f1f8fe;
+            /* Very light blue */
             --gradient-start: #3498db;
             --gradient-end: #2980b9;
-            --sidebar-bg: #2c3e50; /* Dark blue-gray */
-            --chat-area-bg: #ffffff; /* White */
+            --sidebar-bg: #2c3e50;
+            /* Dark blue-gray */
+            --chat-area-bg: #ffffff;
+            /* White */
         }
 
         [data-theme="dark"] {
             /* Dark professional theme */
-            --primary-color: #4fb0c6; /* Teal blue */
-            --secondary-color: #3498db; /* Bright blue */
-            --accent-color: #5ac8fa; /* Sky blue */
-            --background-color: #1a2639; /* Very dark blue */
-            --text-color: #ecf0f1; /* Off-white */
-            --message-user-bg: #2c3e50; /* Dark blue-gray */
-            --message-ai-bg: #34495e; /* Medium dark blue */
-            --border-color: #2c3e50; /* Dark blue-gray */
-            --hover-color: #3498db; /* Bright blue */
-            --light-accent: #2c3e50; /* Dark blue-gray */
+            --primary-color: #4fb0c6;
+            /* Teal blue */
+            --secondary-color: #3498db;
+            /* Bright blue */
+            --accent-color: #5ac8fa;
+            /* Sky blue */
+            --background-color: #1a2639;
+            /* Very dark blue */
+            --text-color: #ecf0f1;
+            /* Off-white */
+            --message-user-bg: #2c3e50;
+            /* Dark blue-gray */
+            --message-ai-bg: #34495e;
+            /* Medium dark blue */
+            --border-color: #2c3e50;
+            /* Dark blue-gray */
+            --hover-color: #3498db;
+            /* Bright blue */
+            --light-accent: #2c3e50;
+            /* Dark blue-gray */
             --gradient-start: #1a2639;
             --gradient-end: #2c3e50;
-            --sidebar-bg: #0d1b2a; /* Very dark blue */
-            --chat-area-bg: #1a2639; /* Dark blue */
+            --sidebar-bg: #0d1b2a;
+            /* Very dark blue */
+            --chat-area-bg: #1a2639;
+            /* Dark blue */
         }
 
         * {
@@ -51,7 +76,8 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
-            background-color: #0d1b2a; /* Fixed dark background */
+            background-color: #0d1b2a;
+            /* Fixed dark background */
             color: #ecf0f1;
             position: relative;
             min-height: 100vh;
@@ -60,7 +86,8 @@
         }
 
         header {
-            background: #0d1b2a; /* Match body dark background */
+            background: #0d1b2a;
+            /* Match body dark background */
             color: white;
             padding: 0.75rem 2rem;
             display: flex;
@@ -78,8 +105,10 @@
             flex-direction: column;
             flex-grow: 1;
             padding: 1.5rem;
-            height: calc(100vh - 64px); /* Full height minus header */
-            background-color: #0d1b2a; /* Dark navy background */
+            height: calc(100vh - 64px);
+            /* Full height minus header */
+            background-color: #0d1b2a;
+            /* Dark navy background */
         }
 
         /* Chat container */
@@ -108,7 +137,7 @@
             overflow-y: auto;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         /* Chat area */
         .chat-area {
             flex: 1;
@@ -122,7 +151,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             background-image: linear-gradient(to bottom, #1a2639, #1f3756);
         }
-        
+
         /* Messages container */
         .messages-container {
             flex: 1;
@@ -132,7 +161,7 @@
             flex-direction: column;
             gap: 1rem;
         }
-        
+
         /* Message form container */
         .message-form-container {
             padding: 1rem 2rem;
@@ -142,14 +171,14 @@
             border-top: 1px solid rgba(44, 62, 80, 0.4);
             position: relative;
         }
-        
+
         .message-form {
             display: flex;
             width: 100%;
             margin: 0 auto;
             position: relative;
         }
-        
+
         .message-input {
             flex: 1;
             border: none;
@@ -165,7 +194,7 @@
             min-height: 42px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) inset;
         }
-        
+
         .message-input::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
@@ -230,16 +259,16 @@
             color: white;
             border-top-left-radius: 4px;
         }
-        
+
         /* Chat controls */
         .chat-controls {
             position: absolute;
-            bottom: 10px;
+            bottom: 4px;
             right: 10px;
             display: flex;
             gap: 8px;
         }
-        
+
         .chat-control-button {
             width: 36px;
             height: 36px;
@@ -253,20 +282,20 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        
+
         .chat-control-button:hover {
             background-color: #2980b9;
             transform: translateY(-2px);
         }
-        
+
         .send-button {
             background-color: #3498db;
         }
-        
-        .edit-button {
+
+        .call-button {
             background-color: #2ecc71;
         }
-        
+
         .voice-button {
             background-color: #e74c3c;
         }
@@ -277,12 +306,12 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .brand-logo {
             width: 36px;
             height: 36px;
         }
-        
+
         .brand-name {
             font-size: 1.5rem;
             font-weight: bold;
@@ -295,7 +324,7 @@
             align-items: center;
             gap: 2rem;
         }
-        
+
         .nav-link {
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
@@ -306,16 +335,16 @@
             padding: 0.5rem 0;
             transition: color 0.2s;
         }
-        
+
         .nav-link:hover {
             color: white;
         }
-        
+
         .nav-link.active {
             color: white;
             font-weight: 600;
         }
-        
+
         .nav-link.active::after {
             content: '';
             position: absolute;
@@ -332,7 +361,7 @@
             align-items: center;
             gap: 1rem;
         }
-        
+
         .user-avatar {
             width: 36px;
             height: 36px;
@@ -359,7 +388,7 @@
             justify-content: center;
             transition: background-color 0.2s;
         }
-        
+
         .theme-toggle:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -368,7 +397,7 @@
         .sidebar-section {
             margin-bottom: 1.5rem;
         }
-        
+
         .sidebar-section h3 {
             font-size: 0.9rem;
             margin-bottom: 0.8rem;
@@ -377,7 +406,7 @@
             opacity: 0.8;
             position: relative;
         }
-        
+
         .sidebar-section h3::after {
             content: '';
             position: absolute;
@@ -387,14 +416,14 @@
             height: 2px;
             background-color: var(--accent-color);
         }
-        
+
         /* Features list */
         .features-list {
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
         }
-        
+
         .feature-item {
             display: flex;
             align-items: center;
@@ -404,15 +433,15 @@
             cursor: pointer;
             transition: background-color 0.2s;
         }
-        
+
         .feature-item:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        
+
         .feature-item.active {
             background-color: rgba(255, 255, 255, 0.15);
         }
-        
+
         .feature-icon {
             width: 24px;
             height: 24px;
@@ -421,7 +450,7 @@
             justify-content: center;
             opacity: 0.9;
         }
-        
+
         .feature-label {
             font-size: 0.9rem;
         }
@@ -435,7 +464,7 @@
             flex-direction: column;
             gap: 0.8rem;
         }
-        
+
         .mood-tracker h3 {
             font-size: 0.9rem;
             color: #fff;
@@ -545,10 +574,12 @@
                 transform: translateY(0px);
                 background-color: var(--text-color);
             }
+
             28% {
                 transform: translateY(-5px);
                 background-color: var(--primary-color);
             }
+
             44% {
                 transform: translateY(0px);
                 background-color: var(--text-color);
@@ -561,6 +592,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -571,9 +603,11 @@
             0% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.05);
             }
+
             100% {
                 transform: scale(1);
             }
@@ -597,16 +631,16 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .loader.active {
             opacity: 1;
         }
-        
+
         .loader-dots {
             display: flex;
             gap: 3px;
         }
-        
+
         .loader-dot {
             width: 6px;
             height: 6px;
@@ -614,20 +648,24 @@
             background-color: white;
             animation: loaderDot 1.4s infinite ease-in-out both;
         }
-        
+
         .loader-dot:nth-child(1) {
             animation-delay: -0.32s;
         }
-        
+
         .loader-dot:nth-child(2) {
             animation-delay: -0.16s;
         }
-        
+
         @keyframes loaderDot {
-            0%, 80%, 100% { 
+
+            0%,
+            80%,
+            100% {
                 transform: scale(0);
-            } 
-            40% { 
+            }
+
+            40% {
                 transform: scale(1);
             }
         }
@@ -637,11 +675,11 @@
             .chat-container {
                 padding: 0.5rem;
             }
-            
+
             .message {
                 max-width: 90%;
             }
-            
+
             .header-title h1 {
                 font-size: 1rem;
             }
@@ -653,18 +691,19 @@
             align-items: center;
             gap: 1rem;
         }
-        
+
         /* User avatar styles */
         .user-area {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .user-avatar {
             width: 36px;
             height: 36px;
-            border-radius: 8px; /* Square with rounded corners */
+            border-radius: 8px;
+            /* Square with rounded corners */
             background-color: #3498db;
             display: flex;
             align-items: center;
@@ -685,7 +724,7 @@
             color: white;
             z-index: 10;
         }
-        
+
         .greeting-bubble {
             background-color: #3498db;
             padding: 10px 15px;
@@ -696,17 +735,17 @@
             color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .greeting-text {
             font-weight: bold;
             font-size: 18px;
         }
-        
+
         .greeting-time {
             font-size: 14px;
             opacity: 0.9;
         }
-        
+
         .greeting-avatar {
             width: 46px;
             height: 46px;
@@ -729,28 +768,37 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="brand">
-            <svg class="brand-logo" width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 0C22.4 0 0 22.4 0 50C0 77.6 22.4 100 50 100C77.6 100 100 77.6 100 50C100 22.4 77.6 0 50 0ZM50 90C27.9 90 10 72.1 10 50C10 27.9 27.9 10 50 10C72.1 10 90 27.9 90 50C90 72.1 72.1 90 50 90Z" fill="white"/>
-                <path d="M65 35C65 43.3 58.3 50 50 50C41.7 50 35 43.3 35 35C35 26.7 41.7 20 50 20C58.3 20 65 26.7 65 35Z" fill="white"/>
-                <path d="M35 65C35 56.7 41.7 50 50 50C58.3 50 65 56.7 65 65C65 73.3 58.3 80 50 80C41.7 80 35 73.3 35 65Z" fill="white"/>
+            <svg class="brand-logo" width="36" height="36" viewBox="0 0 100 100" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M50 0C22.4 0 0 22.4 0 50C0 77.6 22.4 100 50 100C77.6 100 100 77.6 100 50C100 22.4 77.6 0 50 0ZM50 90C27.9 90 10 72.1 10 50C10 27.9 27.9 10 50 10C72.1 10 90 27.9 90 50C90 72.1 72.1 90 50 90Z"
+                    fill="white" />
+                <path
+                    d="M65 35C65 43.3 58.3 50 50 50C41.7 50 35 43.3 35 35C35 26.7 41.7 20 50 20C58.3 20 65 26.7 65 35Z"
+                    fill="white" />
+                <path
+                    d="M35 65C35 56.7 41.7 50 50 50C58.3 50 65 56.7 65 65C65 73.3 58.3 80 50 80C41.7 80 35 73.3 35 65Z"
+                    fill="white" />
             </svg>
             <div class="brand-name">ReflectAI</div>
         </div>
-        
+
         <nav class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
             <a href="chat.html" class="nav-link active">Chat</a>
-            <a href="#" class="nav-link">Plans & Pricing</a>
-            <a href="#" class="nav-link">Blog</a>
+            <a href="#" class="nav-link">Dilemma Resolver</a>
+            <a href="#" class="nav-link">Life Simulator</a>
         </nav>
-        
+
         <div class="user-area">
             <button id="theme-toggle" class="theme-toggle">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
             <div class="user-avatar">U</div>
@@ -765,33 +813,47 @@
                     <div class="features-list">
                         <div class="feature-item active">
                             <div class="feature-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 90C27.9 90 10 72.1 10 50C10 27.9 27.9 10 50 10C72.1 10 90 27.9 90 50C90 72.1 72.1 90 50 90Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 90C27.9 90 10 72.1 10 50C10 27.9 27.9 10 50 10C72.1 10 90 27.9 90 50C90 72.1 72.1 90 50 90Z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
                                 </svg>
                             </div>
                             <span>AI Chat Therapist</span>
                         </div>
                         <div class="feature-item">
                             <div class="feature-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
                                 </svg>
                             </div>
                             <span>Dilemma Resolver</span>
                         </div>
                         <div class="feature-item">
                             <div class="feature-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
                                 </svg>
                             </div>
                             <span>Life Simulator</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="sidebar-section">
                     <h3>How are you feeling today?</h3>
                     <div class="mood-options">
@@ -820,7 +882,7 @@
                             <div class="mood-label">Angry</div>
                         </div>
                     </div>
-                    
+
                     <div class="mood-history-container">
                         <h4>Your Mood History</h4>
                         <div class="mood-history">
@@ -857,45 +919,44 @@
                 </div>
             </div>
             <div class="chat-area">
-                <!-- User greeting in top-right corner -->
-                <div class="user-greeting">
-                    <div class="greeting-bubble">
-                        <div class="greeting-text">XYZ</div>
-                        <div class="greeting-time">15:20</div>
-                    </div>
-                    <div class="greeting-avatar">U</div>
-                </div>
-
                 <!-- Chat Messages -->
                 <div id="chat-messages" class="messages-container"></div>
-                
+
                 <!-- Message Input -->
                 <div class="message-form-container">
                     <form id="message-form" class="message-form">
-                        <textarea 
-                            id="message-input" 
-                            class="message-input" 
-                            placeholder="Type a message..." 
-                            rows="1"
-                        ></textarea>
+                        <textarea id="message-input" class="message-input" placeholder="Type a message..."
+                            rows="1"></textarea>
                         <div class="chat-controls">
                             <button type="submit" class="chat-control-button send-button">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </button>
-                            <button type="button" class="chat-control-button edit-button">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <button type="button" class="chat-control-button call-button">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                                        stroke="white" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
                                 </svg>
                             </button>
                             <button type="button" class="chat-control-button voice-button">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12 19v4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M8 23h8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="white"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="white" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M12 19v4" stroke="white" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M8 23h8" stroke="white" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
                                 </svg>
                             </button>
                         </div>
@@ -904,7 +965,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="loader" class="loader">
         <span>Thinking</span>
         <div class="loader-dots">
@@ -919,6 +980,19 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlOKcjfXEiMJuR2wdIHrjBzcFgkrCk4TQ",
+            authDomain: "dev-berlin-ivjot.firebaseapp.com",
+            projectId: "dev-berlin-ivjot",
+            storageBucket: "dev-berlin-ivjot.firebasestorage.app",
+            messagingSenderId: "105421402396",
+            appId: "1:105421402396:web:a18924ff258193aed40ad9"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         // DOM Elements
         const themeToggle = document.getElementById('theme-toggle');
         const messageForm = document.getElementById('message-form');
@@ -930,9 +1004,12 @@
         // Configuration
         const CONFIG = {
             api: {
-                baseUrl: '/api',
+                baseUrl: 'http://127.0.0.1:8080/reflect/api/chat',
                 endpoints: {
-                    chat: '/v1/chat'
+                    postMessage: '/v1/message'
+                },
+                postMessageFullEndpoint() {
+                    return this.baseUrl + this.endpoints.postMessage;
                 }
             },
             ui: {
@@ -944,7 +1021,7 @@
         function setInitialTheme() {
             const savedTheme = localStorage.getItem(CONFIG.ui.themeStorageKey);
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
+
             if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
                 document.body.setAttribute('data-theme', 'dark');
                 updateThemeToggleIcon('dark');
@@ -995,17 +1072,17 @@
         function saveMood(mood) {
             // Save to localStorage for persistence
             localStorage.setItem('reflectAI_mood', mood);
-            
+
             // Get current date for recording in history
             const today = new Date();
             const dayLabel = today.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3);
-            
+
             // Get the emoji for the selected mood
             const moodEmoji = document.querySelector(`.mood-option[data-mood="${mood}"] .mood-emoji`).textContent;
-            
+
             // Update mood history display
             updateMoodHistory(dayLabel, moodEmoji);
-            
+
             // Store in Firestore if user is logged in
             const userId = localStorage.getItem('reflectAI_userId');
             if (userId) {
@@ -1016,19 +1093,19 @@
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     }
                 }, { merge: true })
-                .catch(error => {
-                    console.error("Error saving mood: ", error);
-                });
+                    .catch(error => {
+                        console.error("Error saving mood: ", error);
+                    });
             }
         }
-        
+
         // Update mood history display
         function updateMoodHistory(day, emoji) {
             const moodHistory = document.querySelector('.mood-history');
             // Find the day element or create it if it doesn't exist
             let dayElement = Array.from(moodHistory.querySelectorAll('.mood-day-label'))
                 .find(el => el.textContent === day)?.parentElement;
-                
+
             if (dayElement) {
                 // Update existing day
                 dayElement.querySelector('.mood-day-emoji').textContent = emoji;
@@ -1037,17 +1114,17 @@
                 // but for now we're just using the static HTML elements
             }
         }
-        
+
         // Load mood history from Firestore
         function loadMoodHistory(userId) {
             db.collection('UserMoods').doc(userId).get()
                 .then(doc => {
                     if (doc.exists) {
                         const moodData = doc.data();
-                        
+
                         // Clear existing mood history
                         const moodHistory = document.querySelector('.mood-history');
-                        
+
                         // Process last 7 days
                         const today = new Date();
                         for (let i = 6; i >= 0; i--) {
@@ -1055,14 +1132,14 @@
                             date.setDate(date.getDate() - i);
                             const dateStr = date.toISOString().split('T')[0];
                             const dayLabel = date.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3);
-                            
+
                             // Find the day element
                             const dayElements = moodHistory.querySelectorAll('.mood-day');
-                            const dayElement = dayElements[6-i]; // Reverse order (today is last)
-                            
+                            const dayElement = dayElements[6 - i]; // Reverse order (today is last)
+
                             if (dayElement) {
                                 dayElement.querySelector('.mood-day-label').textContent = dayLabel;
-                                
+
                                 // If we have mood data for this day
                                 if (moodData[dateStr]) {
                                     const moodEmoji = document.querySelector(`.mood-option[data-mood="${moodData[dateStr].mood}"] .mood-emoji`).textContent;
@@ -1073,7 +1150,7 @@
                                 }
                             }
                         }
-                        
+
                         // Load today's mood if it exists
                         const todayStr = today.toISOString().split('T')[0];
                         if (moodData[todayStr]) {
@@ -1092,13 +1169,13 @@
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
             setInitialTheme();
-            
+
             // Initialize with saved mood if available
             const savedMood = localStorage.getItem('reflectAI_mood');
             if (savedMood) {
                 document.querySelector(`.mood-option[data-mood="${savedMood}"]`)?.classList.add('selected');
             }
-            
+
             // Mood selection
             moodOptions.forEach(option => {
                 option.addEventListener('click', () => {
@@ -1108,7 +1185,7 @@
                     saveMood(mood);
                 });
             });
-            
+
             // Feature selection
             featureItems.forEach(item => {
                 item.addEventListener('click', () => {
@@ -1119,7 +1196,7 @@
         });
 
         // Check if user is logged in
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const userId = localStorage.getItem('reflectAI_userId');
             if (!userId) {
                 window.location.href = 'index.html';
@@ -1141,33 +1218,42 @@
             setupChatListener(userId);
 
             // Auto-adjust textarea height
-            messageInput.addEventListener('input', function() {
+            messageInput.addEventListener('input', function () {
                 this.style.height = 'auto';
                 this.style.height = (this.scrollHeight) + 'px';
             });
 
+            // Add event listener for Enter key to send message
+            messageInput.addEventListener('keydown', function (e) {
+                // Check if Enter key is pressed without Shift key
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault(); // Prevent default newline behavior
+                    messageForm.dispatchEvent(new Event('submit')); // Simulate form submission
+                }
+            });
+
             // Handle message submission
-            messageForm.addEventListener('submit', async function(e) {
+            messageForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
-                
+
                 const message = messageInput.value.trim();
                 if (!message) return;
-                
+
                 // Add user message to UI
                 addMessageToUI('user', message);
-                
+
                 // Clear input
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
-                
+
                 // Show loader and typing indicator
                 loader.classList.add('active');
                 showTypingIndicator();
-                
+
                 try {
                     // Send message to API
                     const response = await sendMessage(userId, message);
-                    
+
                     // Check for successful response
                     if (response.status === 'success') {
                         // API call is successful, the Firestore listener will handle the response
@@ -1181,14 +1267,14 @@
                     console.error('Error sending message:', error);
                     loader.classList.remove('active');
                     removeTypingIndicator();
-                    
+
                     // Show error message
                     addSystemMessage('Sorry, I encountered an error. Please try again.');
                 }
             });
 
             // Handle logout
-            logoutBtn.addEventListener('click', function() {
+            logoutBtn.addEventListener('click', function () {
                 // Unsubscribe from Firestore listener when logging out
                 if (unsubscribeListener) {
                     unsubscribeListener();
@@ -1200,24 +1286,24 @@
             // Focus on input field when page loads
             messageInput.focus();
         }
-        
+
         // Add system message to UI
         function addSystemMessage(message) {
             const chatMessages = document.getElementById('chat-messages');
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message system-message';
-            
+
             const messageContent = document.createElement('div');
             messageContent.className = 'message-content';
             messageContent.innerHTML = `<p>${message}</p>`;
-            
+
             messageDiv.appendChild(messageContent);
             chatMessages.appendChild(messageDiv);
-            
+
             // Scroll to bottom
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-        
+
         // Show typing indicator
         function showTypingIndicator() {
             const chatMessages = document.getElementById('chat-messages');
@@ -1226,11 +1312,11 @@
             indicatorDiv.className = 'message ai-message typing-indicator';
             indicatorDiv.innerHTML = '<span></span><span></span><span></span>';
             chatMessages.appendChild(indicatorDiv);
-            
+
             // Scroll to bottom
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-        
+
         // Remove typing indicator
         function removeTypingIndicator() {
             const indicator = document.getElementById('typing-indicator');
@@ -1245,7 +1331,7 @@
             if (unsubscribeListener) {
                 unsubscribeListener();
             }
-            
+
             // Set up listener on the messages collection for this user/session
             // Using correct collection path from configuration
             const messagesRef = db
@@ -1253,34 +1339,34 @@
                 .doc(userId)
                 .collection('ChatMessages')
                 .orderBy('timestamp');
-            
+
             // Create the listener
             unsubscribeListener = messagesRef.onSnapshot((snapshot) => {
                 // Clear chat messages except system message
                 const chatMessages = document.getElementById('chat-messages');
                 const systemMessage = chatMessages.querySelector('.system-message');
                 chatMessages.innerHTML = '';
-                
+
                 if (systemMessage) {
                     chatMessages.appendChild(systemMessage);
                 }
-                
+
                 // Remove typing indicator when new message received
                 removeTypingIndicator();
-                
+
                 // Process all documents in the collection
                 snapshot.docs.forEach((doc) => {
                     const message = doc.data();
                     addMessageToUI(
                         message.role === 'user' ? 'user' : 'assistant',
-                        message.content || message.message, // Use content or fallback to message field
+                        message.message,
                         new Date(message.timestamp ? message.timestamp.toDate() : new Date())
                     );
                 });
-                
+
                 // Hide loader
                 document.getElementById('loader').classList.remove('active');
-                
+
                 // Scroll to bottom
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, (error) => {
@@ -1293,14 +1379,14 @@
         // Add message to UI
         function addMessageToUI(role, content, timestamp = new Date()) {
             const chatMessages = document.getElementById('chat-messages');
-            
+
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role === 'user' ? 'user' : 'assistant'}`;
-            
+
             // Add avatar
             const avatarDiv = document.createElement('div');
             avatarDiv.className = 'message-avatar';
-            
+
             // Set appropriate avatar content based on role
             if (role === 'user') {
                 avatarDiv.textContent = 'U';
@@ -1311,38 +1397,38 @@
                 aiSvg.setAttribute("height", "20");
                 aiSvg.setAttribute("viewBox", "0 0 24 24");
                 aiSvg.setAttribute("fill", "none");
-                
+
                 const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 path.setAttribute("d", "M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z");
                 path.setAttribute("stroke", "white");
                 path.setAttribute("stroke-width", "2");
-                
+
                 aiSvg.appendChild(path);
                 avatarDiv.appendChild(aiSvg);
             }
-            
+
             messageDiv.appendChild(avatarDiv);
-            
+
             const messageBubble = document.createElement('div');
             messageBubble.className = 'message-bubble';
-            
+
             // Format message content (handle newlines)
             const formattedContent = content.replace(/\n/g, '<br>');
             messageBubble.innerHTML = `<p>${formattedContent}</p>`;
-            
+
             messageDiv.appendChild(messageBubble);
-            
+
             // Add timestamp
             const now = timestamp;
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
+
             const timeSpan = document.createElement('div');
             timeSpan.className = 'message-time';
             timeSpan.textContent = timeString;
             messageBubble.appendChild(timeSpan);
-            
+
             chatMessages.appendChild(messageDiv);
-            
+
             // Scroll to the bottom
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -1351,16 +1437,16 @@
         async function fetchMessages(userId) {
             // This function is kept for backwards compatibility
             // but now the messages are fetched via Firestore listener
-            
+
             // If we need to fetch messages from API, this would be the correct endpoint
             // const response = await fetch(`${CONFIG.api.getFullEndpoint()}?userId=${userId}`);
-            
+
             document.getElementById('loader').classList.remove('active');
         }
 
         // Send message to API
         async function sendMessage(userId, message) {
-            const response = await fetch('/api/v1/chat', {
+            const response = await fetch(CONFIG.api.postMessageFullEndpoint(), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1370,23 +1456,12 @@
                     message
                 })
             });
-            
+
             return await response.json();
         }
-
-        // Initialize Firebase with configuration
-        firebase.initializeApp({
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        });
-        const db = firebase.firestore();
-        
         // Variable to store unsubscribe function
         let unsubscribeListener = null;
     </script>
 </body>
+
 </html>

@@ -28,9 +28,9 @@ declare module 'fastify' {
     }
 }
 
-export const srvServer: FastifyInstance = fastify({ 
-    logger: false, 
-    keepAliveTimeout: 60000, 
+export const srvServer: FastifyInstance = fastify({
+    logger: false,
+    keepAliveTimeout: 60000,
     bodyLimit: 10 * 1024 * 1024 // 10MB
 });
 let server: any;
@@ -72,9 +72,8 @@ export function srvGetClientInfo(request: FastifyRequest): SrvClientInfo {
 export async function srvInit() {
     // Enable CORS
     await srvServer.register(cors, {
-        origin: ['https://cdn-bgp.bluestacks.com', 'http://localhost:3000',
-            'http://local.testngg.net', 'https://local.testngg.net', 'http://nitin.testngg.net:8000',
-            'https://local.now.gg', 'https://wsup.ai', 'https://ifp-demo.abctest.in', 'https://reflectai.com'],
+        origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'https://ifp-demo.abctest.in',
+            'https://reflectai.com'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization']
     });
@@ -87,28 +86,28 @@ export async function srvInit() {
     // Set error handler
     srvServer.setErrorHandler(async function (error, request, reply) {
         reply.ngError = true;
-        log.error('Error in handling request', { 
+        log.error('Error in handling request', {
             error: error.message,
-            stack: error.stack, 
+            stack: error.stack,
             url: request.url,
             method: request.method
         });
-        
+
         // Handle different error types
         if (error.statusCode === 401) {
-            return await reply.status(401).send({ 
-                status: 'error', 
-                message: 'Unauthorized' 
+            return await reply.status(401).send({
+                status: 'error',
+                message: 'Unauthorized'
             });
         } else if (error.statusCode === 400) {
-            return await reply.status(400).send({ 
-                status: 'error', 
-                message: error.message || 'Bad request' 
+            return await reply.status(400).send({
+                status: 'error',
+                message: error.message || 'Bad request'
             });
         } else {
-            return await reply.status(500).send({ 
-                status: 'error', 
-                message: 'Internal server error' 
+            return await reply.status(500).send({
+                status: 'error',
+                message: 'Internal server error'
             });
         }
     });
@@ -157,7 +156,7 @@ export async function srvListen() {
     try {
         const port = Number(conf.env.port) || 3000;
         const host = conf.env.host || '0.0.0.0';
-        
+
         server = await srvServer.listen({ port, host });
         log.info(`Server is running on ${host}:${port}`);
     } catch (error) {
@@ -182,10 +181,10 @@ export function srvGetRequestInfoForLogging(request: FastifyRequest, logRequestI
         params: request.params,
         ip: request.ip
     };
-    
+
     if (logRequestId && request.requestId) {
         requestInfo.requestId = request.requestId;
     }
-    
+
     return requestInfo;
 }

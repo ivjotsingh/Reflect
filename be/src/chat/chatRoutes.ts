@@ -80,6 +80,6 @@ async function processAiResponse(userId: string, message: string): Promise<void>
 // Initialize chat routes
 export function chatRoutesInit(path: string): void {
     // Direct chat endpoint (simplified - one session per user)
-    srvAddRoute('POST', srvServer, `${path}/v1/chat`, chatMessageHandler);
+    srvAddRoute('POST', srvServer, `${path}/v1/message`, chatMessageHandler);
     log.info('Chat routes initialized');
 }
