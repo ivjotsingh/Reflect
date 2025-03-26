@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReflectAI - Interactive Storytelling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/chat.css">
+    <style>
+        :root {
+            --story-primary: #4576de;
+            --story-secondary: #7e6df2;
+            --story-accent: #5ac8fa;
+            --story-light: #f1f8fe;
+            --story-dark: #2c3e50;
+            --story-success: #28a745;
+            --story-danger: #dc3545;
+            --story-warning: #ffc107;
+            --story-info: #17a2b8;
+            --story-gradient-start: #4576de;
+            --story-gradient-end: #7e6df2;
+            --story-shadow: rgba(0, 0, 0, 0.15);
+            --story-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --animation-timing: 0.3s;
+        }
+
+        body {
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1a2639 100%);
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        /* Floating particles background */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 25s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(100px, 50px);
+            }
+            50% {
+                transform: translate(50px, 100px);
+            }
+            75% {
+                transform: translate(-50px, 75px);
+            }
+        }
+
+        .story-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 64px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .story-welcome {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .story-welcome h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--story-primary), var(--story-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .story-welcome p {
+            font-size: 1.2rem;
+            color: #ecf0f1;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .story-card {
+            background: rgba(26, 38, 57, 0.9);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--story-card-shadow);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--story-primary), var(--story-secondary));
+        }
+
+        .story-card h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .story-input {
+            width: 100%;
+            background: #2c3e50;
+            border: none;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 1rem;
+            transition: all var(--animation-timing);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) inset;
+            resize: none;
+            min-height: 120px;
+        }
+
+        .story-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--story-accent), 0 2px 8px rgba(0, 0, 0, 0.1) inset;
+        }
+
+        .story-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .story-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--story-primary), var(--story-secondary));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--animation-timing);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .story-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .story-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .story-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .story-choice-button {
+            background: rgba(44, 62, 80, 0.8);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--animation-timing);
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out both;
+        }
+
+        .story-choice-button span.choice-text {
+            font-weight: 500;
+            z-index: 1;
+            position: relative;
+        }
+
+        .story-choice-button span.emotion-tag {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .story-choice-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--story-primary), var(--story-secondary));
+            opacity: 0.3;
+            transition: width var(--animation-timing);
+            z-index: 0;
+        }
+
+        .story-choice-button:hover::before {
+            width: 100%;
+        }
+
+        .story-choice-button:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .story-content {
+            color: white;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-out 0.2s both;
+        }
+
+        .story-image {
+            width: 100%;
+            height: 250px;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease-out 0.1s both;
+        }
+
+        .story-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(26, 38, 57, 0.7) 0%, rgba(26, 38, 57, 0) 50%);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .analysis-card {
+            background: rgba(26, 38, 57, 0.9);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--story-card-shadow);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .analysis-card h3 {
+            margin-bottom: 1.5rem;
+            color: white;
+            position: relative;
+            display: inline-block;
+        }
+
+        .analysis-card h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--story-primary), var(--story-secondary));
+        }
+
+        .analysis-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .analysis-item h4 {
+            font-size: 1.1rem;
+            color: var(--story-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .analysis-item p, .analysis-item li {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        .analysis-item ul {
+            padding-left: 1.5rem;
+        }
+
+        .analysis-item li {
+            margin-bottom: 0.5rem;
+        }
+
+        .new-story-button {
+            margin-top: 2rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--story-primary);
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .story-welcome h1 {
+                font-size: 2rem;
+            }
+
+            .story-welcome p {
+                font-size: 1rem;
+            }
+
+            .story-card {
+                padding: 1.5rem;
+            }
+
+            .story-choice-button {
+                flex: 1 0 100%;
+            }
+
+            .story-image {
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header section -->
+    <header>
+        <div class="logo">
+            <img src="https://placehold.co/200x40/2c3e50/white?text=ReflectAI" alt="ReflectAI Logo">
+        </div>
+        <div class="theme-toggle">
+            <button id="theme-toggle-btn" aria-label="Toggle dark/light mode">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path fill="currentColor" d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Floating particles background -->
+    <div class="particles-container" id="particles-container"></div>
+
+    <!-- Main story container -->
+    <div class="story-container">
+        <!-- Welcome/Introduction Section -->
+        <div class="story-welcome">
+            <h1>Interactive Storytelling</h1>
+            <p>Explore life situations through immersive stories where your emotional choices shape the narrative. Gain insights about your decision patterns and emotional responses while engaging with realistic scenarios.</p>
+        </div>
+
+        <!-- Start Story Section -->
+        <div class="story-card" id="start-story-section">
+            <h2>Begin Your Journey</h2>
+            <p>Share a personal dilemma you're facing, or let us generate a relevant life scenario for you to explore.</p>
+            <textarea class="story-input" id="dilemma-input" placeholder="Describe a personal dilemma you're facing (e.g., &quot;I'm torn between taking a higher-paying job that requires relocation or staying at my current position close to family&quot;)"></textarea>
+            <div class="story-buttons">
+                <button class="story-button" id="generate-story-button">Create My Story</button>
+                <button class="story-button" id="generate-random-story-button" style="background: rgba(44, 62, 80, 0.8);">Random Scenario</button>
+            </div>
+        </div>
+
+        <!-- Loading Section -->
+        <div class="story-card hidden" id="loading-section">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Creating your immersive story...</div>
+            </div>
+        </div>
+
+        <!-- Story Content Section -->
+        <div class="story-card hidden" id="story-content-section">
+            <h2 id="story-title">Story Title</h2>
+            <div class="story-image" id="story-image"></div>
+            <div class="story-content" id="story-content">
+                Story content will appear here.
+            </div>
+            <div class="story-buttons" id="story-choices">
+                <!-- Choice buttons will be added dynamically -->
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="analysis-card hidden" id="analysis-section">
+            <h3>Your Emotional Journey Analysis</h3>
+            
+            <div class="analysis-item">
+                <h4>Primary Emotional Response</h4>
+                <p id="primary-emotion">Understanding your dominant emotional tendencies...</p>
+            </div>
+            
+            <div class="analysis-item">
+                <h4>Key Insight</h4>
+                <p id="insight-summary">A summary of the key insight from your choices...</p>
+            </div>
+            
+            <div class="analysis-item">
+                <h4>Detailed Analysis</h4>
+                <p id="detailed-analysis">A more detailed analysis of your emotional patterns...</p>
+            </div>
+            
+            <div class="analysis-item">
+                <h4>Emotional Strengths</h4>
+                <ul id="strengths-list">
+                    <!-- Strengths will be added dynamically -->
+                </ul>
+            </div>
+            
+            <div class="analysis-item">
+                <h4>Growth Opportunities</h4>
+                <ul id="opportunities-list">
+                    <!-- Opportunities will be added dynamically -->
+                </ul>
+            </div>
+            
+            <div class="analysis-item">
+                <h4>Reflection Questions</h4>
+                <ul id="questions-list">
+                    <!-- Questions will be added dynamically -->
+                </ul>
+            </div>
+            
+            <button class="story-button new-story-button" id="new-story-button">Start a New Story</button>
+        </div>
+    </div>
+
+    <script>
+        // Current story session data
+        let currentSession = {
+            sessionId: null,
+            currentNodeId: null,
+            path: [],
+            emotionalProfile: {}
+        };
+
+        // DOM elements
+        const startStorySection = document.getElementById('start-story-section');
+        const loadingSection = document.getElementById('loading-section');
+        const storyContentSection = document.getElementById('story-content-section');
+        const analysisSection = document.getElementById('analysis-section');
+        const dilemmaInput = document.getElementById('dilemma-input');
+        const generateStoryButton = document.getElementById('generate-story-button');
+        const generateRandomStoryButton = document.getElementById('generate-random-story-button');
+        const storyTitle = document.getElementById('story-title');
+        const storyImage = document.getElementById('story-image');
+        const storyContent = document.getElementById('story-content');
+        const storyChoices = document.getElementById('story-choices');
+        const newStoryButton = document.getElementById('new-story-button');
+        
+        // Analysis elements
+        const primaryEmotion = document.getElementById('primary-emotion');
+        const insightSummary = document.getElementById('insight-summary');
+        const detailedAnalysis = document.getElementById('detailed-analysis');
+        const strengthsList = document.getElementById('strengths-list');
+        const opportunitiesList = document.getElementById('opportunities-list');
+        const questionsList = document.getElementById('questions-list');
+
+        // Initialize the particle background
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles-container');
+            const colors = ['#4576de', '#7e6df2', '#5ac8fa', '#3498db', '#2980b9'];
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random position, size, color, and animation delay
+                const size = Math.floor(Math.random() * 10) + 5; // 5-15px
+                const left = Math.floor(Math.random() * 100);
+                const top = Math.floor(Math.random() * 100);
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const delay = Math.floor(Math.random() * 25);
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.top = `${top}%`;
+                particle.style.backgroundColor = color;
+                particle.style.animationDelay = `${delay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // API URLs - Use the correct backend URLs
+        const API_BASE_URL = 'http://127.0.0.1:8080/reflect/api';
+        const GENERATE_STORY_URL = `${API_BASE_URL}/storytelling/story/generate`;
+        const MAKE_CHOICE_URL = `${API_BASE_URL}/storytelling/story/choice`;
+        const GET_INSIGHTS_URL = `${API_BASE_URL}/storytelling/story/insights/`;
+
+        // Generate a random image URL based on the image prompt
+        function generateImageUrl(imagePrompt) {
+            // In a real implementation, you might use an actual image generation API
+            // For now, we'll use a placeholder with the prompt as text
+            const encodedPrompt = encodeURIComponent(imagePrompt);
+            return `https://placehold.co/800x400/1a2639/ffffff?text=${encodedPrompt}`;
+        }
+
+        // Show a specific section and hide others
+        function showSection(section) {
+            startStorySection.classList.add('hidden');
+            loadingSection.classList.add('hidden');
+            storyContentSection.classList.add('hidden');
+            analysisSection.classList.add('hidden');
+            
+            section.classList.remove('hidden');
+        }
+
+        // Display a story node
+        function displayStoryNode(node) {
+            storyContent.textContent = node.content;
+            
+            // Set image based on the prompt
+            if (node.imagePrompt) {
+                storyImage.style.backgroundImage = `url('${generateImageUrl(node.imagePrompt)}')`;
+                storyImage.classList.remove('hidden');
+            } else {
+                storyImage.classList.add('hidden');
+            }
+            
+            // Clear previous choices
+            storyChoices.innerHTML = '';
+            
+            // If this is an ending node, show the analysis button
+            if (node.isEnding) {
+                const analysisButton = document.createElement('button');
+                analysisButton.classList.add('story-button');
+                analysisButton.textContent = 'Show My Analysis';
+                analysisButton.addEventListener('click', getStoryInsights);
+                
+                // Add feedback if available
+                if (node.feedback) {
+                    const feedback = document.createElement('div');
+                    feedback.classList.add('story-content');
+                    feedback.style.fontStyle = 'italic';
+                    feedback.style.marginTop = '1rem';
+                    feedback.style.color = 'rgba(255, 255, 255, 0.8)';
+                    feedback.textContent = node.feedback;
+                    storyContent.appendChild(feedback);
+                }
+                
+                storyChoices.appendChild(analysisButton);
+            } else {
+                // Add choice buttons
+                node.choices.forEach((choice, index) => {
+                    const choiceButton = document.createElement('button');
+                    choiceButton.classList.add('story-choice-button');
+                    choiceButton.style.animationDelay = `${index * 0.1}s`;
+                    
+                    const choiceText = document.createElement('span');
+                    choiceText.classList.add('choice-text');
+                    choiceText.textContent = choice.text;
+                    
+                    const emotionTag = document.createElement('span');
+                    emotionTag.classList.add('emotion-tag');
+                    emotionTag.textContent = choice.emotionalResponse;
+                    
+                    choiceButton.appendChild(choiceText);
+                    choiceButton.appendChild(emotionTag);
+                    
+                    choiceButton.addEventListener('click', () => makeChoice(choice.id));
+                    storyChoices.appendChild(choiceButton);
+                });
+            }
+            
+            showSection(storyContentSection);
+        }
+
+        // Generate a new story
+        async function generateStory(isRandom = false) {
+            showSection(loadingSection);
+            
+            try {
+                const dilemma = isRandom ? '' : dilemmaInput.value.trim();
+                
+                const response = await fetch(GENERATE_STORY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        dilemma: dilemma
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to generate story');
+                }
+                
+                const data = await response.json();
+                
+                // Save session data
+                currentSession.sessionId = data.sessionId;
+                currentSession.currentNodeId = data.currentNode.id;
+                currentSession.path = [data.currentNode.id];
+                currentSession.emotionalProfile = {};
+                
+                // Display the story
+                storyTitle.textContent = data.title;
+                displayStoryNode(data.currentNode);
+                
+            } catch (error) {
+                console.error('Error generating story:', error);
+                alert('An error occurred while generating your story. Please try again.');
+                showSection(startStorySection);
+            }
+        }
+
+        // Make a choice in the story
+        async function makeChoice(choiceId) {
+            showSection(loadingSection);
+            
+            try {
+                const response = await fetch(MAKE_CHOICE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sessionId: currentSession.sessionId,
+                        choiceId: choiceId
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to process choice');
+                }
+                
+                const data = await response.json();
+                
+                // Update session data
+                currentSession.currentNodeId = data.nextNode.id;
+                currentSession.path.push(data.nextNode.id);
+                currentSession.emotionalProfile = data.emotionalProfile;
+                
+                // Display the next node
+                displayStoryNode(data.nextNode);
+                
+            } catch (error) {
+                console.error('Error making choice:', error);
+                alert('An error occurred while processing your choice. Please try again.');
+                showSection(storyContentSection);
+            }
+        }
+
+        // Get insights about the story choices
+        async function getStoryInsights() {
+            showSection(loadingSection);
+            
+            try {
+                const response = await fetch(`${GET_INSIGHTS_URL}${currentSession.sessionId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to get insights');
+                }
+                
+                const insights = await response.json();
+                
+                // Update the analysis section with the insights
+                primaryEmotion.textContent = insights.primaryEmotionalResponse;
+                insightSummary.textContent = insights.insightSummary;
+                detailedAnalysis.textContent = insights.detailedAnalysis;
+                
+                // Clear and populate lists
+                strengthsList.innerHTML = '';
+                insights.strengthsShown.forEach(strength => {
+                    const li = document.createElement('li');
+                    li.textContent = strength;
+                    strengthsList.appendChild(li);
+                });
+                
+                opportunitiesList.innerHTML = '';
+                insights.growthOpportunities.forEach(opportunity => {
+                    const li = document.createElement('li');
+                    li.textContent = opportunity;
+                    opportunitiesList.appendChild(li);
+                });
+                
+                questionsList.innerHTML = '';
+                insights.reflectionQuestions.forEach(question => {
+                    const li = document.createElement('li');
+                    li.textContent = question;
+                    questionsList.appendChild(li);
+                });
+                
+                showSection(analysisSection);
+                
+            } catch (error) {
+                console.error('Error getting insights:', error);
+                alert('An error occurred while generating your insights. Please try again.');
+                showSection(storyContentSection);
+            }
+        }
+
+        // Start a new story
+        function startNewStory() {
+            dilemmaInput.value = '';
+            showSection(startStorySection);
+        }
+
+        // Event listeners
+        generateStoryButton.addEventListener('click', () => generateStory(false));
+        generateRandomStoryButton.addEventListener('click', () => generateStory(true));
+        newStoryButton.addEventListener('click', startNewStory);
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            showSection(startStorySection);
+        });
+
+        // Theme toggle functionality
+        document.getElementById('theme-toggle-btn').addEventListener('click', () => {
+            document.documentElement.setAttribute('data-theme', 
+                document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        });
+    </script>
+</body>
+</html>

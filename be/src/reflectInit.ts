@@ -8,9 +8,10 @@ import { log, logFini, logInit, LogErrorMonitoringTools } from './log/log';
 import { conf, confInit } from './conf';
 import { dbInit } from './db';
 import { healthCheckInit, healthCheckRoutesInit } from './healthCheck';
-import { srvFini, srvInit, srvListen } from './srv';
+import { srvFini, srvInit, srvListen, srvServer } from './srv';
 import { chatInit, chatRoutesInit } from './chat';
 import { llmInit } from './llm';
+import { storytellingRouter, storytellingInit } from './storytelling';
 
 async function reflectRoutesInit() {
     /*
@@ -18,6 +19,9 @@ async function reflectRoutesInit() {
      */
     healthCheckRoutesInit('/reflect/api/healthCheck');
     chatRoutesInit('/reflect/api/chat');
+    
+    // Initialize the storytelling routes
+    srvServer.register(storytellingRouter, { prefix: '/reflect/api' });
 }
 
 export async function reflectInit() {
@@ -34,6 +38,7 @@ export async function reflectInit() {
     dbInit(conf.env.credentials.firebase);
     await llmInit();
     chatInit();
+    storytellingInit(); // Initialize storytelling module
     await srvInit();
 
     await reflectRoutesInit();

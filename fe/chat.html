@@ -32,7 +32,7 @@
             <a href="index.html" class="nav-link">Home</a>
             <a href="chat.html" class="nav-link active">Chat</a>
             <a href="#" class="nav-link">Dilemma Resolver</a>
-            <a href="#" class="nav-link">Life Simulator</a>
+            <a href="storytelling.html" class="nav-link">Life Simulator</a>
         </nav>
 
         <div class="user-area">
@@ -78,6 +78,22 @@
                                 </svg>
                             </div>
                             <span>De-Stress</span>
+                        </div>
+                        <div class="feature-item" id="life-simulator-button">
+                            <div class="feature-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M8 12L12 16L16 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <span>Life Simulator</span>
                         </div>
                         <div class="feature-item" id="cbt-button">
                             <div class="feature-icon">
@@ -270,7 +286,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
                                     fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
+                                    <path
+                                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
                                     </path>
                                     <path d="M8 12h8"></path>
                                     <path d="M12 8v8"></path>
@@ -288,7 +305,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
                                     fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
+                                    <path
+                                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
                                     </path>
                                     <path d="M7 10l5 5 5-5"></path>
                                 </svg>
@@ -896,6 +914,11 @@
                     featureItems.forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
                 });
+            });
+
+            const lifeSimulatorButton = document.getElementById('life-simulator-button');
+            lifeSimulatorButton.addEventListener('click', () => {
+                window.location.href = 'storytelling.html';
             });
         });
 
@@ -2017,7 +2040,6 @@
                             </svg>
                         </button>
                     `;
-
                     worriesContainer.appendChild(worryItem);
 
                     // Add event listener to remove button

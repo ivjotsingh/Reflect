@@ -505,19 +505,18 @@
                 // Add button animation
                 const button = this.querySelector('button');
                 button.innerHTML = `
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 5L21 12L13 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 12H3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <div class="loader-spinner">
+                        <div class="spinner"></div>
+                    </div>
                 `;
                 
                 // Store user ID and redirect
                 localStorage.setItem(CONFIG.ui.userIdStorageKey, userId);
                 
-                // Slight delay for animation
+                // Redirect animation with spinner
                 setTimeout(() => {
                     window.location.href = 'chat.html';
-                }, 300);
+                }, 1000);
             }
         });
 
