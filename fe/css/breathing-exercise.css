@@ -308,43 +308,39 @@
     align-items: center;
     background: rgba(9, 21, 38, 0.8);
     box-shadow: 0 0 30px rgba(52, 152, 219, 0.2);
+    overflow: hidden;
 }
 
-.circle-border {
+.wave-container {
     position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
     border-radius: 50%;
-    border: 2px solid rgba(52, 152, 219, 0.3);
-    animation: pulse 4s infinite;
+    z-index: 1;
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(0.95);
-        opacity: 0.7;
-    }
-
-    50% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(0.95);
-        opacity: 0.7;
-    }
+.wave {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(180deg, rgba(52, 152, 219, 0.8) 0%, rgba(26, 199, 254, 0.4) 100%);
+    border-radius: 38% 42% 40% 40%;
+    bottom: -180%;
+    left: -50%;
+    transition: none;
 }
 
 .breathing-animation {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(52, 152, 219, 0.7) 0%, rgba(26, 38, 57, 0.3) 100%);
+    background: radial-gradient(circle, rgba(52, 152, 219, 0.2) 0%, rgba(26, 38, 57, 0.1) 100%);
     box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
     transition: transform 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    z-index: 2;
 }
 
 .breathing-animation-shadow {
@@ -551,36 +547,40 @@
     pointer-events: none;
 }
 
-/* Wave effect for breathing */
-.wave-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    overflow: hidden;
+/* Breathing States */
+.breathing-circle.inhale .wave {
+    animation: fillCircle cubic-bezier(0.42, 0, 0.58, 1) forwards;
+    background: linear-gradient(180deg, rgba(52, 152, 219, 0.8) 0%, rgba(26, 199, 254, 0.4) 100%);
 }
 
-.wave {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 300px;
-    border-radius: 45%;
-    background: rgba(52, 152, 219, 0.5);
-    transform: translate(-50%, -50%) rotate(0);
-    animation: wave 6s linear infinite;
+.breathing-circle.exhale .wave {
+    animation: emptyCircle cubic-bezier(0.42, 0, 0.58, 1) forwards;
+    background: linear-gradient(180deg, rgba(52, 152, 219, 0.8) 0%, rgba(26, 199, 254, 0.4) 100%);
 }
 
-@keyframes wave {
+.breathing-circle.hold .wave {
+    animation-play-state: paused;
+    transform: translateY(-20%); /* Keep water level at top during hold */
+}
+
+/* Animation for fill and empty effects */
+@keyframes fillCircle {
     0% {
-        transform: translate(-50%, -50%) rotate(0);
+        transform: translateY(180%);
     }
 
     100% {
-        transform: translate(-50%, -50%) rotate(360deg);
+        transform: translateY(-20%);
+    }
+}
+
+@keyframes emptyCircle {
+    0% {
+        transform: translateY(-20%);
+    }
+
+    100% {
+        transform: translateY(180%);
     }
 }
 
@@ -603,4 +603,32 @@
         transform: translateY(-100px) translateX(20px);
         opacity: 0;
     }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+}
+
+.circle-border {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 50%;
+    border: 2px solid rgba(52, 152, 219, 0.3);
+    animation: pulse 4s infinite;
 }
