@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReflectAI - Therapy Session</title>
+    <style>
+        /* Theme Variables */
+        :root {
+            /* Light Theme (Default) */
+            --primary-color: #5864f2;
+            --primary-dark: #4752c4;
+            --primary-light: #e9f0ff;
+            --text-color: #333;
+            --light-text: #767676;
+            --bg-color: #f5f8fb;
+            --container-bg: #ffffff;
+            --border-color: #e0e6ed;
+            --message-user: #e9f0ff;
+            --message-ai: #f0f0f0;
+            --message-system: #fffaed;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --primary-color: #7289da;
+            --primary-dark: #5e76d3;
+            --primary-light: #2c3142;
+            --text-color: #e0e0e0;
+            --light-text: #a0a0a0;
+            --bg-color: #1e1e2e;
+            --container-bg: #2a2a3a;
+            --border-color: #3d3d50;
+            --message-user: #364165;
+            --message-ai: #2d2d3d;
+            --message-system: #3d3525;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Chat Page Styles */
+        .chat-container {
+            width: 100%;
+            max-width: 900px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background-color: var(--container-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chat-header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-header .logo h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            margin-right: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-header .logo h1 svg {
+            margin-right: 10px;
+        }
+
+        .chat-header .logo p {
+            margin: 0;
+            color: var(--light-text);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(88, 100, 242, 0.1);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            padding: 8px 15px;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(88, 100, 242, 0.1);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--bg-color);
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            max-width: 85%;
+            animation: fadeIn 0.3s;
+            position: relative;
+        }
+
+        .user-message {
+            background-color: var(--message-user);
+            border-radius: 15px 15px 0 15px;
+            padding: 12px 15px;
+            align-self: flex-end;
+            margin-left: auto;
+            color: var(--text-color);
+        }
+
+        .ai-message {
+            background-color: var(--message-ai);
+            border-radius: 15px 15px 15px 0;
+            padding: 12px 15px;
+            color: var(--text-color);
+        }
+
+        .system-message {
+            background-color: var(--message-system);
+            border-radius: 15px;
+            padding: 12px 15px;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        .message-content p {
+            margin-bottom: 8px;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: var(--light-text);
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .chat-input-container {
+            background-color: var(--container-bg);
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .message-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .textarea-container {
+            flex: 1;
+            position: relative;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            transition: box-shadow 0.3s;
+        }
+
+        .textarea-container:focus-within {
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        #message-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: none;
+            font-family: var(--font-main);
+            transition: border 0.3s;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        #message-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .send-btn {
+            background-color: var(--primary-color);
+            color: white;
+            margin-left: 10px;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .send-btn:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: white;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin-right: 5px;
+            animation: typing 1.5s infinite;
+            animation-fill-mode: both;
+            opacity: 0.6;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+            margin-right: 0;
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Loader */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(var(--bg-color-rgb, 245, 248, 251), 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .loader.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(88, 100, 242, 0.2);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .chat-messages {
+                padding: 15px;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <header class="chat-header">
+            <div class="logo">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 11.5C20 15.642 16.418 19 12 19C10.756 19 9.57 18.7 8.5 18.159C7.43 18.7 6.244 19 5 19C4.75 19 4.5 18.988 4.252 18.962C4.572 18.574 4.84 18.142 5.045 17.674C3.784 16.508 3 14.598 3 12.5C3 8.358 6.582 5 11 5C15.418 5 19 8.358 19 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 12H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 12H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 9H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 9H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    ReflectAI
+                </h1>
+                <p>Your AI Therapist</p>
+            </div>
+            <div class="header-controls">
+                <button id="theme-toggle" class="theme-toggle">
+                    <!-- Sun icon for dark mode -->
+                    <svg id="sun-icon" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" />
+                        <path d="M12 2V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M12 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M4 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M22 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M19.7778 4.22266L17.5558 6.25424" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M4.22217 4.22266L6.44418 6.25424" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M6.44434 17.5557L4.22211 19.7779" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M19.7778 19.7773L17.5558 17.5551" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <!-- Moon icon for light mode -->
+                    <svg id="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button id="logout-btn" class="btn logout-btn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chat-messages">
+            <div class="message system-message">
+                <div class="message-content">
+                    <p>Hello! I'm your AI therapist. How are you feeling today? Feel free to share anything on your mind.</p>
+                </div>
+            </div>
+            <!-- Messages will be added here dynamically -->
+        </div>
+
+        <div class="chat-input-container">
+            <form id="message-form" class="message-form">
+                <div class="textarea-container">
+                    <textarea 
+                        id="message-input" 
+                        placeholder="Type your message here..." 
+                        rows="2"
+                        required
+                    ></textarea>
+                </div>
+                <button type="submit" class="btn send-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Configuration variables - change these when deploying
+        const CONFIG = {
+            // API Configuration
+            api: {
+                baseUrl: 'http://127.0.0.1:8080',
+                chatPath: '/reflect/api/chat/v1/chat',
+                getFullEndpoint: function(params = '') {
+                    return `${this.baseUrl}${this.chatPath}${params}`;
+                }
+            },
+            
+            // Firebase Configuration
+            firebase: {
+                apiKey: "YOUR_API_KEY",
+                authDomain: "YOUR_AUTH_DOMAIN",
+                projectId: "YOUR_PROJECT_ID",
+                storageBucket: "YOUR_STORAGE_BUCKET",
+                messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+                appId: "YOUR_APP_ID"
+            },
+            
+            // UI Configuration
+            ui: {
+                themeStorageKey: 'reflectAI_theme',
+                userIdStorageKey: 'reflectAI_userId',
+                typingIndicatorDelay: 1000
+            },
+            
+            // Firestore Collection Paths
+            collections: {
+                chatSessions: 'ChatSessions',
+                chatMessages: 'ChatMessages'
+            }
+        };
+
+        // Initialize Firebase with configuration
+        firebase.initializeApp(CONFIG.firebase);
+        const db = firebase.firestore();
+        
+        // Variable to store unsubscribe function
+        let unsubscribeListener = null;
+        
+        // Theme management
+        const themeToggle = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        
+        // Check for saved theme preference or use device preference
+        const savedTheme = localStorage.getItem(CONFIG.ui.themeStorageKey);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'block';
+        }
+        
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem(CONFIG.ui.themeStorageKey, 'light');
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem(CONFIG.ui.themeStorageKey, 'dark');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            }
+        });
+
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem(CONFIG.ui.userIdStorageKey);
+            if (!userId) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            setupChatFunctionality(userId);
+        });
+
+        // Set up chat functionality
+        function setupChatFunctionality(userId) {
+            const messageForm = document.getElementById('message-form');
+            const messageInput = document.getElementById('message-input');
+            const chatMessages = document.getElementById('chat-messages');
+            const loader = document.getElementById('loader');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Set up Firestore real-time listener
+            setupChatListener(userId);
+
+            // Auto-adjust textarea height
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+
+            // Handle message submission
+            messageForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const message = messageInput.value.trim();
+                if (!message) return;
+                
+                // Add user message to UI
+                addMessageToUI('user', message);
+                
+                // Clear input
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                
+                // Show loader and typing indicator
+                loader.classList.add('active');
+                showTypingIndicator();
+                
+                try {
+                    // Send message to API
+                    const response = await sendMessage(userId, message);
+                    
+                    // Check for successful response
+                    if (response.status === 'success') {
+                        // API call is successful, the Firestore listener will handle the response
+                        // But we keep this setTimeout for backward compatibility
+                        setTimeout(() => {
+                            loader.classList.remove('active');
+                            removeTypingIndicator();
+                        }, CONFIG.ui.typingIndicatorDelay);
+                    }
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    loader.classList.remove('active');
+                    removeTypingIndicator();
+                    
+                    // Show error message
+                    addSystemMessage('Sorry, I encountered an error. Please try again.');
+                }
+            });
+
+            // Handle logout
+            logoutBtn.addEventListener('click', function() {
+                // Unsubscribe from Firestore listener when logging out
+                if (unsubscribeListener) {
+                    unsubscribeListener();
+                }
+                localStorage.removeItem(CONFIG.ui.userIdStorageKey);
+                window.location.href = 'index.html';
+            });
+
+            // Focus on input field when page loads
+            messageInput.focus();
+        }
+        
+        // Add system message to UI
+        function addSystemMessage(message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system-message';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.innerHTML = `<p>${message}</p>`;
+            
+            messageDiv.appendChild(messageContent);
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Show typing indicator
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chat-messages');
+            const indicatorDiv = document.createElement('div');
+            indicatorDiv.id = 'typing-indicator';
+            indicatorDiv.className = 'message ai-message typing-indicator';
+            indicatorDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatMessages.appendChild(indicatorDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // Set up real-time listener for chat messages
+        function setupChatListener(userId) {
+            // Clear any existing listener
+            if (unsubscribeListener) {
+                unsubscribeListener();
+            }
+            
+            // Set up listener on the messages collection for this user/session
+            // Using correct collection path from configuration
+            const messagesRef = db
+                .collection(CONFIG.collections.chatSessions)
+                .doc(userId)
+                .collection(CONFIG.collections.chatMessages)
+                .orderBy('timestamp');
+            
+            // Create the listener
+            unsubscribeListener = messagesRef.onSnapshot((snapshot) => {
+                // Clear chat messages except system message
+                const chatMessages = document.getElementById('chat-messages');
+                const systemMessage = chatMessages.querySelector('.system-message');
+                chatMessages.innerHTML = '';
+                
+                if (systemMessage) {
+                    chatMessages.appendChild(systemMessage);
+                }
+                
+                // Remove typing indicator when new message received
+                removeTypingIndicator();
+                
+                // Process all documents in the collection
+                snapshot.docs.forEach((doc) => {
+                    const message = doc.data();
+                    addMessageToUI(
+                        message.role === 'user' ? 'user' : 'ai',
+                        message.content || message.message, // Use content or fallback to message field
+                        new Date(message.timestamp ? message.timestamp.toDate() : new Date())
+                    );
+                });
+                
+                // Hide loader
+                document.getElementById('loader').classList.remove('active');
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, (error) => {
+                console.error("Error listening to messages:", error);
+                document.getElementById('loader').classList.remove('active');
+                addSystemMessage('Error loading messages. Please refresh the page.');
+            });
+        }
+
+        // Add message to UI
+        function addMessageToUI(role, content, timestamp = new Date()) {
+            const chatMessages = document.getElementById('chat-messages');
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            
+            // Format message content (handle newlines)
+            const formattedContent = content.replace(/\n/g, '<br>');
+            messageContent.innerHTML = `<p>${formattedContent}</p>`;
+            
+            const messageTime = document.createElement('div');
+            messageTime.className = 'message-time';
+            messageTime.textContent = formatTime(timestamp);
+            
+            messageDiv.appendChild(messageContent);
+            messageDiv.appendChild(messageTime);
+            
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Format timestamp
+        function formatTime(timestamp) {
+            if (typeof timestamp === 'string') {
+                timestamp = new Date(timestamp);
+            }
+            
+            return timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Fetch messages from API - Kept for backward compatibility
+        async function fetchMessages(userId) {
+            // This function is kept for backwards compatibility
+            // but now the messages are fetched via Firestore listener
+            
+            // If we need to fetch messages from API, this would be the correct endpoint
+            // const response = await fetch(`${CONFIG.api.getFullEndpoint()}?userId=${userId}`);
+            
+            document.getElementById('loader').classList.remove('active');
+        }
+
+        // Send message to API
+        async function sendMessage(userId, message) {
+            const response = await fetch(CONFIG.api.getFullEndpoint(), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId,
+                    message
+                })
+            });
+            
+            return await response.json();
+        }
+    </script>
+</body>
+</html>

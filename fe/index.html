@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReflectAI - Your AI Therapist</title>
+    <style>
+        /* Theme Variables */
+        :root {
+            /* Light Theme (Default) */
+            --primary-color: #5864f2;
+            --primary-dark: #4752c4;
+            --primary-light: #e9f0ff;
+            --text-color: #333;
+            --light-text: #767676;
+            --bg-color: #f5f8fb;
+            --container-bg: #ffffff;
+            --border-color: #e0e6ed;
+            --message-user: #e9f0ff;
+            --message-ai: #f0f0f0;
+            --message-system: #fffaed;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --primary-color: #7289da;
+            --primary-dark: #5e76d3;
+            --primary-light: #2c3142;
+            --text-color: #e0e0e0;
+            --light-text: #a0a0a0;
+            --bg-color: #1e1e2e;
+            --container-bg: #2a2a3a;
+            --border-color: #3d3d50;
+            --message-user: #364165;
+            --message-ai: #2d2d3d;
+            --message-system: #3d3525;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(88, 100, 242, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(88, 100, 242, 0.05) 0%, transparent 20%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            z-index: 10;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(88, 100, 242, 0.1);
+        }
+
+        /* Login Page Styles */
+        .login-container {
+            background-color: var(--container-bg);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+        }
+
+        .logo {
+            margin-bottom: 30px;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .logo-icon {
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo h1 svg {
+            margin-right: 10px;
+        }
+
+        .logo p {
+            color: var(--light-text);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .welcome-text {
+            margin-bottom: 30px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .login-form {
+            margin-bottom: 30px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-container {
+            position: relative;
+            border-radius: 8px;
+            transition: box-shadow 0.3s;
+        }
+
+        .input-container:focus-within {
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s, transform 0.3s;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .primary-btn {
+            background-color: var(--primary-color);
+            color: white;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .primary-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(88, 100, 242, 0.3);
+        }
+
+        .primary-btn:active::after {
+            animation: ripple 0.6s ease-out;
+        }
+
+        .info-text {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            animation: fadeIn 1s ease-out;
+            padding: 0 10px;
+        }
+
+        .features {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .feature {
+            text-align: center;
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .feature-icon {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .feature-desc {
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            .features {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="theme-toggle" class="theme-toggle">
+        <!-- Sun icon for dark mode -->
+        <svg id="sun-icon" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" />
+            <path d="M12 2V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M12 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M4 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M22 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M19.7778 4.22266L17.5558 6.25424" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M4.22217 4.22266L6.44418 6.25424" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M6.44434 17.5557L4.22211 19.7779" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M19.7778 19.7773L17.5558 17.5551" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <!-- Moon icon for light mode -->
+        <svg id="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <div class="container">
+        <div class="login-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 11.5C20 15.642 16.418 19 12 19C10.756 19 9.57 18.7 8.5 18.159C7.43 18.7 6.244 19 5 19C4.75 19 4.5 18.988 4.252 18.962C4.572 18.574 4.84 18.142 5.045 17.674C3.784 16.508 3 14.598 3 12.5C3 8.358 6.582 5 11 5C15.418 5 19 8.358 19 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 12H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 12H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 9H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 9H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h1>ReflectAI</h1>
+                <p>Your AI Therapist</p>
+            </div>
+            
+            <div class="welcome-text">
+                <p>Welcome to ReflectAI, your personal AI therapist. Share your thoughts in a safe, confidential space.</p>
+            </div>
+
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="userId">Enter your user ID or name</label>
+                    <div class="input-container">
+                        <input type="text" id="userId" required placeholder="e.g., john_doe123">
+                    </div>
+                </div>
+                <button type="submit" class="btn primary-btn">
+                    Start Session
+                </button>
+            </form>
+            
+            <div class="info-text">
+                <p>Your conversations are stored securely. Your user ID helps us maintain your session.</p>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">Completely Private</div>
+                    <div class="feature-desc">Your data is encrypted and secure</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 4.5V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M19.0784 6.5L20.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M19.5 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M19.0784 17.5L20.5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 19.5V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4.92163 17.5L3.5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4.5 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4.92163 6.5L3.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">24/7 Support</div>
+                    <div class="feature-desc">Available anytime you need</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.5 17H4C3.44772 17 3 16.5523 3 16V8C3 7.44772 3.44772 7 4 7H20C20.5523 7 21 7.44772 21 8V16C21 16.5523 20.5523 17 20 17H19.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12 17V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M8 20H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M7 13.5C7 13.5 8.5 14 12 14C15.5 14 17 13.5 17 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="7.5" cy="10.5" r="1.5" fill="currentColor"/>
+                            <circle cx="16.5" cy="10.5" r="1.5" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="feature-title">AI-Powered</div>
+                    <div class="feature-desc">Advanced conversation</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration variables - change these when deploying
+        const CONFIG = {
+            // UI Configuration
+            ui: {
+                themeStorageKey: 'reflectAI_theme',
+                userIdStorageKey: 'reflectAI_userId'
+            }
+        };
+        
+        // Theme management
+        const themeToggle = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        
+        // Check for saved theme preference or use device preference
+        const savedTheme = localStorage.getItem(CONFIG.ui.themeStorageKey);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'block';
+        }
+        
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem(CONFIG.ui.themeStorageKey, 'light');
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem(CONFIG.ui.themeStorageKey, 'dark');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            }
+        });
+
+        // Form submission with visual feedback
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userId = document.getElementById('userId').value.trim();
+            
+            if (userId) {
+                // Add button animation
+                const button = this.querySelector('button');
+                button.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 5L21 12L13 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12H3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                `;
+                
+                // Store user ID and redirect
+                localStorage.setItem(CONFIG.ui.userIdStorageKey, userId);
+                
+                // Slight delay for animation
+                setTimeout(() => {
+                    window.location.href = 'chat.html';
+                }, 300);
+            }
+        });
+
+        // Focus the input field when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('userId').focus();
+        });
+    </script>
+</body>
+</html>
