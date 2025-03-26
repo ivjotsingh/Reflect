@@ -1,0 +1,606 @@
+/* Breathing Exercise Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.breathing-modal {
+    background: linear-gradient(135deg, #1a2639 0%, #0d1b2a 100%);
+    padding: 0;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 800px;
+    color: #ecf0f1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    animation: modalFadeIn 0.4s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0.1) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-header h2::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233498db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z'%3E%3C/path%3E%3Cpath d='M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94'%3E%3C/path%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-modal-btn:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.modal-content {
+    padding: 2rem;
+}
+
+.breathing-description {
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    max-width: 90%;
+}
+
+.breathing-selection h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    position: relative;
+    display: inline-block;
+}
+
+.breathing-selection h3::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    border-radius: 3px;
+}
+
+.breathing-patterns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.breathing-pattern-card {
+    background: rgba(26, 38, 57, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    padding: 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.breathing-pattern-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #3498db, #1ac7fe);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.breathing-pattern-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-color: rgba(52, 152, 219, 0.8);
+}
+
+.breathing-pattern-card:hover::before {
+    width: 100%;
+    opacity: 0.1;
+}
+
+.breathing-pattern-card.selected {
+    border-color: #3498db;
+    background: rgba(52, 152, 219, 0.15);
+}
+
+.breathing-pattern-card h4 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #3498db;
+    position: relative;
+    z-index: 1;
+    font-weight: 600;
+}
+
+.breathing-pattern-card p {
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.pattern-description {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    position: relative;
+    z-index: 1;
+    display: block;
+    font-style: italic;
+}
+
+.technique-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    opacity: 0.15;
+    width: 30px;
+    height: 30px;
+    z-index: 0;
+}
+
+/* Interactive Exercise Container */
+.breathing-exercise-container {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.exercise-title {
+    color: #3498db;
+    font-size: 1.6rem;
+    margin: 0;
+}
+
+.exercise-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0.5rem 0 0 0;
+    font-size: 1rem;
+}
+
+.back-to-selection {
+    background: rgba(52, 152, 219, 0.2);
+    border: 1px solid rgba(52, 152, 219, 0.4);
+    color: #3498db;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+.back-to-selection:hover {
+    background: rgba(52, 152, 219, 0.3);
+}
+
+.breathing-visualization {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 1rem 0 3rem;
+}
+
+.breathing-circle-wrapper {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.breathing-instruction {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    width: 100%;
+}
+
+.breathing-action {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.2rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.breathing-counter {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #3498db;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    line-height: 1;
+}
+
+.breathing-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(9, 21, 38, 0.8);
+    box-shadow: 0 0 30px rgba(52, 152, 219, 0.2);
+}
+
+.circle-border {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 50%;
+    border: 2px solid rgba(52, 152, 219, 0.3);
+    animation: pulse 4s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+}
+
+.breathing-animation {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(52, 152, 219, 0.7) 0%, rgba(26, 38, 57, 0.3) 100%);
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+    transition: transform 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.breathing-animation-shadow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.3;
+    filter: blur(10px);
+    background: rgba(52, 152, 219, 0.5);
+    transform: scale(1.2);
+}
+
+.breathing-progress {
+    width: 80%;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: rgba(52, 152, 219, 0.15);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    border-radius: 3px;
+    width: 0;
+    transition: width 0.5s linear;
+    position: relative;
+}
+
+.progress-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.breathing-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.breathing-control-btn {
+    border: none;
+    padding: 0.7rem 1.8rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.breathing-control-btn.start {
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    color: white;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.breathing-control-btn.start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+}
+
+.breathing-control-btn.pause {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.breathing-control-btn.pause:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.breathing-control-btn.resume {
+    background: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.4);
+}
+
+.breathing-control-btn.resume:hover {
+    background: rgba(52, 152, 219, 0.3);
+}
+
+.breathing-control-btn.stop {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.breathing-control-btn.stop:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Completion Screen */
+.breathing-complete {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.complete-icon {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.complete-icon svg {
+    filter: drop-shadow(0 4px 12px rgba(52, 152, 219, 0.5));
+}
+
+.complete-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 50%;
+    z-index: -1;
+    animation: pulse 2s infinite;
+}
+
+.breathing-complete h3 {
+    font-size: 1.8rem;
+    color: #3498db;
+    margin-bottom: 1rem;
+}
+
+.breathing-complete p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-exercise-mood {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.mood-btn {
+    border: 1px solid rgba(52, 152, 219, 0.4);
+    background: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.mood-btn:hover {
+    background: rgba(52, 152, 219, 0.2);
+    transform: translateY(-2px);
+}
+
+.mood-btn.primary {
+    background: linear-gradient(90deg, #3498db, #1ac7fe);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.mood-btn.primary:hover {
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* Particles animation */
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(52, 152, 219, 0.3);
+    pointer-events: none;
+}
+
+/* Wave effect for breathing */
+.wave-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.wave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    border-radius: 45%;
+    background: rgba(52, 152, 219, 0.5);
+    transform: translate(-50%, -50%) rotate(0);
+    animation: wave 6s linear infinite;
+}
+
+@keyframes wave {
+    0% {
+        transform: translate(-50%, -50%) rotate(0);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Animation for floating particles in breathing exercise */
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.5;
+    }
+
+    90% {
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translateY(-100px) translateX(20px);
+        opacity: 0;
+    }
+}

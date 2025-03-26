@@ -280,7 +280,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
         .chat-control-button:hover {
@@ -431,7 +431,7 @@
             padding: 0.6rem;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s ease;
         }
 
         .feature-item:hover {
@@ -766,6 +766,414 @@
             margin-top: 4px;
             color: rgba(255, 255, 255, 0.6);
         }
+
+        /* Breathing Exercise Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .breathing-modal {
+            background: linear-gradient(135deg, #1a2639 0%, #0d1b2a 100%);
+            padding: 0;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 800px;
+            color: #ecf0f1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: modalFadeIn 0.4s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem 2rem;
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0.1) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ecf0f1;
+        }
+
+        .close-modal-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s;
+            padding: 5px;
+        }
+
+        .close-modal-btn:hover {
+            color: white;
+        }
+
+        .modal-content {
+            padding: 2rem;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* Breathing Selection Styles */
+        .breathing-selection h3 {
+            margin: 1.5rem 0 1rem;
+            color: #ecf0f1;
+            font-weight: 500;
+        }
+
+        .breathing-patterns {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .breathing-pattern-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+            min-width: 0;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .breathing-pattern-card:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .technique-icon {
+            margin-bottom: 1rem;
+        }
+
+        .breathing-pattern-card h4 {
+            color: #3498db;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .breathing-pattern-card p {
+            margin: 0 0 0.5rem 0;
+            font-weight: 500;
+        }
+
+        .pattern-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            display: block;
+        }
+
+        /* Breathing Exercise Container */
+        .breathing-exercise-container {
+            display: none;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .exercise-title {
+            color: #3498db;
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        .exercise-subtitle {
+            margin: 0.5rem 0 0 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .back-to-selection {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .back-to-selection:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Breathing Visualization */
+        .breathing-visualization {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breathing-circle-wrapper {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 2rem;
+        }
+
+        .circle-border {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+
+        .breathing-circle {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.4) 0%, rgba(52, 152, 219, 0.1) 70%);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.2);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .breathing-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.8) 0%, rgba(52, 152, 219, 0) 70%);
+            opacity: 0.8;
+            transform: scale(0.8);
+        }
+
+        .breathing-animation-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.4) 0%, rgba(52, 152, 219, 0) 70%);
+            filter: blur(10px);
+            transform: scale(0.85);
+        }
+
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            overflow: hidden;
+        }
+
+        .wave {
+            background: linear-gradient(to bottom, #3498db, rgba(52, 152, 219, 0.7));
+            height: 100%;
+            width: 200%;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            bottom: -5px;
+            left: -50%;
+            transform: translateY(60%);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .breathing-instruction {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+            color: white;
+        }
+
+        .breathing-action {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .breathing-counter {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Progress Bar */
+        .breathing-progress {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.5s linear;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Breathing Controls */
+        .breathing-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .breathing-control-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .breathing-control-btn.start {
+            background: #3498db;
+            color: white;
+        }
+
+        .breathing-control-btn.start:hover {
+            background: #2980b9;
+        }
+
+        .breathing-control-btn.pause,
+        .breathing-control-btn.resume {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .breathing-control-btn.pause:hover,
+        .breathing-control-btn.resume:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .breathing-control-btn.stop {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .breathing-control-btn.stop:hover {
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .breathing-control-btn.restart {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+
+        .breathing-control-btn.restart:hover {
+            background: rgba(52, 152, 219, 0.2);
+        }
+
+        /* Completion View */
+        .breathing-complete {
+            display: none;
+            text-align: center;
+        }
+
+        .complete-icon {
+            margin: 0 auto 1.5rem;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .complete-icon svg {
+            filter: drop-shadow(0 4px 12px rgba(52, 152, 219, 0.5));
+        }
+
+        .complete-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .breathing-complete h3 {
+            color: #3498db;
+            font-size: 1.8rem;
+            margin: 0 0 1rem 0;
+        }
+
+        .breathing-complete p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 
@@ -796,7 +1204,8 @@
 
         <div class="user-area">
             <button id="theme-toggle" class="theme-toggle">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
@@ -822,6 +1231,17 @@
                                 </svg>
                             </div>
                             <span>AI Chat Therapist</span>
+                        </div>
+                        <div class="feature-item" id="de-stress-button">
+                            <div class="feature-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <span>De-Stress</span>
                         </div>
                         <div class="feature-item">
                             <div class="feature-icon">
@@ -972,6 +1392,199 @@
             <div class="loader-dot"></div>
             <div class="loader-dot"></div>
             <div class="loader-dot"></div>
+        </div>
+    </div>
+
+    <!-- Breathing Exercise Modal -->
+    <div id="breathing-exercise-modal" class="modal-overlay">
+        <div class="breathing-modal">
+            <div class="modal-header">
+                <h2>Guided Breathing Exercise</h2>
+                <button id="close-breathing-modal" class="close-modal-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-content">
+                <!-- Technique Selection View -->
+                <div id="breathing-selection" class="breathing-selection">
+                    <div class="breathing-description">
+                        <p>Select a scientifically-proven breathing technique to begin your guided exercise. These
+                            mindful practices can help reduce stress, anxiety, and promote a sense of calm and balance.
+                        </p>
+                    </div>
+
+                    <h3>Choose Your Technique</h3>
+                    <div class="breathing-patterns">
+                        <!-- 4-7-8 Breathing - Dr. Andrew Weil's technique -->
+                        <div class="breathing-pattern-card" data-pattern="478">
+                            <div class="technique-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                    fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                            </div>
+                            <h4>4-7-8 Technique</h4>
+                            <p>Inhale (4s) → Hold (7s) → Exhale (8s)</p>
+                            <span class="pattern-description">Developed by Dr. Andrew Weil - reduces anxiety, helps with
+                                sleep, and lowers stress response</span>
+                        </div>
+
+                        <!-- Coherent Breathing - clinically proven -->
+                        <div class="breathing-pattern-card" data-pattern="coherent">
+                            <div class="technique-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                    fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
+                                    </path>
+                                    <path d="M8 12h8"></path>
+                                    <path d="M12 8v8"></path>
+                                </svg>
+                            </div>
+                            <h4>Coherent Breathing</h4>
+                            <p>Inhale (5.5s) → Exhale (5.5s)</p>
+                            <span class="pattern-description">Researched at Harvard Medical School - balances autonomic
+                                nervous system, creating psychophysiological coherence</span>
+                        </div>
+
+                        <!-- Diaphragmatic Breathing - physiological research backed -->
+                        <div class="breathing-pattern-card" data-pattern="diaphragmatic">
+                            <div class="technique-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                    fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
+                                    </path>
+                                    <path d="M7 10l5 5 5-5"></path>
+                                </svg>
+                            </div>
+                            <h4>Diaphragmatic Breathing</h4>
+                            <p>Deep Inhale (4s) → Hold (1s) → Slow Exhale (6s)</p>
+                            <span class="pattern-description">Recommended by Mayo Clinic - activates parasympathetic
+                                nervous system, reduces cortisol levels</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Exercise View -->
+                <div id="breathing-exercise-container" class="breathing-exercise-container">
+                    <div class="exercise-header">
+                        <div>
+                            <h3 class="exercise-title" id="technique-title">4-7-8 Breathing Technique</h3>
+                            <p class="exercise-subtitle" id="technique-subtitle">Developed by Dr. Andrew Weil for stress
+                                reduction</p>
+                        </div>
+                        <button class="back-to-selection">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            Back to techniques
+                        </button>
+                    </div>
+
+                    <div class="breathing-visualization">
+                        <div class="breathing-circle-wrapper">
+                            <div class="circle-border"></div>
+                            <div class="breathing-circle">
+                                <div class="wave-container">
+                                    <div class="wave"></div>
+                                </div>
+                                <div class="breathing-animation"></div>
+                                <div class="breathing-animation-shadow"></div>
+                            </div>
+
+                            <div class="breathing-instruction">
+                                <div class="breathing-action" id="breathing-action">Prepare...</div>
+                                <div class="breathing-counter" id="breathing-counter">3</div>
+                            </div>
+                        </div>
+
+                        <div class="breathing-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span id="current-cycle">Cycle 0/5</span>
+                                <span id="timer">00:00</span>
+                            </div>
+                        </div>
+
+                        <div class="breathing-controls">
+                            <button id="start-breathing" class="breathing-control-btn start">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                Begin Exercise
+                            </button>
+                            <button id="pause-breathing" class="breathing-control-btn pause" style="display: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="6" y="4" width="4" height="16"></rect>
+                                    <rect x="14" y="4" width="4" height="16"></rect>
+                                </svg>
+                                Pause
+                            </button>
+                            <button id="resume-breathing" class="breathing-control-btn resume" style="display: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                Resume
+                            </button>
+                            <button id="stop-breathing" class="breathing-control-btn stop" style="display: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                </svg>
+                                End Early
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completion View -->
+                <div id="breathing-complete" class="breathing-complete">
+                    <div class="complete-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none"
+                            stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Exercise Complete</h3>
+                    <p>Great job! You've completed your mindful breathing session. Taking these moments for yourself helps build resilience and calm throughout your day.</p>
+                    <button id="complete-close" class="breathing-control-btn">
+                        Close
+                    </button>
+                    <button id="restart-breathing" class="breathing-control-btn restart">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 2v6h6"></path>
+                            <path d="M21 12A9 9 0 0 0 6 5.3L3 8"></path>
+                            <path d="M21 22v-6h-6"></path>
+                            <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"></path>
+                        </svg>
+                        Try Another Technique
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1461,6 +2074,447 @@
         }
         // Variable to store unsubscribe function
         let unsubscribeListener = null;
+    </script>
+
+    <script>
+        // Breathing Exercise Modal Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const deStressButton = document.getElementById('de-stress-button');
+            const breathingModal = document.getElementById('breathing-exercise-modal');
+            const closeModal = document.getElementById('close-breathing-modal');
+            const completeClose = document.getElementById('complete-close');
+            
+            // Selection and exercise container elements
+            const selectionView = document.getElementById('breathing-selection');
+            const exerciseContainer = document.getElementById('breathing-exercise-container');
+            const completeView = document.getElementById('breathing-complete');
+            const patternCards = document.querySelectorAll('.breathing-pattern-card');
+            const backToSelection = document.querySelector('.back-to-selection');
+            
+            // Exercise control elements
+            const startButton = document.getElementById('start-breathing');
+            const pauseButton = document.getElementById('pause-breathing');
+            const resumeButton = document.getElementById('resume-breathing');
+            const stopButton = document.getElementById('stop-breathing');
+            const restartButton = document.getElementById('restart-breathing');
+            
+            // Display elements
+            const techniqueTitle = document.getElementById('technique-title');
+            const techniqueSubtitle = document.getElementById('technique-subtitle');
+            const breathingAction = document.getElementById('breathing-action');
+            const breathingCounter = document.getElementById('breathing-counter');
+            const progressFill = document.getElementById('progress-fill');
+            const currentCycleDisplay = document.getElementById('current-cycle');
+            const timerDisplay = document.getElementById('timer');
+            
+            // Animation elements
+            const breathingCircle = document.querySelector('.breathing-circle');
+            const breathingAnimation = document.querySelector('.breathing-animation');
+            const breathingAnimationShadow = document.querySelector('.breathing-animation-shadow');
+            const wave = document.querySelector('.wave');
+            
+            // Breathing patterns
+            const patterns = {
+                '478': {
+                    title: '4-7-8 Breathing Technique',
+                    subtitle: 'Developed by Dr. Andrew Weil for stress reduction',
+                    inhale: 4,
+                    hold: 7,
+                    exhale: 8,
+                    cycles: 5
+                },
+                'coherent': {
+                    title: 'Coherent Breathing',
+                    subtitle: 'Researched at Harvard Medical School for autonomic balance',
+                    inhale: 5.5,
+                    hold: 0,
+                    exhale: 5.5,
+                    cycles: 6
+                },
+                'diaphragmatic': {
+                    title: 'Diaphragmatic Breathing',
+                    subtitle: 'Recommended by Mayo Clinic to activate parasympathetic system',
+                    inhale: 4,
+                    hold: 1,
+                    exhale: 6,
+                    cycles: 8
+                }
+            };
+            
+            // Exercise state
+            let currentPattern = null;
+            let currentCycle = 0;
+            let currentPhase = null; // 'inhale', 'hold', 'exhale'
+            let exerciseActive = false;
+            let exercisePaused = false;
+            let intervalId = null;
+            let countdownId = null;
+            let startTime = null;
+            let elapsedPausedTime = 0;
+            let totalDuration = 0;
+            
+            // Open modal
+            deStressButton.addEventListener('click', () => {
+                breathingModal.style.display = 'flex';
+                resetExerciseState();
+            });
+            
+            // Close modal buttons
+            closeModal.addEventListener('click', closeBreathingModal);
+            completeClose.addEventListener('click', closeBreathingModal);
+            
+            function closeBreathingModal() {
+                breathingModal.style.display = 'none';
+                resetExerciseState();
+                showSelectionView();
+            }
+            
+            // Select breathing pattern
+            patternCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const patternKey = card.getAttribute('data-pattern');
+                    selectPattern(patternKey);
+                });
+            });
+            
+            // Back to selection
+            backToSelection.addEventListener('click', () => {
+                resetExerciseState();
+                showSelectionView();
+            });
+            
+            // Start exercise
+            startButton.addEventListener('click', startExercise);
+            
+            // Pause exercise
+            pauseButton.addEventListener('click', pauseExercise);
+            
+            // Resume exercise
+            resumeButton.addEventListener('click', resumeExercise);
+            
+            // Stop exercise
+            stopButton.addEventListener('click', () => {
+                stopExercise();
+                showSelectionView();
+            });
+            
+            // Restart with another technique
+            restartButton.addEventListener('click', () => {
+                resetExerciseState();
+                showSelectionView();
+            });
+            
+            function selectPattern(patternKey) {
+                currentPattern = patterns[patternKey];
+                techniqueTitle.textContent = currentPattern.title;
+                techniqueSubtitle.textContent = currentPattern.subtitle;
+                
+                showExerciseView();
+            }
+            
+            function showSelectionView() {
+                selectionView.style.display = 'block';
+                exerciseContainer.style.display = 'none';
+                completeView.style.display = 'none';
+            }
+            
+            function showExerciseView() {
+                selectionView.style.display = 'none';
+                exerciseContainer.style.display = 'block';
+                completeView.style.display = 'none';
+            }
+            
+            function showCompleteView() {
+                selectionView.style.display = 'none';
+                exerciseContainer.style.display = 'none';
+                completeView.style.display = 'block';
+            }
+            
+            function startExercise() {
+                if (exerciseActive) return;
+                
+                startButton.style.display = 'none';
+                pauseButton.style.display = 'flex';
+                stopButton.style.display = 'flex';
+                
+                exerciseActive = true;
+                startTime = Date.now();
+                totalDuration = calculateTotalDuration();
+                
+                // Start with 3 second countdown
+                let countdown = 3;
+                breathingAction.textContent = 'Prepare...';
+                breathingCounter.textContent = countdown;
+                
+                countdownId = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        breathingCounter.textContent = countdown;
+                    } else {
+                        clearInterval(countdownId);
+                        startBreathingCycle();
+                    }
+                }, 1000);
+                
+                // Start timer
+                updateTimer();
+            }
+            
+            function pauseExercise() {
+                if (!exerciseActive || exercisePaused) return;
+                
+                exercisePaused = true;
+                pauseButton.style.display = 'none';
+                resumeButton.style.display = 'flex';
+                
+                // Stop animations
+                clearInterval(intervalId);
+                
+                // Pause wave and circle at current state
+                wave.style.transition = 'none';
+                breathingCircle.style.transition = 'none';
+                breathingAnimation.style.transition = 'none';
+                breathingAnimationShadow.style.transition = 'none';
+                
+                breathingAction.textContent = 'Paused';
+                breathingCounter.style.display = 'none';
+            }
+            
+            function resumeExercise() {
+                if (!exerciseActive || !exercisePaused) return;
+                
+                exercisePaused = false;
+                resumeButton.style.display = 'none';
+                pauseButton.style.display = 'flex';
+                
+                // Add the paused time
+                elapsedPausedTime += (Date.now() - (startTime + elapsedPausedTime));
+                
+                // Resume animations from where they left off
+                breathingCounter.style.display = 'block';
+                
+                // Restore transitions
+                wave.style.transition = 'transform 0.5s ease-in-out';
+                breathingCircle.style.transition = 'transform 0.5s ease-in-out';
+                breathingAnimation.style.transition = 'transform 0.5s ease-in-out';
+                breathingAnimationShadow.style.transition = 'transform 0.5s ease-in-out';
+                
+                // Continue from current phase
+                continueBreathingCycle();
+            }
+            
+            function stopExercise() {
+                if (!exerciseActive) return;
+                
+                // Reset UI
+                exerciseActive = false;
+                exercisePaused = false;
+                
+                clearInterval(intervalId);
+                clearInterval(countdownId);
+                
+                startButton.style.display = 'flex';
+                pauseButton.style.display = 'none';
+                resumeButton.style.display = 'none';
+                stopButton.style.display = 'none';
+                
+                resetAnimations();
+            }
+            
+            function startBreathingCycle() {
+                currentCycle = 1;
+                updateCurrentCycleDisplay();
+                startInhalePhase();
+            }
+            
+            function continueBreathingCycle() {
+                // Pick up from where we left off
+                if (currentPhase === 'inhale') {
+                    startInhalePhase();
+                } else if (currentPhase === 'hold') {
+                    startHoldPhase();
+                } else if (currentPhase === 'exhale') {
+                    startExhalePhase();
+                }
+            }
+            
+            function startInhalePhase() {
+                if (!exerciseActive || exercisePaused) return;
+                
+                currentPhase = 'inhale';
+                const duration = currentPattern.inhale;
+                
+                // Update UI
+                breathingAction.textContent = 'Inhale';
+                updateCountdown(duration);
+                
+                // Animation
+                breathingCircle.style.transform = 'scale(1.2)';
+                breathingAnimation.style.transform = 'scale(1.3)';
+                breathingAnimationShadow.style.transform = 'scale(1.35)';
+                wave.style.transform = 'translateY(0%)';
+                
+                // When inhale is done, move to hold or exhale
+                setTimeout(() => {
+                    if (!exerciseActive || exercisePaused) return;
+                    
+                    if (currentPattern.hold > 0) {
+                        startHoldPhase();
+                    } else {
+                        startExhalePhase();
+                    }
+                }, duration * 1000);
+            }
+            
+            function startHoldPhase() {
+                if (!exerciseActive || exercisePaused) return;
+                
+                currentPhase = 'hold';
+                const duration = currentPattern.hold;
+                
+                // Update UI
+                breathingAction.textContent = 'Hold';
+                updateCountdown(duration);
+                
+                // No animation change for hold
+                
+                // When hold is done, move to exhale
+                setTimeout(() => {
+                    if (!exerciseActive || exercisePaused) return;
+                    startExhalePhase();
+                }, duration * 1000);
+            }
+            
+            function startExhalePhase() {
+                if (!exerciseActive || exercisePaused) return;
+                
+                currentPhase = 'exhale';
+                const duration = currentPattern.exhale;
+                
+                // Update UI
+                breathingAction.textContent = 'Exhale';
+                updateCountdown(duration);
+                
+                // Animation
+                breathingCircle.style.transform = 'scale(1)';
+                breathingAnimation.style.transform = 'scale(0.8)';
+                breathingAnimationShadow.style.transform = 'scale(0.85)';
+                wave.style.transform = 'translateY(60%)';
+                
+                // When exhale is done, start next cycle or complete
+                setTimeout(() => {
+                    if (!exerciseActive || exercisePaused) return;
+                    
+                    // Update progress bar
+                    const progress = (currentCycle / currentPattern.cycles) * 100;
+                    progressFill.style.width = `${progress}%`;
+                    
+                    if (currentCycle < currentPattern.cycles) {
+                        currentCycle++;
+                        updateCurrentCycleDisplay();
+                        startInhalePhase();
+                    } else {
+                        completeExercise();
+                    }
+                }, duration * 1000);
+            }
+            
+            function updateCountdown(duration) {
+                let timeLeft = duration;
+                breathingCounter.textContent = timeLeft.toFixed(1);
+                
+                clearInterval(intervalId);
+                intervalId = setInterval(() => {
+                    if (exercisePaused) {
+                        clearInterval(intervalId);
+                        return;
+                    }
+                    
+                    timeLeft -= 0.1;
+                    if (timeLeft <= 0) {
+                        clearInterval(intervalId);
+                        breathingCounter.textContent = '0';
+                    } else {
+                        breathingCounter.textContent = timeLeft.toFixed(1);
+                    }
+                }, 100);
+            }
+            
+            function updateCurrentCycleDisplay() {
+                currentCycleDisplay.textContent = `Cycle ${currentCycle}/${currentPattern.cycles}`;
+            }
+            
+            function updateTimer() {
+                if (!exerciseActive) return;
+                
+                const elapsed = Date.now() - startTime - elapsedPausedTime;
+                const seconds = Math.floor((elapsed / 1000) % 60);
+                const minutes = Math.floor(elapsed / 1000 / 60);
+                
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Update progress
+                if (totalDuration > 0) {
+                    const progress = Math.min((elapsed / (totalDuration * 1000)) * 100, 100);
+                    progressFill.style.width = `${progress}%`;
+                }
+                
+                requestAnimationFrame(updateTimer);
+            }
+            
+            function completeExercise() {
+                stopExercise();
+                showCompleteView();
+            }
+            
+            function resetExerciseState() {
+                currentCycle = 0;
+                currentPhase = null;
+                exerciseActive = false;
+                exercisePaused = false;
+                elapsedPausedTime = 0;
+                startTime = null;
+                
+                clearInterval(intervalId);
+                clearInterval(countdownId);
+                
+                startButton.style.display = 'flex';
+                pauseButton.style.display = 'none';
+                resumeButton.style.display = 'none';
+                stopButton.style.display = 'none';
+                
+                // Reset UI
+                breathingAction.textContent = 'Prepare...';
+                breathingCounter.textContent = '3';
+                breathingCounter.style.display = 'block';
+                progressFill.style.width = '0%';
+                currentCycleDisplay.textContent = 'Cycle 0/5';
+                timerDisplay.textContent = '00:00';
+                
+                resetAnimations();
+            }
+            
+            function resetAnimations() {
+                breathingCircle.style.transform = 'scale(1)';
+                breathingAnimation.style.transform = 'scale(0.8)';
+                breathingAnimationShadow.style.transform = 'scale(0.85)';
+                wave.style.transform = 'translateY(60%)';
+                
+                // Restore transitions
+                wave.style.transition = 'transform 0.5s ease-in-out';
+                breathingCircle.style.transition = 'transform 0.5s ease-in-out';
+                breathingAnimation.style.transition = 'transform 0.5s ease-in-out';
+                breathingAnimationShadow.style.transition = 'transform 0.5s ease-in-out';
+            }
+            
+            function calculateTotalDuration() {
+                const cycleTime = currentPattern.inhale + currentPattern.hold + currentPattern.exhale;
+                return currentPattern.cycles * cycleTime;
+            }
+            
+            // Initial state
+            showSelectionView();
+        });
     </script>
 </body>
 

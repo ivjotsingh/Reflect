@@ -1,0 +1,649 @@
+/* CBT Worksheet Styles */
+.cbt-modal {
+    background-color: #1a1f2c;
+    max-width: 900px;
+    width: 90%;
+    max-height: 90vh;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-out;
+    color: #f5f5f5;
+}
+
+.cbt-container {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(90vh - 60px);
+}
+
+.cbt-progress-container {
+    margin-bottom: 25px;
+}
+
+.cbt-progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.cbt-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.cbt-step.active {
+    opacity: 1;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #2c3e50;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.cbt-step.active .step-number {
+    background-color: #3498db;
+}
+
+.step-label {
+    font-size: 12px;
+    text-align: center;
+}
+
+.cbt-progress-bar {
+    height: 5px;
+    background-color: #2c3e50;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.cbt-progress-fill {
+    height: 100%;
+    background-color: #3498db;
+    width: 14.28%; /* 1/7 for step 1 */
+    transition: width 0.3s ease;
+}
+
+.cbt-step-content {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.cbt-step-content.active {
+    display: block;
+}
+
+.step-header {
+    margin-bottom: 20px;
+}
+
+.step-header h3 {
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.step-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.cbt-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.cbt-textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.cbt-info-box {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-left: 3px solid #3498db;
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.info-icon {
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.cbt-info-box p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.thought-bubbles {
+    margin-bottom: 20px;
+}
+
+.thought-bubble-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.thought-bubble {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+}
+
+.thought-input {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    resize: none;
+}
+
+.thought-input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.belief-slider-container {
+    margin-top: 10px;
+}
+
+.belief-slider-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.belief-slider {
+    width: 100%;
+    height: 5px;
+    background: #2c3e50;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    border-radius: 5px;
+}
+
+.belief-slider:hover {
+    opacity: 1;
+}
+
+.belief-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #3498db;
+    cursor: pointer;
+}
+
+.add-thought-btn {
+    background-color: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.add-thought-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.emotion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.emotion-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.emotion-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.emotion-intensity {
+    width: 90%;
+    margin: 10px 0 5px;
+    height: 5px;
+    background: #2c3e50;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    border-radius: 5px;
+}
+
+.intensity-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.other-emotion-container {
+    margin-top: 15px;
+}
+
+.other-emotion-container label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.other-emotion-container input {
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+}
+
+.distortion-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.distortion-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.distortion-checkbox-container {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    position: relative;
+}
+
+.distortion-checkbox {
+    opacity: 0;
+    position: absolute;
+}
+
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.distortion-checkbox:checked ~ .checkmark {
+    background-color: #3498db;
+}
+
+.checkmark:after {
+    content: "";
+    display: none;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.distortion-checkbox:checked ~ .checkmark:after {
+    display: block;
+}
+
+.distortion-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.distortion-title {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.distortion-desc {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.evidence-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.evidence-column h4 {
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.evidence-textarea {
+    min-height: 150px;
+}
+
+.thought-selector {
+    margin-bottom: 20px;
+}
+
+.thought-selector label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.thought-selector select {
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+}
+
+.perspective-container {
+    margin-bottom: 20px;
+}
+
+.perspective-prompts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.perspective-prompt {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.prompt-question {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.perspective-input {
+    width: 100%;
+    min-height: 80px;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    resize: none;
+}
+
+.balanced-thought-container {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.balanced-thought-container h4 {
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.results-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.result-column {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.result-column h4 {
+    margin-bottom: 10px;
+    color: #fff;
+    text-align: center;
+}
+
+.result-thought {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 10px;
+    min-height: 100px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.result-belief {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.belief-meter {
+    flex-grow: 1;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.belief-fill {
+    height: 100%;
+    background-color: #3498db;
+    transition: width 0.5s ease;
+}
+
+.original-belief-fill {
+    background-color: #e74c3c;
+}
+
+.balanced-belief-fill {
+    background-color: #2ecc71;
+}
+
+.belief-percentage {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #fff;
+}
+
+.emotion-changes {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.emotion-changes h4 {
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.emotion-comparison {
+    margin: 15px 0;
+}
+
+.emotion-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.emotion-name {
+    width: 100px;
+    font-size: 14px;
+}
+
+.emotion-bars {
+    flex-grow: 1;
+    display: flex;
+    gap: 15px;
+}
+
+.emotion-bar-container {
+    flex-grow: 1;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.emotion-bar-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.before-bar-fill {
+    background-color: #e74c3c;
+}
+
+.after-bar-fill {
+    background-color: #2ecc71;
+}
+
+.emotion-bar-label {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #fff;
+}
+
+.current-mood {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.current-mood p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.current-mood input {
+    flex-grow: 1;
+    max-width: 200px;
+}
+
+.learning-reflection {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.learning-reflection h4 {
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.cbt-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.cbt-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cbt-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.cbt-nav-btn.save {
+    background-color: rgba(52, 152, 219, 0.2);
+}
+
+.cbt-nav-btn.save:hover {
+    background-color: rgba(52, 152, 219, 0.3);
+}
+
+.cbt-nav-btn.next {
+    background-color: #3498db;
+}
+
+.cbt-nav-btn.next:hover {
+    background-color: #2980b9;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
