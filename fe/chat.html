@@ -1204,8 +1204,7 @@
 
         <div class="user-area">
             <button id="theme-toggle" class="theme-toggle">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
@@ -1236,40 +1235,35 @@
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                            <span>De-Stress</span>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" />
-                                    <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
+                                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <span>Dilemma Resolver</span>
+                            <span>De-Stress</span>
                         </div>
-                        <div class="feature-item">
+                        <div class="feature-item" id="cbt-worksheets-button">
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
-                                        d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8"
+                                        d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <span>Life Simulator</span>
+                            <span>CBT Worksheets</span>
                         </div>
                     </div>
                 </div>
@@ -1569,7 +1563,8 @@
                         </svg>
                     </div>
                     <h3>Exercise Complete</h3>
-                    <p>Great job! You've completed your mindful breathing session. Taking these moments for yourself helps build resilience and calm throughout your day.</p>
+                    <p>Great job! You've completed your mindful breathing session. Taking these moments for yourself
+                        helps build resilience and calm throughout your day.</p>
                     <button id="complete-close" class="breathing-control-btn">
                         Close
                     </button>
@@ -2078,26 +2073,26 @@
 
     <script>
         // Breathing Exercise Modal Functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const deStressButton = document.getElementById('de-stress-button');
             const breathingModal = document.getElementById('breathing-exercise-modal');
             const closeModal = document.getElementById('close-breathing-modal');
             const completeClose = document.getElementById('complete-close');
-            
+
             // Selection and exercise container elements
             const selectionView = document.getElementById('breathing-selection');
             const exerciseContainer = document.getElementById('breathing-exercise-container');
             const completeView = document.getElementById('breathing-complete');
             const patternCards = document.querySelectorAll('.breathing-pattern-card');
             const backToSelection = document.querySelector('.back-to-selection');
-            
+
             // Exercise control elements
             const startButton = document.getElementById('start-breathing');
             const pauseButton = document.getElementById('pause-breathing');
             const resumeButton = document.getElementById('resume-breathing');
             const stopButton = document.getElementById('stop-breathing');
             const restartButton = document.getElementById('restart-breathing');
-            
+
             // Display elements
             const techniqueTitle = document.getElementById('technique-title');
             const techniqueSubtitle = document.getElementById('technique-subtitle');
@@ -2106,13 +2101,13 @@
             const progressFill = document.getElementById('progress-fill');
             const currentCycleDisplay = document.getElementById('current-cycle');
             const timerDisplay = document.getElementById('timer');
-            
+
             // Animation elements
             const breathingCircle = document.querySelector('.breathing-circle');
             const breathingAnimation = document.querySelector('.breathing-animation');
             const breathingAnimationShadow = document.querySelector('.breathing-animation-shadow');
             const wave = document.querySelector('.wave');
-            
+
             // Breathing patterns
             const patterns = {
                 '478': {
@@ -2140,7 +2135,7 @@
                     cycles: 8
                 }
             };
-            
+
             // Exercise state
             let currentPattern = null;
             let currentCycle = 0;
@@ -2152,23 +2147,23 @@
             let startTime = null;
             let elapsedPausedTime = 0;
             let totalDuration = 0;
-            
+
             // Open modal
             deStressButton.addEventListener('click', () => {
                 breathingModal.style.display = 'flex';
                 resetExerciseState();
             });
-            
+
             // Close modal buttons
             closeModal.addEventListener('click', closeBreathingModal);
             completeClose.addEventListener('click', closeBreathingModal);
-            
+
             function closeBreathingModal() {
                 breathingModal.style.display = 'none';
                 resetExerciseState();
                 showSelectionView();
             }
-            
+
             // Select breathing pattern
             patternCards.forEach(card => {
                 card.addEventListener('click', () => {
@@ -2176,76 +2171,76 @@
                     selectPattern(patternKey);
                 });
             });
-            
+
             // Back to selection
             backToSelection.addEventListener('click', () => {
                 resetExerciseState();
                 showSelectionView();
             });
-            
+
             // Start exercise
             startButton.addEventListener('click', startExercise);
-            
+
             // Pause exercise
             pauseButton.addEventListener('click', pauseExercise);
-            
+
             // Resume exercise
             resumeButton.addEventListener('click', resumeExercise);
-            
+
             // Stop exercise
             stopButton.addEventListener('click', () => {
                 stopExercise();
                 showSelectionView();
             });
-            
+
             // Restart with another technique
             restartButton.addEventListener('click', () => {
                 resetExerciseState();
                 showSelectionView();
             });
-            
+
             function selectPattern(patternKey) {
                 currentPattern = patterns[patternKey];
                 techniqueTitle.textContent = currentPattern.title;
                 techniqueSubtitle.textContent = currentPattern.subtitle;
-                
+
                 showExerciseView();
             }
-            
+
             function showSelectionView() {
                 selectionView.style.display = 'block';
                 exerciseContainer.style.display = 'none';
                 completeView.style.display = 'none';
             }
-            
+
             function showExerciseView() {
                 selectionView.style.display = 'none';
                 exerciseContainer.style.display = 'block';
                 completeView.style.display = 'none';
             }
-            
+
             function showCompleteView() {
                 selectionView.style.display = 'none';
                 exerciseContainer.style.display = 'none';
                 completeView.style.display = 'block';
             }
-            
+
             function startExercise() {
                 if (exerciseActive) return;
-                
+
                 startButton.style.display = 'none';
                 pauseButton.style.display = 'flex';
                 stopButton.style.display = 'flex';
-                
+
                 exerciseActive = true;
                 startTime = Date.now();
                 totalDuration = calculateTotalDuration();
-                
+
                 // Start with 3 second countdown
                 let countdown = 3;
                 breathingAction.textContent = 'Prepare...';
                 breathingCounter.textContent = countdown;
-                
+
                 countdownId = setInterval(() => {
                     countdown--;
                     if (countdown > 0) {
@@ -2255,78 +2250,78 @@
                         startBreathingCycle();
                     }
                 }, 1000);
-                
+
                 // Start timer
                 updateTimer();
             }
-            
+
             function pauseExercise() {
                 if (!exerciseActive || exercisePaused) return;
-                
+
                 exercisePaused = true;
                 pauseButton.style.display = 'none';
                 resumeButton.style.display = 'flex';
-                
+
                 // Stop animations
                 clearInterval(intervalId);
-                
+
                 // Pause wave and circle at current state
                 wave.style.transition = 'none';
                 breathingCircle.style.transition = 'none';
                 breathingAnimation.style.transition = 'none';
                 breathingAnimationShadow.style.transition = 'none';
-                
+
                 breathingAction.textContent = 'Paused';
                 breathingCounter.style.display = 'none';
             }
-            
+
             function resumeExercise() {
                 if (!exerciseActive || !exercisePaused) return;
-                
+
                 exercisePaused = false;
                 resumeButton.style.display = 'none';
                 pauseButton.style.display = 'flex';
-                
+
                 // Add the paused time
                 elapsedPausedTime += (Date.now() - (startTime + elapsedPausedTime));
-                
+
                 // Resume animations from where they left off
                 breathingCounter.style.display = 'block';
-                
+
                 // Restore transitions
                 wave.style.transition = 'transform 0.5s ease-in-out';
                 breathingCircle.style.transition = 'transform 0.5s ease-in-out';
                 breathingAnimation.style.transition = 'transform 0.5s ease-in-out';
                 breathingAnimationShadow.style.transition = 'transform 0.5s ease-in-out';
-                
+
                 // Continue from current phase
                 continueBreathingCycle();
             }
-            
+
             function stopExercise() {
                 if (!exerciseActive) return;
-                
+
                 // Reset UI
                 exerciseActive = false;
                 exercisePaused = false;
-                
+
                 clearInterval(intervalId);
                 clearInterval(countdownId);
-                
+
                 startButton.style.display = 'flex';
                 pauseButton.style.display = 'none';
                 resumeButton.style.display = 'none';
                 stopButton.style.display = 'none';
-                
+
                 resetAnimations();
             }
-            
+
             function startBreathingCycle() {
                 currentCycle = 1;
                 updateCurrentCycleDisplay();
                 startInhalePhase();
             }
-            
+
             function continueBreathingCycle() {
                 // Pick up from where we left off
                 if (currentPhase === 'inhale') {
@@ -2337,27 +2332,27 @@
                     startExhalePhase();
                 }
             }
-            
+
             function startInhalePhase() {
                 if (!exerciseActive || exercisePaused) return;
-                
+
                 currentPhase = 'inhale';
                 const duration = currentPattern.inhale;
-                
+
                 // Update UI
                 breathingAction.textContent = 'Inhale';
                 updateCountdown(duration);
-                
+
                 // Animation
                 breathingCircle.style.transform = 'scale(1.2)';
                 breathingAnimation.style.transform = 'scale(1.3)';
                 breathingAnimationShadow.style.transform = 'scale(1.35)';
                 wave.style.transform = 'translateY(0%)';
-                
+
                 // When inhale is done, move to hold or exhale
                 setTimeout(() => {
                     if (!exerciseActive || exercisePaused) return;
-                    
+
                     if (currentPattern.hold > 0) {
                         startHoldPhase();
                     } else {
@@ -2365,50 +2360,50 @@
                     }
                 }, duration * 1000);
             }
-            
+
             function startHoldPhase() {
                 if (!exerciseActive || exercisePaused) return;
-                
+
                 currentPhase = 'hold';
                 const duration = currentPattern.hold;
-                
+
                 // Update UI
                 breathingAction.textContent = 'Hold';
                 updateCountdown(duration);
-                
+
                 // No animation change for hold
-                
+
                 // When hold is done, move to exhale
                 setTimeout(() => {
                     if (!exerciseActive || exercisePaused) return;
                     startExhalePhase();
                 }, duration * 1000);
             }
-            
+
             function startExhalePhase() {
                 if (!exerciseActive || exercisePaused) return;
-                
+
                 currentPhase = 'exhale';
                 const duration = currentPattern.exhale;
-                
+
                 // Update UI
                 breathingAction.textContent = 'Exhale';
                 updateCountdown(duration);
-                
+
                 // Animation
                 breathingCircle.style.transform = 'scale(1)';
                 breathingAnimation.style.transform = 'scale(0.8)';
                 breathingAnimationShadow.style.transform = 'scale(0.85)';
                 wave.style.transform = 'translateY(60%)';
-                
+
                 // When exhale is done, start next cycle or complete
                 setTimeout(() => {
                     if (!exerciseActive || exercisePaused) return;
-                    
+
                     // Update progress bar
                     const progress = (currentCycle / currentPattern.cycles) * 100;
                     progressFill.style.width = `${progress}%`;
-                    
+
                     if (currentCycle < currentPattern.cycles) {
                         currentCycle++;
                         updateCurrentCycleDisplay();
@@ -2418,18 +2413,18 @@
                     }
                 }, duration * 1000);
             }
-            
+
             function updateCountdown(duration) {
                 let timeLeft = duration;
                 breathingCounter.textContent = timeLeft.toFixed(1);
-                
+
                 clearInterval(intervalId);
                 intervalId = setInterval(() => {
                     if (exercisePaused) {
                         clearInterval(intervalId);
                         return;
                     }
-                    
+
                     timeLeft -= 0.1;
                     if (timeLeft <= 0) {
                         clearInterval(intervalId);
@@ -2439,34 +2434,34 @@
                     }
                 }, 100);
             }
-            
+
             function updateCurrentCycleDisplay() {
                 currentCycleDisplay.textContent = `Cycle ${currentCycle}/${currentPattern.cycles}`;
             }
-            
+
             function updateTimer() {
                 if (!exerciseActive) return;
-                
+
                 const elapsed = Date.now() - startTime - elapsedPausedTime;
                 const seconds = Math.floor((elapsed / 1000) % 60);
                 const minutes = Math.floor(elapsed / 1000 / 60);
-                
+
                 timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
+
                 // Update progress
                 if (totalDuration > 0) {
                     const progress = Math.min((elapsed / (totalDuration * 1000)) * 100, 100);
                     progressFill.style.width = `${progress}%`;
                 }
-                
+
                 requestAnimationFrame(updateTimer);
             }
-            
+
             function completeExercise() {
                 stopExercise();
                 showCompleteView();
             }
-            
+
             function resetExerciseState() {
                 currentCycle = 0;
                 currentPhase = null;
@@ -2474,15 +2469,15 @@
                 exercisePaused = false;
                 elapsedPausedTime = 0;
                 startTime = null;
-                
+
                 clearInterval(intervalId);
                 clearInterval(countdownId);
-                
+
                 startButton.style.display = 'flex';
                 pauseButton.style.display = 'none';
                 resumeButton.style.display = 'none';
                 stopButton.style.display = 'none';
-                
+
                 // Reset UI
                 breathingAction.textContent = 'Prepare...';
                 breathingCounter.textContent = '3';
@@ -2490,28 +2485,28 @@
                 progressFill.style.width = '0%';
                 currentCycleDisplay.textContent = 'Cycle 0/5';
                 timerDisplay.textContent = '00:00';
-                
+
                 resetAnimations();
             }
-            
+
             function resetAnimations() {
                 breathingCircle.style.transform = 'scale(1)';
                 breathingAnimation.style.transform = 'scale(0.8)';
                 breathingAnimationShadow.style.transform = 'scale(0.85)';
                 wave.style.transform = 'translateY(60%)';
-                
+
                 // Restore transitions
                 wave.style.transition = 'transform 0.5s ease-in-out';
                 breathingCircle.style.transition = 'transform 0.5s ease-in-out';
                 breathingAnimation.style.transition = 'transform 0.5s ease-in-out';
                 breathingAnimationShadow.style.transition = 'transform 0.5s ease-in-out';
             }
-            
+
             function calculateTotalDuration() {
                 const cycleTime = currentPattern.inhale + currentPattern.hold + currentPattern.exhale;
                 return currentPattern.cycles * cycleTime;
             }
-            
+
             // Initial state
             showSelectionView();
         });
