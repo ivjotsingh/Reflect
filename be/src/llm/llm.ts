@@ -36,13 +36,13 @@ async function llmInitOpenAiModels() {
     try {
         // Standard GPT model with JSON output format
         const reflectOpenAINormalMode = new ChatOpenAI({
-            modelName: 'gpt-3.5-turbo',
+            modelName: 'gpt-4o-mini-2024-07-18',
             maxTokens: 800,
             openAIApiKey: conf.env.credentials.openAIAPIKey,
-            temperature: 0.7,
+            temperature: 0.5, // Lower temperature for more consistent therapy responses
             verbose: true,
         });
-        
+
         const reflectOpenAIJsonMode = reflectOpenAINormalMode.bind({
             response_format: {
                 type: 'json_object',
@@ -55,10 +55,12 @@ async function llmInitOpenAiModels() {
             modelName: 'gpt-4o',
             maxTokens: 1000,
             openAIApiKey: conf.env.credentials.openAIAPIKey,
-            temperature: 0.7,
+            temperature: 0.4, // Lower temperature for more consistent therapy responses
             verbose: true,
+            presencePenalty: 0.2, // Slight presence penalty for more diverse responses
+            frequencyPenalty: 0.3, // Discourage repetitiveness in therapy
         });
-        
+
         const reflectGpt4oJson = reflectGpt4o.bind({
             response_format: {
                 type: 'json_object',

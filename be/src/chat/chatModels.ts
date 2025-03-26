@@ -36,17 +36,21 @@ export class ChatMessage extends dbDocument {
     public chatId: string;
     public sessionId: string;  // Using userId as sessionId in our simplified model
     public content: string;
+    public message: string;    // Human-readable message for both user and AI
     public role: 'user' | 'assistant';
     public userId: string;
     public timestamp: dbTimestamp;
+    public additionalKwargs?: Record<string, any>; // Add this field for storing additional data
 
     constructor(init: Partial<ChatMessage>) {
         super(init);
         this.sessionId = init.sessionId || '';
         this.content = init.content || '';
+        this.message = init.message || init.content || ''; // Default to content if message not provided
         this.role = init.role || 'user';
         this.userId = init.userId || '';
         this.timestamp = init.timestamp || new Date() as any;
+        this.additionalKwargs = init.additionalKwargs || {};
     }
 
     static override _collection(sessionId?: string): string {

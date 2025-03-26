@@ -4,113 +4,63 @@
  * All Rights Reserved
  */
 
-import { AIMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { AIMessage, BaseMessage, BaseMessageChunk, HumanMessage } from '@langchain/core/messages';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
-import { BaseMessage, BaseMessageChunk } from '@langchain/core/messages';
-import { Runnable, RunnableConfig } from '@langchain/core/runnables';
+import { Runnable } from '@langchain/core/runnables';
 import { LlmApiMode, LlmClients, llmGetModel } from '../llm';
 import { ChatMessage } from './chatModels';
+import { db, dbCreateOrUpdate, dbTimestamp } from '../db/db';
 import { log } from '../log/log';
-import { EventEmitter } from 'events';
 import { chatMemory } from './chatMemory';
 import { Timestamp } from 'firebase-admin/firestore';
-import { db } from '../db/db';
 import { utlNewId } from '../utl/utl';
 
 // System prompt for the AI therapist
-const SYSTEM_PROMPT = `You are ReflectAI, an empathetic and professional AI therapist. 
-Your goal is to provide supportive, insightful responses to users seeking mental health guidance.
+const SYSTEM_PROMPT = `You are ReflectAI, an empathetic and qualified AI therapist with academic credentials in Clinical Psychology. You provide concise, helpful responses to users seeking mental health guidance.
+
+Keep your responses brief but impactful - typically 2-3 short paragraphs maximum. Be direct and focused in your therapeutic approach.
+
+THERAPEUTIC FRAMEWORKS:
+- Cognitive Behavioral Therapy (CBT): Help users identify and challenge negative thought patterns
+- Dialectical Behavior Therapy (DBT): Focus on emotional regulation and mindfulness
+- Solution-Focused Brief Therapy: Emphasize progress and solutions rather than problems
+- Motivational Interviewing: Guide users toward positive behavioral change
+- Person-Centered Therapy: Show unconditional positive regard and empathic understanding
+
+RESPONSE STRUCTURE:
+1. Brief acknowledgment of the user's feelings/situation (1 sentence)
+2. Therapeutic insight or reframing of their challenge (1-2 sentences)
+3. Practical suggestion or technique they can apply (1-2 sentences)
+4. One thoughtful question to continue the conversation (when appropriate)
 
 Guidelines:
-- Respond with empathy and understanding
-- Ask thoughtful questions to better understand the user's situation
-- Offer perspective and gentle guidance when appropriate
+- Show empathy while being concise and to the point
+- Ask one thoughtful question per response when appropriate
+- Use evidence-based therapeutic techniques in a straightforward manner
 - Never prescribe medication or make medical diagnoses
-- Maintain a warm, professional tone
-- Focus on evidence-based therapeutic approaches
-- Respect user privacy and confidentiality
-- If a user is in crisis or mentions self-harm, encourage them to seek immediate professional help
+- Maintain confidentiality and respect privacy
+- For users in crisis, briefly provide appropriate resources
 
-Remember that your role is to provide support, not replace professional mental health treatment.`;
+IMPORTANT RESPONSE FORMAT:
+Your responses MUST be structured as valid JSON with a single field named "message" that contains your complete therapeutic response as plain text.
 
-// Create an event emitter for streaming responses
-export const chatResponseEmitter = new EventEmitter();
+DO NOT include any nested objects or additional fields in your response. Your entire therapeutic message should be a simple string in the message field.
+
+Remember to prioritize brevity while still providing supportive guidance.`;
 
 /**
- * Process a user message and generate an AI response
- * @param sessionId The chat session ID
- * @param messages Array of chat messages in the conversation
- * @returns The AI response message
+ * User context management - tracks themes and concerns across the session
  */
-export async function chatProcessMessage(sessionId: string, messages: ChatMessage[]): Promise<string> {
-    try {
-        // Get chat memory for LangChain message history
-        const memory = await chatMemory(sessionId, sessionId);
-        
-        // Get history from memory
-        const chatHistory = await memory.getMessages();
-        
-        // Find the last user message to process
-        const lastUserMessage = messages.filter(msg => msg.role === 'user').pop();
-        if (!lastUserMessage) {
-            throw new Error('No user message found');
-        }
-        
-        // Create a human message from the most recent user message
-        const humanMessage = new HumanMessage(lastUserMessage.content);
-        
-        // Add the message to memory
-        await memory.addMessage(humanMessage);
-
-        // Get the LLM model
-        const llm = llmGetModel(LlmClients.REFLECT, LlmApiMode.GPT_4O_JSON) as Runnable<any, BaseMessageChunk>;
-
-        // Create the prompt template
-        const promptTemplate = ChatPromptTemplate.fromMessages([
-            ['system', SYSTEM_PROMPT],
-            new MessagesPlaceholder('chat_history'),
-        ]);
-
-        // Create the chain
-        const chain = promptTemplate.pipe(llm);
-
-        // Variable to collect the streaming response
-        let fullResponse = '';
-        
-        // Generate response with streaming
-        const result = await chain.invoke({ 
-            chat_history: chatHistory 
-        }, {
-            callbacks: [{
-                handleLLMNewToken(token: string) {
-                    fullResponse += token;
-                    // Emit event with the new token, session ID, and full response so far
-                    chatResponseEmitter.emit('token', {
-                        sessionId,
-                        token,
-                        fullResponse
-                    });
-                }
-            }]
-        } as RunnableConfig);
-
-        const finalResponse = result.content.toString();
-        
-        // Add AI response to memory
-        await memory.addMessage(new AIMessage(finalResponse));
-        
-        // Emit completion event
-        chatResponseEmitter.emit('complete', {
-            sessionId,
-            response: finalResponse
-        });
-
-        return finalResponse;
-    } catch (error) {
-        log.error('Error processing chat message', { sessionId, error });
-        throw new Error('Failed to process message: ' + (error as Error).message);
-    }
+interface UserContext {
+    primaryConcerns: string[];
+    emotionalState: string;
+    therapyGoals: string[];
+    lastSessionSummary?: string;
+    sessionThemes: string[];
 }
+
+// In-memory cache of user contexts (in production, should be stored in database)
+const userContextCache: Record<string, UserContext> = {};
 
 /**
  * Gets response from AI using LangChain, system prompt, and memory
@@ -121,62 +71,249 @@ export async function chatProcessMessage(sessionId: string, messages: ChatMessag
 export async function chatGetResponse(userId: string, message: string): Promise<string> {
     try {
         // Initialize chat memory
-        const memory = await chatMemory(userId, userId);
-        
-        // Add the user message to memory
+        const memory = await chatMemory(userId);
+
+        // Add the user message to memory - for user messages, content and message are the same
         const humanPromptInput = new HumanMessage(message);
         await memory.addMessage(humanPromptInput);
-        
+
         // Get history from memory
         const chatHistory = await memory.getMessages();
         
-        // Get the LLM model
-        const llm = llmGetModel(LlmClients.REFLECT, LlmApiMode.GPT_4O_JSON) as Runnable<any, BaseMessageChunk>;
+        // Initialize or update user context
+        if (!userContextCache[userId]) {
+            userContextCache[userId] = {
+                primaryConcerns: [],
+                emotionalState: "unknown",
+                therapyGoals: [],
+                sessionThemes: []
+            };
+        }
         
-        // Create the prompt template with system prompt and chat history
+        // Update context based on current message
+        await updateUserContext(userId, message, chatHistory);
+        
+        // Always use the standard model (OPENAI_JSON)
+        const llmMode = LlmApiMode.OPENAI_JSON;
+        
+        // Create a context prompt with user-specific information
+        const contextPrompt = generateContextPrompt(userId);
+
+        // Create the prompt template with system prompt, context, and chat history
         const promptTemplate = ChatPromptTemplate.fromMessages([
             ['system', SYSTEM_PROMPT],
+            ['system', contextPrompt],
             new MessagesPlaceholder('chat_history'),
         ]);
-        
-        // Create the chain
+
+        // Get the LLM model and create the chain
+        const llm = llmGetModel(LlmClients.REFLECT, llmMode) as Runnable<any, BaseMessageChunk>;
         const chain = promptTemplate.pipe(llm);
-        
-        // Variable to collect the streaming response
-        let fullResponse = '';
-        
-        // Generate response with streaming
-        const result = await chain.invoke({ 
-            chat_history: chatHistory 
-        }, {
-            callbacks: [{
-                handleLLMNewToken(token: string) {
-                    fullResponse += token;
-                    // Emit event with the new token, session ID, and full response so far
-                    chatResponseEmitter.emit('token', {
-                        sessionId: userId,
-                        token,
-                        fullResponse
-                    });
-                }
-            }]
-        } as RunnableConfig);
-        
-        const finalResponse = result.content.toString();
-        
-        // Add AI response to memory
-        await memory.addMessage(new AIMessage(finalResponse));
-        
-        // Emit completion event
-        chatResponseEmitter.emit('complete', {
-            sessionId: userId,
-            response: finalResponse
+
+        // Generate response
+        const result = await chain.invoke({
+            chat_history: chatHistory
         });
+
+        // Extract the raw response (will be stored in content field)
+        let rawResponse = result.content.toString();
         
+        // Default to raw response for message field
+        let finalResponse = rawResponse;
+        
+        try {
+            // Parse any JSON in the response
+            const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const jsonObj = JSON.parse(jsonMatch[0]);
+                
+                // Handle the therapy-specific response structure from JSON mode
+                if (jsonObj.message) {
+                    // If the message is itself an object with a nested message field (the complex structure)
+                    if (typeof jsonObj.message === 'object' && jsonObj.message !== null) {
+                        // Extract just the plain text message field if it exists
+                        if (jsonObj.message.message && typeof jsonObj.message.message === 'string') {
+                            finalResponse = jsonObj.message.message;
+                        }
+                    } else if (typeof jsonObj.message === 'string') {
+                        // Direct message string
+                        finalResponse = jsonObj.message;
+                    }
+                } else if (jsonObj.response) {
+                    finalResponse = jsonObj.response;
+                } else if (jsonObj.content) {
+                    finalResponse = jsonObj.content;
+                } else if (jsonObj.reply) {
+                    finalResponse = jsonObj.reply;
+                } else {
+                    // If we can't find expected fields, use the first string value
+                    for (const key of Object.keys(jsonObj)) {
+                        const value = jsonObj[key];
+                        // If we find a field named 'message' that's a string, use it
+                        if (key === 'message' && typeof value === 'string') {
+                            finalResponse = value;
+                            break;
+                        }
+                        // Otherwise, take the first string value we find
+                        if (typeof value === 'string') {
+                            finalResponse = value;
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (parseError) {
+            log.warn('Failed to parse JSON response, using raw content', { userId, parseError });
+            // Fallback to the raw content if JSON parsing fails
+        }
+        
+        // Create a custom message document
+        const chatId = utlNewId('chat');
+        const timestamp = Timestamp.now();
+        
+        // For AI response, store raw JSON in content and parsed message in message field
+        await dbCreateOrUpdate(
+            ChatMessage,
+            chatId,
+            {
+                chatId,                  // Add chatId field
+                sessionId: userId,
+                userId,
+                role: 'assistant' as const,  // Use const assertion to fix type error
+                content: rawResponse,     // Store raw JSON here
+                message: finalResponse,   // Store human-readable message here
+                timestamp: timestamp,
+                updatedAt: timestamp      // Add updatedAt field
+            },
+            userId  // Use userId as parentId (session ID)
+        );
+
         return finalResponse;
     } catch (error) {
         log.error('Error in chatGetResponse', { userId, error });
         throw new Error('Failed to get AI response: ' + (error as Error).message);
+    }
+}
+
+/**
+ * Analyzes user message and chat history to update user context
+ * @param userId User ID 
+ * @param message Current message
+ * @param chatHistory Chat history
+ */
+async function updateUserContext(userId: string, message: string, chatHistory: BaseMessage[]): Promise<void> {
+    try {
+        const context = userContextCache[userId];
+        
+        // Simple keyword-based analysis for emotions
+        const emotionKeywords = {
+            "anxious": ["anxiety", "anxious", "nervous", "worry", "stressed"],
+            "depressed": ["depressed", "sad", "down", "hopeless", "unmotivated"],
+            "angry": ["angry", "frustrated", "mad", "irritated", "annoyed"],
+            "happy": ["happy", "joy", "excited", "pleased", "content"],
+            "confused": ["confused", "uncertain", "unsure", "don't know"]
+        };
+        
+        let detectedEmotions: string[] = [];
+        
+        // Check for emotion keywords in the current message
+        Object.entries(emotionKeywords).forEach(([emotion, keywords]) => {
+            if (keywords.some(keyword => message.toLowerCase().includes(keyword))) {
+                detectedEmotions.push(emotion);
+            }
+        });
+        
+        if (detectedEmotions.length > 0) {
+            context.emotionalState = detectedEmotions[0]; // Use first detected emotion
+        }
+        
+        // Extract potential concerns (simple implementation)
+        const concernPhrases = ["worried about", "concerned about", "struggle with", "problem with", "issue with"];
+        concernPhrases.forEach(phrase => {
+            const regex = new RegExp(`${phrase} ([^.!?]+)`, 'i');
+            const match = message.match(regex);
+            if (match && match[1]) {
+                const concern = match[1].trim();
+                if (!context.primaryConcerns.includes(concern)) {
+                    context.primaryConcerns.push(concern);
+                    // Keep only the 3 most recent concerns
+                    if (context.primaryConcerns.length > 3) {
+                        context.primaryConcerns.shift();
+                    }
+                }
+            }
+        });
+        
+        // Extract therapy goals
+        const goalPhrases = ["want to", "goal is", "trying to", "would like to", "hope to"];
+        goalPhrases.forEach(phrase => {
+            const regex = new RegExp(`${phrase} ([^.!?]+)`, 'i');
+            const match = message.match(regex);
+            if (match && match[1]) {
+                const goal = match[1].trim();
+                if (!context.therapyGoals.includes(goal)) {
+                    context.therapyGoals.push(goal);
+                    // Keep only the 3 most recent goals
+                    if (context.therapyGoals.length > 3) {
+                        context.therapyGoals.shift();
+                    }
+                }
+            }
+        });
+        
+        // Update session themes
+        const commonThemes = ["work", "family", "relationship", "health", "anxiety", 
+                             "depression", "stress", "sleep", "motivation", "confidence"];
+        
+        commonThemes.forEach(theme => {
+            if (message.toLowerCase().includes(theme) && !context.sessionThemes.includes(theme)) {
+                context.sessionThemes.push(theme);
+            }
+        });
+    } catch (error) {
+        log.error('Error updating user context', { userId, error });
+        // If context update fails, we can continue without it
+    }
+}
+
+/**
+ * Generates a personalized context prompt based on user's history
+ * @param userId User ID
+ * @returns Context prompt string
+ */
+function generateContextPrompt(userId: string): string {
+    try {
+        const context = userContextCache[userId];
+        if (!context) return "";
+        
+        let contextPrompt = "USER CONTEXT:\n";
+        
+        // Add emotional state if known
+        if (context.emotionalState && context.emotionalState !== "unknown") {
+            contextPrompt += `The user appears to be feeling ${context.emotionalState}. `;
+        }
+        
+        // Add primary concerns if available
+        if (context.primaryConcerns.length > 0) {
+            contextPrompt += `Their primary concerns include: ${context.primaryConcerns.join(", ")}. `;
+        }
+        
+        // Add therapy goals if available
+        if (context.therapyGoals.length > 0) {
+            contextPrompt += `Their therapy goals include: ${context.therapyGoals.join(", ")}. `;
+        }
+        
+        // Add session themes if available
+        if (context.sessionThemes.length > 0) {
+            contextPrompt += `Common themes in their discussions: ${context.sessionThemes.join(", ")}. `;
+        }
+        
+        contextPrompt += "\nUse this context to provide more personalized and relevant therapeutic guidance, but do not explicitly reference this information in your response.";
+        
+        return contextPrompt;
+    } catch (error) {
+        log.error('Error generating context prompt', { userId, error });
+        return ""; // Return empty string if context generation fails
     }
 }
 
@@ -188,28 +325,62 @@ export async function chatGetResponse(userId: string, message: string): Promise<
  */
 export async function chatSaveAIResponse(userId: string, content: string): Promise<ChatMessage> {
     try {
-        // Create AI message
+        // Create a chat message document
         const chatId = utlNewId('chat');
-        const sessionId = userId; // Using userId as sessionId
+        const timestamp = Timestamp.now();
         
-        const aiMessage = new ChatMessage({
+        // For AI messages, extract the message from the content if it's JSON
+        let message = content;
+        
+        try {
+            // Check if the content is JSON and extract the message field
+            const jsonMatch = content.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const jsonObj = JSON.parse(jsonMatch[0]);
+                
+                // Handle the therapy-specific response structure
+                if (jsonObj.message) {
+                    // If the message is itself an object with a nested message field
+                    if (typeof jsonObj.message === 'object' && jsonObj.message !== null) {
+                        // Extract just the plain text message field if it exists
+                        if (jsonObj.message.message && typeof jsonObj.message.message === 'string') {
+                            message = jsonObj.message.message;
+                        }
+                    } else if (typeof jsonObj.message === 'string') {
+                        // Direct message string
+                        message = jsonObj.message;
+                    }
+                }
+            }
+        } catch (parseError) {
+            // Silent fail - just use the raw content if parsing fails
+            // No need to log this as it's an expected case sometimes
+        }
+        
+        // Create the chat message document with both content and message fields
+        const chatMessageData = {
             chatId,
-            sessionId,
-            content: content,
-            role: 'assistant',
+            sessionId: userId,
             userId,
-            timestamp: Timestamp.now()
-        });
+            role: 'assistant' as const,  // Use const assertion to fix type error
+            content: content,        // Store raw JSON/content here
+            message: message,        // Store human-readable message here
+            timestamp: timestamp,
+            updatedAt: timestamp
+        };
         
-        // Save message to database - use dbCreateOrUpdate which handles the collection path
-        await db.collection(ChatMessage._collection(sessionId))
-            .doc(aiMessage._documentId())
-            .set(JSON.parse(JSON.stringify(aiMessage)));
+        // Save to Firestore
+        await dbCreateOrUpdate(
+            ChatMessage,
+            chatId,
+            chatMessageData,
+            userId  // Use userId as parentId (session ID)
+        );
         
-        log.info('AI response saved', { userId });
-        return aiMessage;
+        // Return the created message
+        return new ChatMessage(chatMessageData);
     } catch (error) {
-        log.error('Error saving AI response', { userId, error });
+        log.error('Error in chatSaveAIResponse', { userId, error });
         throw new Error('Failed to save AI response: ' + (error as Error).message);
     }
 }
@@ -220,7 +391,7 @@ export async function chatSaveAIResponse(userId: string, content: string): Promi
  * @returns Approximate token count
  */
 export function chatCalculateTokens(content: string): number {
-    // A simple approximation: average of 4 characters per token
+    // Rough approximation: 1 token ≈ 4 characters for English text
     return Math.ceil(content.length / 4);
 }
 
@@ -231,23 +402,27 @@ export function chatCalculateTokens(content: string): number {
  * @returns Trimmed message history
  */
 export function chatLimitMessageHistory(messages: ChatMessage[], maxTokens: number = 4000): ChatMessage[] {
-    // Start with the most recent messages and work backwards
-    const reversedMessages = [...messages].reverse();
-    const result: ChatMessage[] = [];
+    // Sort messages by timestamp (oldest first)
+    const sortedMessages = [...messages].sort((a, b) =>
+        a.timestamp.toMillis() - b.timestamp.toMillis()
+    );
+
     let totalTokens = 0;
-    
-    for (const message of reversedMessages) {
+    const keptMessages: ChatMessage[] = [];
+
+    // Process from newest to oldest
+    for (let i = sortedMessages.length - 1; i >= 0; i--) {
+        const message = sortedMessages[i];
         const messageTokens = chatCalculateTokens(message.content);
-        
-        // If adding this message would exceed the limit, stop
-        if (totalTokens + messageTokens > maxTokens) {
-            break;
+
+        // Always keep the most recent message
+        if (i === sortedMessages.length - 1 || totalTokens + messageTokens <= maxTokens) {
+            keptMessages.unshift(message); // Add to start of array to maintain chronological order
+            totalTokens += messageTokens;
+        } else {
+            break; // Stop once we exceed token limit
         }
-        
-        // Add message to result and update token count
-        result.unshift(message); // Add to beginning to maintain chronological order
-        totalTokens += messageTokens;
     }
-    
-    return result;
+
+    return keptMessages;
 }

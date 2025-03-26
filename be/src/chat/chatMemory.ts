@@ -11,6 +11,7 @@ import { FirestoreChatMessageHistory, FirestoreDBChatMessageHistory } from '@lan
 import { log } from '../log/log';
 import { ChatMessage } from './chatModels';
 import { db, dbGetByFields } from '../db/db';
+import { conf } from '../conf';
 
 /**
  * Extended Firestore Chat Message History class for ReflectAI
@@ -37,41 +38,44 @@ export class ReflectFirestoreChatMessageHistory extends FirestoreChatMessageHist
      * @param numberOfMessages Optional limit on number of messages to retrieve
      * @returns Array of BaseMessage objects for LangChain
      */
-    async getMessages(numberOfMessages: number = 20): Promise<BaseMessage[]> {
+    async getMessages(numberOfMessages: number = 23): Promise<BaseMessage[]> {
         try {
-            // Get messages from Firestore
-            const messagesRef = db.collection(ChatMessage._collection(this._sessionId));
-            const query = await messagesRef
-                .orderBy('timestamp', 'desc')
-                .limit(numberOfMessages)
-                .get();
-                
-            const chatMessages = query.docs.map(doc => doc.data() as ChatMessage);
-            
-            // Reverse to get chronological order
-            chatMessages.reverse();
-            
+            const chatFirestoreHistory = await dbGetByFields(
+                null,
+                ChatMessage,
+                {},
+                numberOfMessages,
+                [{ field: 'timestamp', direction: 'desc' }],
+                this._sessionId
+            );
+
+            chatFirestoreHistory.reverse();
+
             const storedMessages: StoredMessage[] = [];
-            
-            // Convert to LangChain StoredMessage format
-            chatMessages.forEach((message) => {
+
+            chatFirestoreHistory.forEach((message) => {
+                // Map role to the correct LangChain message type
+                const type = message.role === 'user' ? 'human' : 'ai';
+
+                // Use the 'message' field if available, otherwise fall back to 'content'
+                const messageContent = message.message || message.content;
+
                 const data: StoredMessageData = {
-                    content: message.content,
+                    content: messageContent,
                     role: message.role,
                     name: undefined,
                     tool_call_id: undefined,
                     additional_kwargs: {
-                        documentId: message._documentId()
+                        documentId: message.chatId
                     }
                 };
-                
+
                 storedMessages.push({
-                    type: message.role,
+                    type,
                     data
                 });
             });
-            
-            // Map to LangChain BaseMessage objects
+
             return mapStoredMessagesToChatMessages(storedMessages);
         }
         catch (err) {
@@ -100,18 +104,16 @@ export class ReflectFirestoreChatMessageHistory extends FirestoreChatMessageHist
 /**
  * Creates a chat memory instance for the given user and chat
  * @param userId The user ID
- * @param chatId The chat ID
  * @returns ReflectFirestoreChatMessageHistory instance
  */
-export async function chatMemory(userId: string, chatId: string) {
+export async function chatMemory(userId: string) {
     const chatMessageHistory = new ReflectFirestoreChatMessageHistory({
         collections: ['chatSessions'],
         docs: [userId],
         sessionId: userId, // Using userId as sessionId in our simplified model
         userId: userId,
         config: {
-            // Use the already initialized Firebase app
-            projectId: process.env.FIREBASE_PROJECT_ID || 'reflect-ai-dev'
+            credential: admin.credential.cert(JSON.parse(conf.env.credentials.firebase) as string)
         },
     });
     return chatMessageHistory;

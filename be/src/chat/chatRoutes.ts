@@ -8,7 +8,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { srvAddRoute, srvServer } from '../srv';
 import { log } from '../log/log';
 import { ChatMessage, ChatSession } from './chatModels';
-import { chatGetResponse, chatResponseEmitter, chatSaveAIResponse } from './chatProcessor';
+import { chatGetResponse, chatSaveAIResponse } from './chatProcessor';
 import { db, dbCreateOrUpdate } from '../db/db';
 import { Timestamp } from 'firebase-admin/firestore';
 import { utlNewId } from '../utl/utl';
@@ -55,14 +55,7 @@ async function chatMessageHandler(request: FastifyRequest, reply: FastifyReply):
         void processAiResponse(userId, message);
 
         return reply.status(200).send({
-            status: 'success',
-            data: {
-                message: {
-                    ...newUserMessage.toResponse(),
-                    id: newUserMessage._documentId()
-                },
-                streamingEnabled: true
-            }
+            status: 'success'
         });
     } catch (error) {
         log.error('Error in chat message handler', { error });
@@ -76,8 +69,9 @@ async function chatMessageHandler(request: FastifyRequest, reply: FastifyReply):
 // Helper function to process AI response asynchronously
 async function processAiResponse(userId: string, message: string): Promise<void> {
     try {
-        const aiResponseContent = await chatGetResponse(userId, message);
-        await chatSaveAIResponse(userId, aiResponseContent);
+        // chatGetResponse already saves the AI response to the database
+        // so we don't need to call chatSaveAIResponse here
+        await chatGetResponse(userId, message);
     } catch (error) {
         log.error('Error processing AI response', { error, userId });
     }
