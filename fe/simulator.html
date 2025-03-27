@@ -767,9 +767,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, 
-                rgba(0, 0, 0, 0.2) 0%, 
-                rgba(0, 0, 0, 0.4) 100%);
+            background: linear-gradient(to bottom,
+                    rgba(0, 0, 0, 0.2) 0%,
+                    rgba(0, 0, 0, 0.4) 100%);
             z-index: 1;
         }
 
@@ -976,6 +976,34 @@
         .story-option.disabled {
             opacity: 0.5;
             transform: scale(0.98);
+        }
+
+        .choice-text {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .choice-hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -1234,20 +1262,38 @@
                     choiceElement.classList.add('story-option', `choice-${index + 1}`, 'animate-slide-in');
                     choiceElement.style.animationDelay = `${index * 0.2}s`;
 
-                    const emotionTag = document.createElement('span');
-                    emotionTag.classList.add('emotion-tag');
-                    emotionTag.textContent = choice.emotionalResponse;
-                    emotionTag.style.backgroundColor = getEmotionColor(choice.emotionalResponse);
-
+                    // Create choice text with enhanced styling
                     const choiceText = document.createElement('p');
                     choiceText.textContent = choice.text;
+                    choiceText.classList.add('choice-text');
 
-                    choiceElement.appendChild(emotionTag);
                     choiceElement.appendChild(choiceText);
+
+                    // Add hover effect for choices
+                    choiceElement.addEventListener('mouseenter', () => {
+                        choiceElement.classList.add('choice-hover');
+                    });
+
+                    choiceElement.addEventListener('mouseleave', () => {
+                        choiceElement.classList.remove('choice-hover');
+                    });
 
                     choiceElement.addEventListener('click', () => {
                         // Add selected state and animate
                         choiceElement.classList.add('selected');
+                        
+                        // Add ripple effect on click
+                        const ripple = document.createElement('span');
+                        ripple.classList.add('ripple-effect');
+                        const rect = choiceElement.getBoundingClientRect();
+                        ripple.style.left = '50%';
+                        ripple.style.top = '50%';
+                        choiceElement.appendChild(ripple);
+                        
+                        // Remove ripple after animation completes
+                        setTimeout(() => {
+                            ripple.remove();
+                        }, 1000);
 
                         // Disable other choices
                         document.querySelectorAll('.story-option').forEach(option => {
