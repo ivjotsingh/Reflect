@@ -539,6 +539,8 @@
         /* Fix chat input container size and styling */
         .message-form-container {
             width: 100%;
+            position: relative;
+            z-index: 100;
             margin-top: 1rem;
         }
 
@@ -546,6 +548,8 @@
             display: flex;
             flex-direction: column;
             width: 100%;
+            position: relative;
+            z-index: 100;
         }
 
         .chat-input-container {
@@ -558,24 +562,25 @@
             width: 100%;
             min-height: 50px;
             box-shadow: var(--shadow-md);
+            position: relative;
+            z-index: 100;
         }
 
         #message-input {
             flex: 1;
             border: none;
-            resize: none;
-            min-height: 36px;
-            max-height: 150px;
-            background-color: transparent;
+            background: transparent;
             color: var(--text);
-            font-size: 1rem;
-            padding: 8px 0;
+            font-size: 16px;
+            padding: 10px 0;
+            min-height: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            resize: none;
             font-family: 'Inter', sans-serif;
             width: 100%;
-        }
-
-        #message-input:focus {
-            outline: none;
+            position: relative;
+            z-index: 101;
         }
 
         .chat-controls {
@@ -600,34 +605,28 @@
 
         .send-button {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            border: none;
         }
 
-        .chat-control-button:hover {
+        .send-button:hover {
             transform: scale(1.05);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        /* Improved message text visibility */
-        .message-text {
-            color: var(--text) !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 5;
-            font-size: 16px;
-            letter-spacing: 0.01em;
-            line-height: 1.6;
-        }
-
-        .message.received .message-text {
-            color: rgba(255, 255, 255, 0.95) !important;
-            font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .message.received {
-            background-color: rgba(50, 50, 60, 0.9);
-            color: white;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        .send-button svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
         }
 
         /* Target message-bubble content specifically */
@@ -723,6 +722,32 @@
             color: rgba(255, 255, 255, 0.95) !important;
             font-weight: 500;
         }
+
+        /* Improved sidebar text visibility */
+        .sidebar h3, 
+        .sidebar-section h3, 
+        .sidebar p,
+        .sidebar span,
+        .feature-item-text,
+        .sidebar-label {
+            color: rgba(255, 255, 255, 0.95) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Ensure all headings are visible */
+        h1, h2, h3, h4, h5, h6 {
+            color: rgba(255, 255, 255, 0.95) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+        
+        /* Fix text visibility in dark areas */
+        .feature-item, 
+        .mood-options, 
+        .mood-option, 
+        .sidebar-section {
+            color: rgba(255, 255, 255, 0.95) !important;
+        }
     </style>
 </head>
 
@@ -747,7 +772,6 @@
         <nav class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
             <a href="chat.html" class="nav-link active">Chat</a>
-            <a href="#" class="nav-link">Dilemma Resolver</a>
             <a href="simulator.html" class="nav-link">Life Simulator</a>
         </nav>
 

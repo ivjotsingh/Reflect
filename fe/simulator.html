@@ -790,9 +790,9 @@
             margin-top: 1rem;
             padding: 0 1rem;
             position: relative;
-            z-index: 10;
+            z-index: 100;
         }
-
+        
         .message-input-container {
             display: flex;
             align-items: center;
@@ -801,8 +801,10 @@
             border-radius: 24px;
             padding: 8px 16px;
             width: 100%;
+            position: relative;
+            z-index: 100;
         }
-
+        
         .message-input {
             flex: 1;
             background: transparent;
@@ -812,35 +814,36 @@
             padding: 10px 0;
             min-height: 44px;
             outline: none;
+            resize: none;
+            position: relative;
+            z-index: 101;
         }
-
-        .message-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
+        
         /* Fix send button */
         .send-button {
             background: linear-gradient(to right, var(--story-gradient-start), var(--story-gradient-end));
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-left: 8px;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             border: none;
+            transition: all 0.2s ease;
         }
-
+        
         .send-button:hover {
             transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
-
-        /* Particle background fixes */
-        .particles {
-            z-index: 0;
-            opacity: 0.4;
+        
+        .send-button svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
         }
 
         /* Message bubbles need contrast */
@@ -910,6 +913,29 @@
             padding: 20px;
             border-radius: 16px;
             margin-bottom: 20px;
+        }
+
+        /* Improved heading and text visibility */
+        h1, h2, h3, h4, h5, h6,
+        .story-welcome h1,
+        .story-welcome h2,
+        .story-card h2,
+        .story-content h2,
+        .story-option h3 {
+            color: rgba(255, 255, 255, 0.95) !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            font-weight: 600;
+            position: relative;
+            z-index: 5;
+        }
+        
+        /* Ensure all paragraph text is visible */
+        p, .story-text, .story-description,
+        .story-prompt, .story-option p {
+            color: rgba(255, 255, 255, 0.9) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 5;
         }
     </style>
 </head>
