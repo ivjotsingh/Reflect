@@ -1604,16 +1604,6 @@
                 }
             });
 
-            // Handle logout
-            logoutBtn.addEventListener('click', function () {
-                // Unsubscribe from Firestore listener when logging out
-                if (unsubscribeListener) {
-                    unsubscribeListener();
-                }
-                localStorage.removeItem('reflectAI_userId');
-                window.location.href = 'index.html';
-            });
-
             // Focus on input field when page loads
             messageInput.focus();
         }

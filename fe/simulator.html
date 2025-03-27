@@ -961,6 +961,9 @@
             emotionalProfile: {}
         };
 
+        // Generate a unique user ID if not already present
+        let userId = localStorage.getItem('reflectai-userid');
+
         // DOM elements
         const startStorySection = document.getElementById('start-story-section');
         const loadingSection = document.getElementById('loading-section');
@@ -1106,6 +1109,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        userId: userId,
                         dilemma: dilemma
                     })
                 });
@@ -1144,6 +1148,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        userId: userId,
                         sessionId: currentSession.sessionId,
                         choiceId: choiceId
                     })
@@ -1178,7 +1183,8 @@
                 const response = await fetch(`${GET_INSIGHTS_URL}${currentSession.sessionId}`, {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-User-ID': userId
                     }
                 });
 
@@ -1232,7 +1238,6 @@
 
         // Event listeners
         generateStoryButton.addEventListener('click', () => generateStory(false));
-        generateRandomStoryButton.addEventListener('click', () => generateStory(true));
         newStoryButton.addEventListener('click', startNewStory);
 
         // Initialize the app
