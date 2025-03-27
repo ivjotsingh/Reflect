@@ -6,12 +6,12 @@
 
 import { FastifyInstance } from 'fastify';
 import { log } from '../log';
-import { generateStory, makeChoice, getStoryInsights } from './simulatorProcessor';
+import { generateStorySimulation, makeChoice, getStoryInsights } from './simulatorProcessor';
 
 // Simulator routes plugin
 export function simulatorRouter(fastify: FastifyInstance, _: any, done: () => void) {
   // Route to generate a new interactive story
-  fastify.post('/simulator/story/generate', generateStory);
+  fastify.post('/simulator/story/generate', generateStorySimulation);
 
   // Route to make a choice in the story
   fastify.post('/simulator/story/choice', makeChoice);

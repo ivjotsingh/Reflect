@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReflectAI - Interactive simulator</title>
+    <title>ReflectAI - Life simulator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/chat.css">
     <style>
@@ -100,20 +100,27 @@
         .story-welcome {
             text-align: center;
             margin-bottom: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .story-welcome h1 {
             font-weight: 700;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: var(--space-lg);
-            background: linear-gradient(to right, var(--story-gradient-start), var(--story-gradient-end));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent;
-            /* Fallback */
+            color: white;
             letter-spacing: var(--heading-letter-spacing);
             line-height: var(--heading-line-height);
+            text-shadow: 0 0 10px rgba(76, 201, 240, 0.8), 0 0 20px rgba(67, 97, 238, 0.6);
+            position: relative;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.8) 0%, rgba(114, 9, 183, 0.8) 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateZ(0);
         }
 
         .story-welcome p {
@@ -126,7 +133,7 @@
         /* Enhanced card and button styling */
         .card,
         .story-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(17, 25, 40, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -305,6 +312,11 @@
             line-height: 1.7;
             margin-bottom: 2rem;
             animation: fadeIn 0.5s ease-out 0.2s both;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .story-image {
@@ -689,23 +701,19 @@
         }
 
         .story-option {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 15px;
             margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
+            border-radius: 12px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
         }
 
         .story-option:hover {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.6);
             transform: translateX(5px);
-        }
-
-        .story-option.selected {
-            background: rgba(67, 97, 238, 0.15);
-            border-color: rgba(67, 97, 238, 0.4);
         }
 
         .story-input {
@@ -759,129 +767,28 @@
         }
 
         /* Fix text visibility issues */
-        .story-text, .story-card p, .story-card h2, .story-welcome p, .story-welcome h1,
-        .user-message, .ai-message, .message-text {
+        .story-text,
+        .story-card p,
+        .story-card h2,
+        .story-welcome p,
+        .story-welcome h1,
+        .user-message,
+        .ai-message,
+        .message-text {
             color: white !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
             position: relative;
             z-index: 5;
-        }
-
-        /* Ensure backgrounds have enough contrast */
-        .story-option {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-        }
-
-        .story-option:hover {
-            background: rgba(0, 0, 0, 0.4);
-            transform: translateX(5px);
-        }
-
-        /* Fix input panel size and styling */
-        .input-container {
-            width: 100%;
-            margin-top: 1rem;
-            padding: 0 1rem;
-            position: relative;
-            z-index: 100;
-        }
-        
-        .message-input-container {
-            display: flex;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 8px 16px;
-            width: 100%;
-            position: relative;
-            z-index: 100;
-        }
-        
-        .message-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 16px;
-            padding: 10px 0;
-            min-height: 44px;
-            outline: none;
-            resize: none;
-            position: relative;
-            z-index: 101;
-        }
-        
-        /* Fix send button */
-        .send-button {
-            background: linear-gradient(to right, var(--story-gradient-start), var(--story-gradient-end));
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 8px;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            border: none;
-            transition: all 0.2s ease;
-        }
-        
-        .send-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-        }
-        
-        .send-button svg {
-            width: 22px;
-            height: 22px;
-            fill: white;
-        }
-
-        /* Message bubbles need contrast */
-        .user-message, .ai-message {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            max-width: 85%;
-        }
-        
-        .user-message {
-            align-self: flex-end;
-            background: rgba(67, 97, 238, 0.3);
-        }
-        
-        /* Improve AI message visibility specifically */
-        .ai-message {
-            background: rgba(50, 50, 60, 0.9);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-        }
-        
-        .ai-message .message-text {
-            color: rgba(255, 255, 255, 0.95) !important;
             font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            letter-spacing: 0.01em;
-            line-height: 1.6;
         }
-        
+
         /* Ensure all text elements in AI messages are visible */
         .ai-message p,
         .ai-message div,
         .ai-message span {
             color: rgba(255, 255, 255, 0.95) !important;
         }
-        
+
         /* Target message-bubble content specifically */
         .message-bubble p,
         .message-bubble div,
@@ -900,38 +807,36 @@
             margin: 0 0 8px 0;
             font-weight: 500;
         }
-        
+
         /* Ensure all paragraph elements in AI messages are visible */
         .ai-message p {
             color: rgba(255, 255, 255, 0.95) !important;
             font-weight: 500;
         }
 
-        /* Story content area */
-        .story-content {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-        }
-
         /* Improved heading and text visibility */
-        h1, h2, h3, h4, h5, h6,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
         .story-welcome h1,
         .story-welcome h2,
         .story-card h2,
         .story-content h2,
         .story-option h3 {
             color: rgba(255, 255, 255, 0.95) !important;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
             font-weight: 600;
-            position: relative;
-            z-index: 5;
         }
-        
+
         /* Ensure all paragraph text is visible */
-        p, .story-text, .story-description,
-        .story-prompt, .story-option p {
+        p,
+        .story-text,
+        .story-description,
+        .story-prompt,
+        .story-option p {
             color: rgba(255, 255, 255, 0.9) !important;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
             position: relative;
@@ -950,19 +855,9 @@
             </a>
             <span class="brand-name">ReflectAI</span>
         </div>
-        <div class="theme-toggle">
-            <button id="theme-toggle-btn" aria-label="Toggle dark/light mode">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path fill="currentColor"
-                        d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
-                </svg>
-            </button>
-        </div>
         <nav>
             <ul class="nav-links">
-                <li><a href="#" class="nav-link">Home</a></li>
-                <li><a href="#" class="nav-link">About</a></li>
+                <li><a href="chat.html" class="nav-link">AI Chat</a></li>
                 <li><a href="#" class="nav-link active">Simulator</a></li>
             </ul>
         </nav>
@@ -975,7 +870,7 @@
     <div class="story-container">
         <!-- Welcome/Introduction Section -->
         <div class="story-welcome">
-            <h1>Interactive simulator</h1>
+            <h1>Life simulator</h1>
             <p>Explore life situations through immersive stories where your emotional choices shape the narrative. Gain
                 insights about your decision patterns and emotional responses while engaging with realistic scenarios.
             </p>
@@ -984,14 +879,12 @@
         <!-- Start Story Section -->
         <div class="story-card" id="start-story-section">
             <h2>Begin Your Journey</h2>
-            <p>Share a personal dilemma you're facing, or let us generate a relevant life scenario for you to explore.
-            </p>
+            <p>Share a personal dilemma you're facing, or a scenario you want to simulate</p>
             <textarea class="story-input" id="dilemma-input"
-                placeholder="Describe a personal dilemma you're facing (e.g., &quot;I'm torn between taking a higher-paying job that requires relocation or staying at my current position close to family&quot;)"></textarea>
+                placeholder="e.g., &quot;I'm torn between taking a higher-paying job that requires relocation or staying at my current position close to family&quot; or &quot;I am starting a new job at google, what should I expect&quot;"></textarea>
+
             <div class="story-buttons">
-                <button class="story-button" id="generate-story-button">Create My Story</button>
-                <button class="story-button" id="generate-random-story-button"
-                    style="background: rgba(44, 62, 80, 0.8);">Random Scenario</button>
+                <button class="story-button" id="generate-story-button">Start Simulation</button>
             </div>
         </div>
 
@@ -1075,7 +968,6 @@
         const analysisSection = document.getElementById('analysis-section');
         const dilemmaInput = document.getElementById('dilemma-input');
         const generateStoryButton = document.getElementById('generate-story-button');
-        const generateRandomStoryButton = document.getElementById('generate-random-story-button');
         const storyTitle = document.getElementById('story-title');
         const storyImage = document.getElementById('story-image');
         const storyContent = document.getElementById('story-content');
@@ -1347,12 +1239,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             initParticles();
             showSection(startStorySection);
-        });
-
-        // Theme toggle functionality
-        document.getElementById('theme-toggle-btn').addEventListener('click', () => {
-            document.documentElement.setAttribute('data-theme',
-                document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
         });
     </script>
 </body>

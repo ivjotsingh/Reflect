@@ -149,7 +149,7 @@ export async function generateEmotionalProfile(userId: string): Promise<Record<s
 /**
  * Generate a new interactive story based on user input
  */
-export const generateStory = async (
+export const generateStorySimulation = async (
   request: FastifyRequest<GenerateStoryRequest>,
   reply: FastifyReply
 ) => {

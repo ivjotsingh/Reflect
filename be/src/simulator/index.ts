@@ -5,7 +5,7 @@
  */
 
 export { simulatorRouter } from './simulatorRoutes';
-export { generateStory, makeChoice, getStoryInsights } from './simulatorProcessor';
+export { generateStorySimulation as generateStory, makeChoice, getStoryInsights } from './simulatorProcessor';
 export {
   StorySession,
   StoryScenarioDocument,
