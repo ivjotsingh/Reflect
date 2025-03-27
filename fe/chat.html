@@ -483,23 +483,6 @@
             gap: var(--space-md);
         }
 
-        .theme-toggle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.05);
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
         .user-avatar {
             width: 40px;
             height: 40px;
@@ -776,12 +759,6 @@
         </nav>
 
         <div class="user-area">
-            <button id="theme-toggle" class="theme-toggle">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </button>
             <div class="user-avatar">U</div>
         </div>
     </header>
@@ -1431,7 +1408,6 @@
         const db = firebase.firestore();
 
         // DOM Elements
-        const themeToggle = document.getElementById('theme-toggle');
         const messageForm = document.getElementById('message-form');
         const messageInput = document.getElementById('message-input');
         const loader = document.getElementById('loader');
@@ -1454,163 +1430,46 @@
             }
         };
 
-        // Set default theme from local storage or system preference
-        function setInitialTheme() {
-            const savedTheme = localStorage.getItem(CONFIG.ui.themeStorageKey);
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Initialize Firebase
+                firebase.initializeApp(CONFIG.firebase);
+                const db = firebase.firestore();
 
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                document.body.setAttribute('data-theme', 'dark');
-                updateThemeToggleIcon('dark');
-            } else {
-                document.body.removeAttribute('data-theme');
-                updateThemeToggleIcon('light');
-            }
-        }
+                // DOM Elements
+                const messageForm = document.getElementById('message-form');
+                const messageInput = document.getElementById('message-input');
+                const loader = document.getElementById('loader');
+                const chatMessages = document.getElementById('chat-messages');
 
-        // Update theme toggle icon based on current theme
-        function updateThemeToggleIcon(theme) {
-            if (theme === 'dark') {
-                themeToggle.innerHTML = `
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="12" y1="1" x2="12" y2="3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="12" y1="21" x2="12" y2="23" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="1" y1="12" x2="3" y2="12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="21" y1="12" x2="23" y2="12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                `;
-            } else {
-                themeToggle.innerHTML = `
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                `;
-            }
-        }
+                // Show loader
+                loader.classList.add('active');
 
-        // Toggle theme
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.body.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                document.body.removeAttribute('data-theme');
-                localStorage.setItem(CONFIG.ui.themeStorageKey, 'light');
-                updateThemeToggleIcon('light');
-            } else {
-                document.body.setAttribute('data-theme', 'dark');
-                localStorage.setItem(CONFIG.ui.themeStorageKey, 'dark');
-                updateThemeToggleIcon('dark');
+                // Get user ID from local storage or create a new one
+                const userId = getUserId();
+
+                // Setup chat functionality
+                setupChatFunctionality(userId);
+
+                // Initialize message input functionality
+                initializeMessageInput();
+
+            } catch (error) {
+                console.error('Error initializing application:', error);
+                addSystemMessage('Error initializing application. Please refresh the page.');
             }
         });
 
-        // Save and track mood
-        function saveMood(mood) {
-            // Save to localStorage for persistence
-            localStorage.setItem('reflectAI_mood', mood);
-
-            // Get current date for recording in history
-            const today = new Date();
-            const dayLabel = today.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3);
-
-            // Get the emoji for the selected mood
-            const moodEmoji = document.querySelector(`.mood-option[data-mood="${mood}"] .mood-emoji`).textContent;
-
-            // Update mood history display
-            updateMoodHistory(dayLabel, moodEmoji);
-
-            // Store in Firestore if user is logged in
-            const userId = localStorage.getItem('reflectAI_userId');
-            if (userId) {
-                // Save mood to Firestore
-                db.collection('UserMoods').doc(userId).set({
-                    [`${today.toISOString().split('T')[0]}`]: {
-                        mood: mood,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    }
-                }, { merge: true })
-                    .catch(error => {
-                        console.error("Error saving mood: ", error);
-                    });
-            }
-        }
-
-        // Update mood history display
-        function updateMoodHistory(day, emoji) {
-            const moodHistory = document.querySelector('.mood-history');
-            // Find the day element or create it if it doesn't exist
-            let dayElement = Array.from(moodHistory.querySelectorAll('.mood-day-label'))
-                .find(el => el.textContent === day)?.parentElement;
-
-            if (dayElement) {
-                // Update existing day
-                dayElement.querySelector('.mood-day-emoji').textContent = emoji;
-            } else {
-                // This would be for initial setup - normally we'd load the history from Firestore
-                // but for now we're just using the static HTML elements
-            }
-        }
-
-        // Load mood history from Firestore
-        function loadMoodHistory(userId) {
-            db.collection('UserMoods').doc(userId).get()
-                .then(doc => {
-                    if (doc.exists) {
-                        const moodData = doc.data();
-
-                        // Clear existing mood history
-                        const moodHistory = document.querySelector('.mood-history');
-
-                        // Process last 7 days
-                        const today = new Date();
-                        for (let i = 6; i >= 0; i--) {
-                            const date = new Date(today);
-                            date.setDate(date.getDate() - i);
-                            const dateStr = date.toISOString().split('T')[0];
-                            const dayLabel = date.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3);
-
-                            // Find the day element
-                            const dayElements = moodHistory.querySelectorAll('.mood-day');
-                            const dayElement = dayElements[6 - i]; // Reverse order (today is last)
-
-                            if (dayElement) {
-                                dayElement.querySelector('.mood-day-label').textContent = dayLabel;
-
-                                // If we have mood data for this day
-                                if (moodData[dateStr]) {
-                                    const moodEmoji = document.querySelector(`.mood-option[data-mood="${moodData[dateStr].mood}"] .mood-emoji`).textContent;
-                                    dayElement.querySelector('.mood-day-emoji').textContent = moodEmoji;
-                                } else {
-                                    // Default neutral mood
-                                    dayElement.querySelector('.mood-day-emoji').textContent = '😐';
-                                }
-                            }
-                        }
-
-                        // Load today's mood if it exists
-                        const todayStr = today.toISOString().split('T')[0];
-                        if (moodData[todayStr]) {
-                            const mood = moodData[todayStr].mood;
-                            // Select the mood in the UI
-                            moodOptions.forEach(opt => opt.classList.remove('selected'));
-                            document.querySelector(`.mood-option[data-mood="${mood}"]`)?.classList.add('selected');
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error("Error loading mood history: ", error);
-                });
-        }
-
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
-            setInitialTheme();
-
             // Initialize with saved mood if available
             const savedMood = localStorage.getItem('reflectAI_mood');
             if (savedMood) {
                 document.querySelector(`.mood-option[data-mood="${savedMood}"]`)?.classList.add('selected');
+            } else {
+                // Default to neutral mood
+                document.querySelector('.mood-option[data-mood="neutral"]')?.classList.add('selected');
             }
 
             // Mood selection
