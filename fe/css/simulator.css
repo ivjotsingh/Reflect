@@ -1,5 +1,5 @@
 /*
- * ReflectAI - Interactive Storytelling CSS
+ * ReflectAI - Life Simulator CSS
  * Copyright (C) 2025 ReflectAI, Inc.
  * All Rights Reserved
  */
@@ -47,15 +47,20 @@ body {
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(0, 0);
     }
+
     25% {
         transform: translate(100px, 50px);
     }
+
     50% {
         transform: translate(50px, 100px);
     }
+
     75% {
         transform: translate(-50px, 75px);
     }
@@ -274,6 +279,7 @@ body {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -284,6 +290,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -294,9 +301,11 @@ body {
     0% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.05);
     }
+
     100% {
         transform: scale(1);
     }
@@ -339,7 +348,8 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.analysis-item p, .analysis-item li {
+.analysis-item p,
+.analysis-item li {
     color: rgba(255, 255, 255, 0.9);
     line-height: 1.6;
 }

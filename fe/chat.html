@@ -32,7 +32,7 @@
             <a href="index.html" class="nav-link">Home</a>
             <a href="chat.html" class="nav-link active">Chat</a>
             <a href="#" class="nav-link">Dilemma Resolver</a>
-            <a href="storytelling.html" class="nav-link">Life Simulator</a>
+            <a href="simulator.html" class="nav-link">Life Simulator</a>
         </nav>
 
         <div class="user-area">
@@ -42,7 +42,6 @@
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
-            <div class="user-avatar">U</div>
         </div>
     </header>
 
@@ -64,6 +63,7 @@
                             </div>
                             <span>AI Chat Therapist</span>
                         </div>
+
                         <div class="feature-item" id="de-stress-button">
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -79,6 +79,7 @@
                             </div>
                             <span>De-Stress</span>
                         </div>
+
                         <div class="feature-item" id="life-simulator-button">
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -87,14 +88,15 @@
                                         d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" />
-                                    <path d="M8 12L12 16L16 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
+                                    <path d="M8 12L12 16L16 12" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                     <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" />
                                 </svg>
                             </div>
                             <span>Life Simulator</span>
                         </div>
+
                         <div class="feature-item" id="cbt-button">
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -112,70 +114,6 @@
                                 </svg>
                             </div>
                             <span>Cognitive Behavioral Therapy Tools</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3>How are you feeling today?</h3>
-                    <div class="mood-options">
-                        <div class="mood-option" data-mood="great">
-                            <div class="mood-emoji">😊</div>
-                            <div class="mood-label">Great</div>
-                        </div>
-                        <div class="mood-option" data-mood="good">
-                            <div class="mood-emoji">😀</div>
-                            <div class="mood-label">Good</div>
-                        </div>
-                        <div class="mood-option" data-mood="okay">
-                            <div class="mood-emoji">😐</div>
-                            <div class="mood-label">Okay</div>
-                        </div>
-                        <div class="mood-option" data-mood="down">
-                            <div class="mood-emoji">😔</div>
-                            <div class="mood-label">Down</div>
-                        </div>
-                        <div class="mood-option" data-mood="stressed">
-                            <div class="mood-emoji">😓</div>
-                            <div class="mood-label">Stressed</div>
-                        </div>
-                        <div class="mood-option" data-mood="angry">
-                            <div class="mood-emoji">😠</div>
-                            <div class="mood-label">Angry</div>
-                        </div>
-                    </div>
-
-                    <div class="mood-history-container">
-                        <h4>Your Mood History</h4>
-                        <div class="mood-history">
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😊</div>
-                                <div class="mood-day-label">Mon</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😀</div>
-                                <div class="mood-day-label">Tue</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😐</div>
-                                <div class="mood-day-label">Wed</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😔</div>
-                                <div class="mood-day-label">Thu</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😊</div>
-                                <div class="mood-day-label">Fri</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😀</div>
-                                <div class="mood-day-label">Sat</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😊</div>
-                                <div class="mood-day-label">Sun</div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -642,8 +580,8 @@
 
                     <div class="cbt-reminder">
                         <h4>About Worry Time</h4>
-                        <p>Worry Time is a technique where you set aside a specific time to address your worries, rather
-                            than letting them consume you throughout the day. This helps you manage anxiety and develop
+                        <p>Worry Time is a technique where you set aside a specific time to address worries, rather
+                            than letting them interfere with your daily life. This helps you manage anxiety and develop
                             effective solutions.</p>
                     </div>
 
@@ -918,7 +856,7 @@
 
             const lifeSimulatorButton = document.getElementById('life-simulator-button');
             lifeSimulatorButton.addEventListener('click', () => {
-                window.location.href = 'storytelling.html';
+                window.location.href = 'simulator.html';
             });
         });
 
@@ -1116,7 +1054,7 @@
 
             // Set appropriate avatar content based on role
             if (role === 'user') {
-                avatarDiv.textContent = 'U';
+                avatarDiv.textContent = '';
             } else {
                 // AI avatar uses the logo
                 const aiSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");

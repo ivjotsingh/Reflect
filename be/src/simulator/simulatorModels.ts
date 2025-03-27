@@ -1,5 +1,5 @@
 /*
- * ReflectAI - Interactive Storytelling Module
+ * ReflectAI - Life Simulator Module
  * Copyright (C) 2025 ReflectAI, Inc.
  * All Rights Reserved
  */
@@ -11,11 +11,11 @@ export interface StoryChoice {
   id: string;
   text: string;
   emotionalResponse: string;
-  nextNodeId?: string;
+  nextScenarioId?: string;
 }
 
-// Interface for story node content
-export interface StoryNode {
+// Interface for story scenario content
+export interface StoryScenario {
   id: string;
   content: string;
   imagePrompt?: string;
@@ -28,11 +28,11 @@ export interface StoryNode {
 export interface StoryResponse {
   sessionId: string;
   title: string;
-  currentNode: StoryNode;
+  currentScenario: StoryScenario;
 }
 
 export interface ChoiceResponse {
-  nextNode: StoryNode;
+  nextScenario: StoryScenario;
   emotionalProfile: Record<string, number>;
 }
 
@@ -51,7 +51,7 @@ export class StorySession extends dbDocument {
   public userId: string;
   public title: string;
   public dilemma: string;
-  public currentNodeId: string;
+  public currentScenarioId: string;
   public path: string[];
   public emotionalProfile: Record<string, number>;
   public createdAt: dbTimestamp;
@@ -64,7 +64,7 @@ export class StorySession extends dbDocument {
     this.userId = init.userId || 'anonymous';
     this.title = init.title || '';
     this.dilemma = init.dilemma || '';
-    this.currentNodeId = init.currentNodeId || '';
+    this.currentScenarioId = init.currentScenarioId || '';
     this.path = init.path || [];
     this.emotionalProfile = init.emotionalProfile || {};
     this.createdAt = init.createdAt || new Date() as any;
@@ -81,8 +81,8 @@ export class StorySession extends dbDocument {
   }
 }
 
-export class StoryNodeDocument extends dbDocument {
-  public nodeId: string;
+export class StoryScenarioDocument extends dbDocument {
+  public scenarioId: string;
   public sessionId: string;
   public content: string;
   public imagePrompt?: string;
@@ -91,9 +91,9 @@ export class StoryNodeDocument extends dbDocument {
   public feedback?: string;
   public createdAt: dbTimestamp;
 
-  constructor(init: Partial<StoryNodeDocument>) {
+  constructor(init: Partial<StoryScenarioDocument>) {
     super(init);
-    this.nodeId = init.nodeId || '';
+    this.scenarioId = init.scenarioId || '';
     this.sessionId = init.sessionId || '';
     this.content = init.content || '';
     this.imagePrompt = init.imagePrompt;
@@ -105,18 +105,18 @@ export class StoryNodeDocument extends dbDocument {
 
   static override _collection(sessionId?: string): string {
     if (sessionId) {
-      return `StorySessions/${sessionId}/StoryNodes`;
+      return `StorySessions/${sessionId}/StoryScenarios`;
     }
-    throw new Error('Session ID is required for story nodes');
+    throw new Error('Session ID is required for story scenarios');
   }
 
   override _documentId(): string {
-    return this.nodeId;
+    return this.scenarioId;
   }
 
-  toStoryNode(): StoryNode {
+  toStoryScenario(): StoryScenario {
     return {
-      id: this.nodeId,
+      id: this.scenarioId,
       content: this.content,
       imagePrompt: this.imagePrompt,
       choices: this.choices,

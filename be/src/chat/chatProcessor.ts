@@ -46,6 +46,11 @@ Your responses MUST be structured as valid JSON with a single field named "messa
 
 DO NOT include any nested objects or additional fields in your response. Your entire therapeutic message should be a simple string in the message field.
 
+CRITICAL FORMATTING INSTRUCTIONS:
+1. Do not include any blank lines or excessive spaces in your response
+2. Ensure your response is clean, properly formatted JSON without any extra text
+3. Avoid adding any markdown, comments, or non-JSON elements
+
 Remember to prioritize brevity while still providing supportive guidance.`;
 
 /**
@@ -117,6 +122,9 @@ export async function chatGetResponse(userId: string, message: string): Promise<
 
         // Extract the raw response (will be stored in content field)
         let rawResponse = result.content.toString();
+        
+        // Clean up excessive blank lines and spaces
+        rawResponse = rawResponse.replace(/(\n\s*){3,}/g, '\n\n').trim();
         
         // Default to raw response for message field
         let finalResponse = rawResponse;
