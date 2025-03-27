@@ -501,7 +501,16 @@
         }
 
         /* Fix text visibility issues - make text stand out against background */
-        .message-text, .ai-message, .user-message, p, h1, h2, h3, h4, h5, h6 {
+        .message-text,
+        .ai-message,
+        .user-message,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             color: var(--text);
             background-color: transparent;
             position: relative;
@@ -509,7 +518,8 @@
         }
 
         /* Message bubbles need contrast with the background */
-        .message.received, .message.sent {
+        .message.received,
+        .message.sent {
             background-color: var(--surface);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--shadow-md);
@@ -621,7 +631,7 @@
             color: rgba(255, 255, 255, 0.95) !important;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
-        
+
         /* Additional specific targeting for received messages */
         .message.received .message-bubble p,
         .message.received .message-bubble span,
@@ -699,7 +709,7 @@
             margin: 0 0 8px 0;
             font-weight: 500;
         }
-        
+
         /* Fix for message paragraphs in received messages */
         .message.received .message-bubble p {
             color: rgba(255, 255, 255, 0.95) !important;
@@ -707,8 +717,8 @@
         }
 
         /* Improved sidebar text visibility */
-        .sidebar h3, 
-        .sidebar-section h3, 
+        .sidebar h3,
+        .sidebar-section h3,
         .sidebar p,
         .sidebar span,
         .feature-item-text,
@@ -716,18 +726,23 @@
             color: rgba(255, 255, 255, 0.95) !important;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
-        
+
         /* Ensure all headings are visible */
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             color: rgba(255, 255, 255, 0.95) !important;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
             font-weight: 600;
         }
-        
+
         /* Fix text visibility in dark areas */
-        .feature-item, 
-        .mood-options, 
-        .mood-option, 
+        .feature-item,
+        .mood-options,
+        .mood-option,
         .sidebar-section {
             color: rgba(255, 255, 255, 0.95) !important;
         }
@@ -828,7 +843,7 @@
                                         stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <span>Cognitive Behavioral Therapy Tools</span>
+                            <span>CBT Tools</span>
                         </div>
                     </div>
                 </div>
@@ -861,7 +876,7 @@
                             <div class="mood-label">Angry</div>
                         </div>
                     </div>
-
+                    <br>
                     <div class="mood-history-container">
                         <h4>Your Mood History</h4>
                         <div class="mood-history">
@@ -1335,7 +1350,8 @@
                     <div class="cbt-reminder">
                         <h4>About Worry Time</h4>
                         <p>Worry Time is a technique where you set aside a specific time to address worries, rather
-                            than letting them interfere with your daily life. This helps reduce anxiety by containing worry
+                            than letting them interfere with your daily life. This helps reduce anxiety by containing
+                            worry
                             to specific periods.</p>
                     </div>
 
