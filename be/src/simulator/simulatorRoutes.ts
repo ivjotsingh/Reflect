@@ -6,7 +6,8 @@
 
 import { FastifyInstance } from 'fastify';
 import { log } from '../log';
-import { generateStorySimulation, makeChoice, getStoryInsights } from './simulatorProcessor';
+import { makeChoice, getStoryInsights } from './simulatorProcessor';
+import { generateStorySimulation } from './simulatorGenerateStory';
 
 // Simulator routes plugin
 export function simulatorRouter(fastify: FastifyInstance, _: any, done: () => void) {

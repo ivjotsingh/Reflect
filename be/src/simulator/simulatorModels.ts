@@ -99,7 +99,7 @@ export class StoryScenarioDocument extends dbDocument {
     this.imagePrompt = init.imagePrompt;
     this.choices = init.choices || [];
     this.isEnding = init.isEnding || false;
-    this.feedback = init.feedback;
+    this.feedback = init.feedback || '';
     this.createdAt = init.createdAt || new Date() as any;
   }
 
