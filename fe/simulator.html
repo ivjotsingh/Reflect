@@ -319,31 +319,25 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .story-image {
+        .image-prompt-box {
             width: 100%;
-            height: 250px;
-            border-radius: 12px;
-            background-size: cover;
-            background-position: center;
-            margin-bottom: 2rem;
+            height: auto;
+            min-height: 60px;
+            border-radius: 8px;
+            background-color: rgba(25, 33, 57, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             animation: fadeIn 0.5s ease-out 0.1s both;
-        }
-
-        .story-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(0deg, rgba(26, 38, 57, 0.7) 0%, rgba(26, 38, 57, 0) 50%);
-        }
-
-        .hidden {
-            display: none;
+            padding: 10px;
+            font-size: 0.95rem;
+            color: var(--story-light);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            line-height: 1.4;
         }
 
         /* Enhanced header and navigation styling */
@@ -663,8 +657,8 @@
                 flex: 1 0 100%;
             }
 
-            .story-image {
-                height: 180px;
+            .image-prompt-box {
+                height: 120px;
             }
         }
 
@@ -750,199 +744,43 @@
             }
         }
 
-        .story-image {
-            transition: transform 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            margin-bottom: 25px;
-            max-height: 300px;
-        }
-
-        .story-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom,
-                    rgba(0, 0, 0, 0.2) 0%,
-                    rgba(0, 0, 0, 0.4) 100%);
-            z-index: 1;
-        }
-
-        .story-image:hover {
-            transform: scale(1.05);
-        }
-
-        .story-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(0deg, rgba(26, 38, 57, 0.7) 0%, rgba(26, 38, 57, 0) 50%);
-        }
-
-        /* Fix text visibility issues */
-        .story-text,
-        .story-card p,
-        .story-card h2,
-        .story-welcome p,
-        .story-welcome h1,
-        .user-message,
-        .ai-message,
-        .message-text {
-            color: white !important;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-            position: relative;
-            z-index: 5;
-            font-weight: 500;
-        }
-
-        /* Ensure all text elements in AI messages are visible */
-        .ai-message p,
-        .ai-message div,
-        .ai-message span {
-            color: rgba(255, 255, 255, 0.95) !important;
-        }
-
-        /* Target message-bubble content specifically */
-        .message-bubble p,
-        .message-bubble div,
-        .message-bubble span,
-        .message-text,
-        .ai-message .message-time {
-            color: rgba(255, 255, 255, 0.95) !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            font-weight: 500;
-        }
-
-        /* Target specific elements inside message bubble */
-        .message-bubble p {
-            color: rgba(255, 255, 255, 0.95) !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            margin: 0 0 8px 0;
-            font-weight: 500;
-        }
-
-        /* Ensure all paragraph elements in AI messages are visible */
-        .ai-message p {
-            color: rgba(255, 255, 255, 0.95) !important;
-            font-weight: 500;
-        }
-
-        /* Improved heading and text visibility */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        .story-welcome h1,
-        .story-welcome h2,
-        .story-card h2,
-        .story-content h2,
-        .story-option h3 {
-            color: rgba(255, 255, 255, 0.95) !important;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-            font-weight: 600;
-        }
-
-        /* Ensure all paragraph text is visible */
-        p,
-        .story-text,
-        .story-description,
-        .story-prompt,
-        .story-option p {
-            color: rgba(255, 255, 255, 0.9) !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            position: relative;
-            z-index: 5;
-        }
-
-        /* Animated content with fade-in effects */
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .animate-slide-in {
-            animation: slideInRight 0.5s forwards;
-            opacity: 0;
-            transform: translateX(30px);
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .animate-pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
-            }
-
-            70% {
-                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-            }
-        }
-
-        /* Color-coded emotion system for choice options */
-        .emotion-tag {
-            display: inline-block;
-            font-size: 0.8rem;
-            opacity: 0.9;
-            margin-bottom: 0.5rem;
-            z-index: 1;
-            position: relative;
-            background-color: #4361ee;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            color: white;
-            font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            letter-spacing: 0.5px;
-        }
-
-        /* Improved typography and layout for better readability */
-        .story-content-wrapper {
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.6);
-        }
-
-        .story-text {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 2rem;
-        }
-
-        /* Choices container styling */
+        /* Story choices grid layout */
         .choices-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-top: 20px;
+            gap: var(--space-md);
+            width: 100%;
+            margin-top: var(--space-lg);
+        }
+        
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-md);
+            width: 100%;
+        }
+
+        .story-option {
+            background-color: rgba(25, 33, 57, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: var(--space-md);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .story-option p {
+            color: var(--story-light);
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
         }
 
         .choices-title {
@@ -1005,6 +843,30 @@
                 opacity: 0;
             }
         }
+
+        #story-title {
+            font-size: 1.75rem;
+            margin-bottom: 1.25rem;
+            color: var(--story-light);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .story-content-wrapper {
+            margin-bottom: 1.5rem;
+        }
+
+        .story-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            text-align: left;
+            color: var(--story-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -1032,7 +894,7 @@
     <!-- Main story container -->
     <div class="story-container">
         <!-- Welcome/Introduction Section -->
-        <div class="story-welcome">
+        <div class="story-welcome" id="story-welcome">
             <h1>Life simulator</h1>
             <p>Explore life situations through immersive stories where your emotional choices shape the narrative. Gain
                 insights about your decision patterns and emotional responses while engaging with realistic scenarios.
@@ -1061,8 +923,8 @@
 
         <!-- Story Content Section -->
         <div class="story-card hidden" id="story-content-section">
-            <h2 id="story-title">Story Title</h2>
-            <div class="story-image" id="story-image"></div>
+            <h2 id="story-title" class="animate-fade-in">Story Title</h2>
+            <div class="image-prompt-box hidden" id="image-prompt-box"></div>
             <div class="story-content" id="story-content">
                 Story content will appear here.
             </div>
@@ -1134,10 +996,10 @@
         const analysisSection = document.getElementById('analysis-section');
         const dilemmaInput = document.getElementById('dilemma-input');
         const generateStoryButton = document.getElementById('generate-story-button');
-        const storyTitle = document.getElementById('story-title');
-        const storyImage = document.getElementById('story-image');
         const storyContent = document.getElementById('story-content');
         const storyChoices = document.getElementById('story-choices');
+        const storyTitle = document.getElementById('story-title');
+        const imagePromptBox = document.getElementById('image-prompt-box');
         const newStoryButton = document.getElementById('new-story-button');
 
         // Analysis elements
@@ -1181,12 +1043,9 @@
         const MAKE_CHOICE_URL = `${API_BASE_URL}/simulator/story/choice`;
         const GET_INSIGHTS_URL = `${API_BASE_URL}/simulator/story/insights/`;
 
-        // Generate a random image URL based on the image prompt
+        // Generate image URL function is no longer needed since we display the prompt directly
         function generateImageUrl(imagePrompt) {
-            // In a real implementation, you might use an actual image generation API
-            // For now, we'll use a placeholder with the prompt as text
-            const encodedPrompt = encodeURIComponent(imagePrompt);
-            return `https://placehold.co/800x400/1a2639/ffffff?text=${encodedPrompt}`;
+            return `https://source.unsplash.com/random/800x400/?${encodeURIComponent(imagePrompt)}`;
         }
 
         // Show a specific section and hide others
@@ -1195,6 +1054,14 @@
             loadingSection.classList.add('hidden');
             storyContentSection.classList.add('hidden');
             analysisSection.classList.add('hidden');
+            
+            // Hide welcome section when showing any gameplay sections
+            const welcomeSection = document.getElementById('story-welcome');
+            if (section !== startStorySection) {
+                welcomeSection.classList.add('hidden');
+            } else {
+                welcomeSection.classList.remove('hidden');
+            }
 
             section.classList.remove('hidden');
         }
@@ -1204,33 +1071,19 @@
             // Show story section
             showSection(storyContentSection);
 
-            // Set story title and content with animated fade-in effect
+            // Set story content with animated fade-in effect
             storyContent.innerHTML = `
                 <div class="story-content-wrapper">
                     <p class="story-text animate-fade-in">${node.content}</p>
                 </div>
             `;
 
-            // Set image based on the prompt with enhanced styling
+            // Set image prompt text
             if (node.imagePrompt) {
-                // Create a higher quality image URL or use your actual image service
-                const imageUrl = generateImageUrl(node.imagePrompt);
-                storyImage.style.backgroundImage = `url('${imageUrl}')`;
-                storyImage.classList.remove('hidden');
-                storyImage.classList.add('animate-fade-in');
-
-                // Add parallax effect on mouse move for immersion
-                storyImage.addEventListener('mousemove', (e) => {
-                    const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-                    const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-                    storyImage.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-                });
-
-                storyImage.addEventListener('mouseleave', () => {
-                    storyImage.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
-                });
+                imagePromptBox.textContent = node.imagePrompt;
+                imagePromptBox.classList.remove('hidden');
             } else {
-                storyImage.classList.add('hidden');
+                imagePromptBox.classList.add('hidden');
             }
 
             // Clear previous choices
@@ -1255,6 +1108,10 @@
                 choicesTitle.classList.add('choices-title');
                 choicesTitle.textContent = "What will you do?";
                 choicesContainer.appendChild(choicesTitle);
+
+                const choicesGrid = document.createElement('div');
+                choicesGrid.classList.add('choices-grid', 'animate-fade-in');
+                choicesContainer.appendChild(choicesGrid);
 
                 // Add choices with staggered animation
                 node.choices.forEach((choice, index) => {
@@ -1312,7 +1169,7 @@
                         setTimeout(() => makeChoice(choice.id), 800);
                     });
 
-                    choicesContainer.appendChild(choiceElement);
+                    choicesGrid.appendChild(choiceElement);
                 });
 
                 storyChoices.appendChild(choicesContainer);
@@ -1323,24 +1180,6 @@
                 top: storyContentSection.offsetTop - 20,
                 behavior: 'smooth'
             });
-        }
-
-        // Helper function to get a color based on emotion
-        function getEmotionColor(emotion) {
-            const emotionColors = {
-                'Hopeful': '#4cc9f0',
-                'Empathetic': '#8338ec',
-                'Stressed': '#fb5607',
-                'Curious': '#ffbe0b',
-                'Confident': '#06d6a0',
-                'Anxious': '#ef476f',
-                'Excited': '#ffd166',
-                'Cautious': '#073b4c',
-                'Determined': '#118ab2',
-                'Worried': '#7209b7'
-            };
-
-            return emotionColors[emotion] || '#4361ee'; // Default color
         }
 
         // Generate a new story
