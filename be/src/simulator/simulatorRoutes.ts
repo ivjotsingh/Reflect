@@ -6,8 +6,9 @@
 
 import { FastifyInstance } from 'fastify';
 import { log } from '../log';
-import { makeChoice, getStoryInsights } from './simulatorProcessor';
+import { getStoryInsights } from './simulatorProcessor';
 import { generateStorySimulation } from './simulatorGenerateStory';
+import { generateNextScenario } from './simulatorNextScenario';
 
 // Simulator routes plugin
 export function simulatorRouter(fastify: FastifyInstance, _: any, done: () => void) {
@@ -15,7 +16,7 @@ export function simulatorRouter(fastify: FastifyInstance, _: any, done: () => vo
   fastify.post('/simulator/story/generate', generateStorySimulation);
 
   // Route to make a choice in the story
-  fastify.post('/simulator/story/choice', makeChoice);
+  fastify.post('/simulator/story/choice', generateNextScenario);
 
   // Route to get therapeutic insights based on story choices
   fastify.get('/simulator/story/insights/:sessionId', getStoryInsights);

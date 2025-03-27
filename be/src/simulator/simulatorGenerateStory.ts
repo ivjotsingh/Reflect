@@ -16,32 +16,32 @@ export const generateStorySimulation = async (
 ) => {
     return reply.status(200).send(
         {
-            "sessionId": "story-KEmLHuCHmSVb0X9A5n9wZ",
+            "sessionId": "story-jwP7iVQAncVmOxVhpKVRZ",
             "title": "The Crossroads of Career and Family",
             "currentScenario": {
-                "id": "scenario-Ft8BsxMhfJEZkJV21rQ4a",
-                "content": "You stand at a pivotal moment in your life. A prestigious company has offered you a higher-paying position, but it requires moving to a new city far from your family and friends. You feel the weight of this decision pressing down on you. On one hand, the financial stability could provide a better future, but on the other, leaving your loved ones behind feels daunting. As you ponder your options, you can almost hear the echoes of your family's laughter and the comfort of your familiar surroundings. What will you choose?",
-                "imagePrompt": "A person standing at a crossroads, contemplating two paths, one leading to a city skyline and the other to a cozy home.",
+                "id": "scenario-7E8QS50rdEYwxRaO4talT",
+                "content": "You sit at your kitchen table, your laptop open to an enticing job offer. The new position promises a higher salary and exciting opportunities, but it requires relocating to a city far from your family and friends. Your heart races as you think about the implications of leaving your familiar life behind. You feel a mix of stress and hope as you weigh your options. What will you choose?",
+                "imagePrompt": "A person sitting at a kitchen table with a laptop, looking contemplative and torn between two paths.",
                 "choices": [
                     {
-                        "id": "choice-oGAfk2DHXtoDqH0YRoIsw",
+                        "id": "choice-etToRiaPbwTMQkHDjU8ka",
                         "text": "Accept the job offer and embrace the new adventure.",
                         "emotionalResponse": "Hopeful"
                     },
                     {
-                        "id": "choice-iYe4m15wZR1bbmavTlZ2I",
-                        "text": "Decline the offer and prioritize staying close to family.",
+                        "id": "choice-GeiWWZJ8AI0ooLDfKvFV1",
+                        "text": "Decline the offer and stay close to family for support.",
                         "emotionalResponse": "Stressed"
                     },
                     {
-                        "id": "choice-C4t8aEUebOLklGsWE1BAa",
-                        "text": "Ask for more time to think it over and weigh the pros and cons.",
-                        "emotionalResponse": "Curious"
+                        "id": "choice-9vO197PCw4XJCvU2RSvIX",
+                        "text": "Request a meeting with your current employer to discuss a raise or promotion.",
+                        "emotionalResponse": "Encouraged"
                     },
                     {
-                        "id": "choice-XxQyJLLb19JaVfcqYhayl",
-                        "text": "Discuss the opportunity with family to get their perspective.",
-                        "emotionalResponse": "Empathetic"
+                        "id": "choice-6jbp77oCsJghQLzjqgmLx",
+                        "text": "Take some time to reflect and talk to loved ones before making a decision.",
+                        "emotionalResponse": "Curious"
                     }
                 ],
                 "isEnding": false,

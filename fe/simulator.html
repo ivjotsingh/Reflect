@@ -917,7 +917,7 @@
         <div class="story-card hidden" id="loading-section">
             <div class="loading-container">
                 <div class="loading-spinner"></div>
-                <div class="loading-text">Creating your immersive story...</div>
+                <div class="loading-text" id="loading-message">Creating your immersive story...</div>
             </div>
         </div>
 
@@ -1000,6 +1000,7 @@
         const storyChoices = document.getElementById('story-choices');
         const storyTitle = document.getElementById('story-title');
         const imagePromptBox = document.getElementById('image-prompt-box');
+        const loadingMessage = document.getElementById('loading-message');
         const newStoryButton = document.getElementById('new-story-button');
 
         // Analysis elements
@@ -1184,6 +1185,7 @@
 
         // Generate a new story
         async function generateStory(isRandom = false) {
+            loadingMessage.textContent = "Creating your immersive story...";
             showSection(loadingSection);
 
             try {
@@ -1226,6 +1228,7 @@
 
         // Make a choice in the story
         async function makeChoice(choiceId) {
+            loadingMessage.textContent = "Continuing your journey...";
             showSection(loadingSection);
 
             try {
