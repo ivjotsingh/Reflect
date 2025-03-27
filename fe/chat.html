@@ -42,6 +42,7 @@
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
+            <div class="user-avatar">U</div>
         </div>
     </header>
 
@@ -63,7 +64,6 @@
                             </div>
                             <span>AI Chat Therapist</span>
                         </div>
-
                         <div class="feature-item" id="de-stress-button">
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -79,7 +79,6 @@
                             </div>
                             <span>De-Stress</span>
                         </div>
-
                         <div class="feature-item" id="life-simulator-button">
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -96,7 +95,6 @@
                             </div>
                             <span>Life Simulator</span>
                         </div>
-
                         <div class="feature-item" id="cbt-button">
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -114,6 +112,70 @@
                                 </svg>
                             </div>
                             <span>Cognitive Behavioral Therapy Tools</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>How are you feeling today?</h3>
+                    <div class="mood-options">
+                        <div class="mood-option" data-mood="great">
+                            <div class="mood-emoji">😊</div>
+                            <div class="mood-label">Great</div>
+                        </div>
+                        <div class="mood-option" data-mood="good">
+                            <div class="mood-emoji">😀</div>
+                            <div class="mood-label">Good</div>
+                        </div>
+                        <div class="mood-option" data-mood="okay">
+                            <div class="mood-emoji">😐</div>
+                            <div class="mood-label">Okay</div>
+                        </div>
+                        <div class="mood-option" data-mood="down">
+                            <div class="mood-emoji">😔</div>
+                            <div class="mood-label">Down</div>
+                        </div>
+                        <div class="mood-option" data-mood="stressed">
+                            <div class="mood-emoji">😓</div>
+                            <div class="mood-label">Stressed</div>
+                        </div>
+                        <div class="mood-option" data-mood="angry">
+                            <div class="mood-emoji">😠</div>
+                            <div class="mood-label">Angry</div>
+                        </div>
+                    </div>
+
+                    <div class="mood-history-container">
+                        <h4>Your Mood History</h4>
+                        <div class="mood-history">
+                            <div class="mood-day">
+                                <div class="mood-day-emoji">😊</div>
+                                <div class="mood-day-label">Mon</div>
+                            </div>
+                            <div class="mood-day">
+                                <div class="mood-day-emoji">😀</div>
+                                <div class="mood-day-label">Tue</div>
+                            </div>
+                            <div class="mood-day">
+                                <div class="mood-day-emoji">😐</div>
+                                <div class="mood-day-label">Wed</div>
+                            </div>
+                            <div class="mood-day">
+                                <div class="mood-day-emoji">😔</div>
+                                <div class="mood-day-label">Thu</div>
+                            </div>
+                            <div class="mood-day">
+                                <div class="mood-day-emoji">😊</div>
+                                <div class="mood-day-label">Fri</div>
+                            </div>
+                            <div class="mood-day">
+                                <div class="mood-day-emoji">😀</div>
+                                <div class="mood-day-label">Sat</div>
+                            </div>
+                            <div class="mood-day">
+                                <div class="mood-day-emoji">😊</div>
+                                <div class="mood-day-label">Sun</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -224,8 +286,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
                                     fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path
-                                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
+                                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
                                     </path>
                                     <path d="M8 12h8"></path>
                                     <path d="M12 8v8"></path>
@@ -243,8 +304,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
                                     fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path
-                                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
+                                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z">
                                     </path>
                                     <path d="M7 10l5 5 5-5"></path>
                                 </svg>
@@ -580,8 +640,8 @@
 
                     <div class="cbt-reminder">
                         <h4>About Worry Time</h4>
-                        <p>Worry Time is a technique where you set aside a specific time to address worries, rather
-                            than letting them interfere with your daily life. This helps you manage anxiety and develop
+                        <p>Worry Time is a technique where you set aside a specific time to address your worries, rather
+                            than letting them consume you throughout the day. This helps you manage anxiety and develop
                             effective solutions.</p>
                     </div>
 
@@ -1054,7 +1114,7 @@
 
             // Set appropriate avatar content based on role
             if (role === 'user') {
-                avatarDiv.textContent = '';
+                avatarDiv.textContent = 'U';
             } else {
                 // AI avatar uses the logo
                 const aiSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");

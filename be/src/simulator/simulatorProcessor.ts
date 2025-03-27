@@ -96,7 +96,7 @@ export async function generateEmotionalProfile(userId: string): Promise<Record<s
         Important instructions:
         1. Provide only clean JSON without any extra text, comments, or markdown formatting
         2. Do not include any blank lines or extra spaces in your response
-        3. Focus on emotions that would be relevant for storytelling scenarios`
+        3. Focus on emotions that would be relevant for simulator scenarios`
       },
       {
         role: 'user',
