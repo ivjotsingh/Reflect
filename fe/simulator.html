@@ -1302,6 +1302,7 @@
 
         // Get insights about the story choices
         async function getStoryInsights() {
+            loadingMessage.textContent = "Analysing and Generating Psychological Insights...";
             showSection(loadingSection);
 
             try {

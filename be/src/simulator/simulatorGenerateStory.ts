@@ -14,6 +14,7 @@ export const simulatorGenerateStory = async (
     request: FastifyRequest<GenerateStoryRequest>,
     reply: FastifyReply
 ) => {
+    await new Promise(resolve => setTimeout(resolve, 5000));
     return reply.status(200).send(
         {
             "sessionId": "story-jwP7iVQAncVmOxVhpKVRZ",

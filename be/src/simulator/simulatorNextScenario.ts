@@ -14,6 +14,7 @@ export const simulatorGenerateNextScenario = async (
     request: FastifyRequest<MakeChoiceRequest>,
     reply: FastifyReply
 ) => {
+    await new Promise(resolve => setTimeout(resolve, 5000));
     return reply.status(200).send(
         {
             "nextScenario": {
