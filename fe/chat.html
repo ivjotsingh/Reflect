@@ -2627,6 +2627,33 @@
                 worrySessions.push(worrySession);
                 localStorage.setItem('worrySessions', JSON.stringify(worrySessions));
 
+                // Save worry list and solutions if present
+                const currentWorries = [];
+                const currentSolutions = [];
+
+                // Get all worries from the worries container
+                const worryItems = worriesContainer.querySelectorAll('.worry-item');
+                worryItems.forEach(item => {
+                    const worryText = item.querySelector('.worry-text').textContent;
+                    currentWorries.push(worryText);
+                });
+
+                // Get all solutions from the solutions container
+                const solutionItems = solutionsContainer.querySelectorAll('.solution-item');
+                solutionItems.forEach(item => {
+                    const solutionText = item.querySelector('.solution-text').textContent;
+                    currentSolutions.push(solutionText);
+                });
+
+                // Save to localStorage only if items exist
+                if (currentWorries.length > 0) {
+                    localStorage.setItem('worries', JSON.stringify(currentWorries));
+                }
+
+                if (currentSolutions.length > 0) {
+                    localStorage.setItem('solutions', JSON.stringify(currentSolutions));
+                }
+
                 // Show success message
                 alert(`Worry session saved! You completed ${Math.round(completedPercentage)}% of your scheduled worry time.`);
 

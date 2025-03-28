@@ -387,7 +387,7 @@ header {
 
 /* Sidebar section */
 .sidebar-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.1rem;
 }
 
 .sidebar-section h3 {
@@ -650,6 +650,7 @@ header {
 }
 
 @keyframes loaderDot {
+
     0%,
     80%,
     100% {
