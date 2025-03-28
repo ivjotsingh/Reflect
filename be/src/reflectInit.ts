@@ -12,6 +12,7 @@ import { srvFini, srvInit, srvListen, srvServer } from './srv';
 import { chatInit, chatRoutesInit } from './chat';
 import { llmInit } from './llm';
 import { simulatorRouter, simulatorInit } from './simulator';
+import { moodTrackerRoutesInit } from './moodTracker';
 
 async function reflectRoutesInit() {
     /*
@@ -19,6 +20,7 @@ async function reflectRoutesInit() {
      */
     healthCheckRoutesInit('/reflect/api/healthCheck');
     chatRoutesInit('/reflect/api/chat');
+    moodTrackerRoutesInit('/reflect/api/mood');
 
     // Initialize the simulator routes
     srvServer.register(simulatorRouter, { prefix: '/reflect/api' });

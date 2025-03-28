@@ -649,7 +649,7 @@
             align-items: center;
             background-color: var(--surface);
             border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 24px;
+            border-radius: var(--radius-lg);
             padding: 8px 16px;
             box-shadow: var(--shadow-md);
             margin-top: 1rem;
@@ -937,6 +937,78 @@
             width: 18px;
             height: 18px;
         }
+
+        /* Mood tracking styles */
+        .mood-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .mood-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            border-radius: var(--radius-md);
+            background-color: var(--surface);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            padding: 8px;
+        }
+
+        .mood-option:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .mood-option.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            border: 2px solid var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .mood-emoji {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .mood-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .mood-history-container {
+            margin-top: 20px;
+        }
+
+        .mood-history {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .mood-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mood-day-emoji {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .mood-day-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
     </style>
     <style>
         @keyframes pulse {
@@ -1044,63 +1116,35 @@
                 <div class="sidebar-section">
                     <h3>How are you feeling today?</h3>
                     <div class="mood-options">
-                        <div class="mood-option" data-mood="great">
+                        <div class="mood-option" data-mood="Great">
                             <div class="mood-emoji">😊</div>
                             <div class="mood-label">Great</div>
                         </div>
-                        <div class="mood-option" data-mood="good">
+                        <div class="mood-option" data-mood="Good">
                             <div class="mood-emoji">😀</div>
                             <div class="mood-label">Good</div>
                         </div>
-                        <div class="mood-option" data-mood="okay">
+                        <div class="mood-option" data-mood="Okay">
                             <div class="mood-emoji">😐</div>
                             <div class="mood-label">Okay</div>
                         </div>
-                        <div class="mood-option" data-mood="down">
+                        <div class="mood-option" data-mood="Down">
                             <div class="mood-emoji">😔</div>
                             <div class="mood-label">Down</div>
                         </div>
-                        <div class="mood-option" data-mood="stressed">
+                        <div class="mood-option" data-mood="Stressed">
                             <div class="mood-emoji">😓</div>
                             <div class="mood-label">Stressed</div>
                         </div>
-                        <div class="mood-option" data-mood="angry">
+                        <div class="mood-option" data-mood="Angry">
                             <div class="mood-emoji">😠</div>
                             <div class="mood-label">Angry</div>
                         </div>
                     </div>
-                    <br>
-                    <div class="mood-history-container">
+                    <div class="mood-history-container" id="mood-history-container" style="display: none;">
                         <h4>Your Mood History</h4>
-                        <div class="mood-history">
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😊</div>
-                                <div class="mood-day-label">Mon</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😀</div>
-                                <div class="mood-day-label">Tue</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😐</div>
-                                <div class="mood-day-label">Wed</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😔</div>
-                                <div class="mood-day-label">Thu</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😊</div>
-                                <div class="mood-day-label">Fri</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😀</div>
-                                <div class="mood-day-label">Sat</div>
-                            </div>
-                            <div class="mood-day">
-                                <div class="mood-day-emoji">😊</div>
-                                <div class="mood-day-label">Sun</div>
-                            </div>
+                        <div class="mood-history" id="mood-history">
+                            <!-- Mood history will be dynamically populated -->
                         </div>
                     </div>
                 </div>
@@ -1187,8 +1231,7 @@
                             </div>
                             <h4>4-7-8 Breathing Technique</h4>
                             <p>Inhale (4s) → Hold (7s) → Exhale (8s)</p>
-                            <span class="pattern-description">Developed by Dr. Andrew Weil - reduces anxiety, helps with
-                                sleep, and lowers stress response</span>
+                            <span class="pattern-description">Developed by Dr. Andrew Weil for stress reduction</span>
                         </div>
 
                         <!-- Coherent Breathing - clinically proven -->
@@ -1206,8 +1249,8 @@
                             </div>
                             <h4>Coherent Breathing</h4>
                             <p>Inhale (5.5s) → Exhale (5.5s)</p>
-                            <span class="pattern-description">Researched at Harvard Medical School - balances autonomic
-                                nervous system, creating psychophysiological coherence</span>
+                            <span class="pattern-description">Researched at Harvard Medical School for autonomic
+                                balance</span>
                         </div>
 
                         <!-- Diaphragmatic Breathing - physiological research backed -->
@@ -1224,8 +1267,8 @@
                             </div>
                             <h4>Diaphragmatic Breathing</h4>
                             <p>Deep Inhale (4s) → Hold (1s) → Slow Exhale (6s)</p>
-                            <span class="pattern-description">Recommended by Mayo Clinic - activates parasympathetic
-                                nervous system, reduces cortisol levels</span>
+                            <span class="pattern-description">Recommended by Mayo Clinic to activate parasympathetic
+                                system</span>
                         </div>
                     </div>
                 </div>
@@ -1588,6 +1631,14 @@
             },
             ui: {
                 themeStorageKey: 'reflectai-theme'
+            },
+            apiEndpoints: {
+                chat: "http://127.0.0.1:8080/reflect/api/chat/v1/chat",
+                sendMessage: "http://127.0.0.1:8080/reflect/api/chat/v1/message",
+                mood: {
+                    save: "http://127.0.0.1:8080/reflect/api/mood/v1/mood",
+                    history: "http://127.0.0.1:8080/reflect/api/mood/v1/mood/history"
+                }
             }
         };
 
@@ -1610,12 +1661,20 @@
                 // Get user ID from local storage or create a new one
                 const userId = getUserId();
 
+                console.log('Initializing application for user:', userId);
+
                 // Setup chat functionality
                 setupChatFunctionality(userId);
 
                 // Initialize message input functionality
                 initializeMessageInput();
 
+                // Initialize mood tracker with a slight delay to ensure all DOM elements are ready
+                console.log('Initializing mood tracker for user:', userId);
+                setTimeout(() => {
+                    // Make sure we're passing the same userId that was used for setupChatFunctionality
+                    initMoodTracker(userId);
+                }, 1000);
             } catch (error) {
                 console.error('Error initializing application:', error);
                 addSystemMessage('Error initializing application. Please refresh the page.');
@@ -1639,7 +1698,12 @@
                     moodOptions.forEach(opt => opt.classList.remove('selected'));
                     option.classList.add('selected');
                     const mood = option.getAttribute('data-mood');
-                    saveMood(mood);
+                    const userId = localStorage.getItem('reflectAI_userId');
+                    if (userId) {
+                        saveMood(userId, mood);
+                    } else {
+                        console.error('No userId found in localStorage for mood saving');
+                    }
                 });
             });
 
@@ -1896,8 +1960,8 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    userId,
-                    message
+                    userId: userId,
+                    message: message
                 })
             });
 
@@ -2755,14 +2819,16 @@
                     worryItem.innerHTML = `
                         <div class="worry-text">${worry.text}</div>
                         <div class="worry-time">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             Added ${new Date(worry.timestamp).toLocaleDateString()}
                         </div>
                         <button class="worry-remove" data-index="${index}">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                 <line x1="6" y1="6" x2="18" y2="18"></line>
                             </svg>
@@ -2796,14 +2862,16 @@
                     solutionItem.innerHTML = `
                         <div class="solution-text">${solution.text}</div>
                         <div class="solution-priority">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                             </svg>
                             Added ${new Date(solution.timestamp).toLocaleDateString()}
                         </div>
                         <button class="solution-remove" data-index="${index}">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                 <line x1="6" y1="6" x2="18" y2="18"></line>
                             </svg>
@@ -2940,6 +3008,182 @@
                 });
             });
         });
+    </script>
+
+    <script>
+        // Mood tracking functionality
+        function initMoodTracker(userId) {
+            console.log('Initializing mood tracker with userId:', userId);
+
+            // Get all mood options
+            const moodOptions = document.querySelectorAll('.mood-option');
+
+            // Add click event to each mood option
+            moodOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    const mood = this.getAttribute('data-mood');
+                    console.log('Mood clicked:', mood, 'for user:', userId);
+
+                    // Save the mood
+                    saveMood(userId, mood);
+
+                    // Add active class to selected mood and remove from others
+                    moodOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            console.log('Fetching initial mood history for user:', userId);
+            // Fetch mood history on page load
+            fetchMoodHistory(userId);
+        }
+
+        /**
+         * Save the user's mood to the backend
+         * @param {string} userId - The user ID
+         * @param {string} mood - The selected mood
+         */
+        function saveMood(userId, mood) {
+            try {
+                console.log('Saving mood:', mood, 'for user:', userId);
+
+                // Ensure correct structure of payload
+                const payload = {
+                    userId: userId,
+                    mood: mood
+                };
+
+                console.log('Payload:', payload);
+
+                fetch(CONFIG.apiEndpoints.mood.save, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            console.log('Mood saved successfully');
+                            // Refresh mood history
+                            fetchMoodHistory(userId);
+                        } else {
+                            console.error('Error saving mood:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error processing mood save response:', error);
+                    });
+            } catch (error) {
+                console.error('Error saving mood:', error);
+            }
+        }
+
+        /**
+         * Fetch the user's mood history from the backend
+         * @param {string} userId - The user ID
+         */
+        function fetchMoodHistory(userId) {
+            try {
+                console.log('Fetching mood history for user:', userId);
+
+                // Create URL with properly encoded userId query parameter
+                const url = `${CONFIG.apiEndpoints.mood.history}?userId=${encodeURIComponent(userId)}`;
+                console.log('Mood history API URL:', url);
+
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        console.log('Mood history response status:', response.status);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Mood history response data:', data);
+                        if (data.status === 'success' && data.data && data.data.length > 0) {
+                            // Display mood history
+                            displayMoodHistory(data.data);
+
+                            // Show the mood history container
+                            document.getElementById('mood-history-container').style.display = 'block';
+                        } else {
+                            console.log('No mood history found or empty response');
+                            // Hide the mood history container if no entries
+                            document.getElementById('mood-history-container').style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error processing mood history response:', error);
+                        // Hide the mood history container on error
+                        document.getElementById('mood-history-container').style.display = 'none';
+                    });
+            } catch (error) {
+                console.error('Error fetching mood history:', error);
+                // Hide the mood history container on error
+                document.getElementById('mood-history-container').style.display = 'none';
+            }
+        }
+
+        /**
+         * Display the mood history in the UI
+         * @param {Array} moodHistory - Array of mood history entries
+         */
+        function displayMoodHistory(moodHistory) {
+            const historyContainer = document.getElementById('mood-history');
+            historyContainer.innerHTML = '';
+
+            // Create elements for each mood entry
+            moodHistory.forEach((entry, index) => {
+                const moodDay = document.createElement('div');
+                moodDay.className = 'mood-day';
+
+                const moodEmoji = document.createElement('div');
+                moodEmoji.className = 'mood-day-emoji';
+                moodEmoji.textContent = getMoodEmoji(entry.mood);
+
+                const moodLabel = document.createElement('div');
+                moodLabel.className = 'mood-day-label';
+                moodLabel.textContent = getDayName(new Date(entry.timestamp));
+
+                moodDay.appendChild(moodEmoji);
+                moodDay.appendChild(moodLabel);
+
+                historyContainer.appendChild(moodDay);
+            });
+        }
+
+        /**
+         * Get the emoji for a given mood
+         * @param {string} mood - The mood
+         * @returns {string} - The corresponding emoji
+         */
+        function getMoodEmoji(mood) {
+            const emojiMap = {
+                'Great': '😊',
+                'Good': '😀',
+                'Okay': '😐',
+                'Down': '😔',
+                'Stressed': '😓',
+                'Angry': '😠'
+            };
+
+            return emojiMap[mood] || '😐';
+        }
+
+        /**
+         * Get the day name (DD/MM) for a given date
+         * @param {Date} date - The date
+         * @returns {string} - The day name abbreviation
+         */
+        function getDayName(date) {
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            return `${day}/${month}`;
+        }
     </script>
 </body>
 
