@@ -752,7 +752,7 @@
             width: 100%;
             margin-top: var(--space-lg);
         }
-        
+
         .choices-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1055,7 +1055,7 @@
             loadingSection.classList.add('hidden');
             storyContentSection.classList.add('hidden');
             analysisSection.classList.add('hidden');
-            
+
             // Hide welcome section when showing any gameplay sections
             const welcomeSection = document.getElementById('story-welcome');
             if (section !== startStorySection) {
@@ -1139,7 +1139,7 @@
                     choiceElement.addEventListener('click', () => {
                         // Add selected state and animate
                         choiceElement.classList.add('selected');
-                        
+
                         // Add ripple effect on click
                         const ripple = document.createElement('span');
                         ripple.classList.add('ripple-effect');
@@ -1147,7 +1147,7 @@
                         ripple.style.left = '50%';
                         ripple.style.top = '50%';
                         choiceElement.appendChild(ripple);
-                        
+
                         // Remove ripple after animation completes
                         setTimeout(() => {
                             ripple.remove();
@@ -1174,6 +1174,40 @@
                 });
 
                 storyChoices.appendChild(choicesContainer);
+
+                // Add the End Story button
+                const endStoryButtonContainer = document.createElement('div');
+                endStoryButtonContainer.classList.add('end-story-container', 'animate-fade-in');
+                endStoryButtonContainer.style.textAlign = 'center';
+                endStoryButtonContainer.style.marginTop = '2rem';
+
+                const endStoryButton = document.createElement('button');
+                endStoryButton.classList.add('story-button', 'end-story-button');
+                endStoryButton.style.background = 'linear-gradient(135deg, #6c5ce7, #e84393)';
+                endStoryButton.style.fontSize = '0.95rem';
+                endStoryButton.style.padding = '0.8rem 1.5rem';
+                endStoryButton.style.opacity = '0.85';
+                endStoryButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+
+                endStoryButton.innerHTML = `
+                    <span class="button-text">End Simulation & See Insights</span>
+                    <span class="button-icon">🔍</span>
+                `;
+
+                endStoryButton.addEventListener('mouseenter', () => {
+                    endStoryButton.style.opacity = '1';
+                    endStoryButton.style.transform = 'translateY(-2px)';
+                });
+
+                endStoryButton.addEventListener('mouseleave', () => {
+                    endStoryButton.style.opacity = '0.85';
+                    endStoryButton.style.transform = 'translateY(0)';
+                });
+
+                endStoryButton.addEventListener('click', getStoryInsights);
+
+                endStoryButtonContainer.appendChild(endStoryButton);
+                storyChoices.appendChild(endStoryButtonContainer);
             }
 
             // Scroll to top of content
