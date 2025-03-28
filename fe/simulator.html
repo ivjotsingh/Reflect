@@ -1042,7 +1042,7 @@
         const API_BASE_URL = 'http://127.0.0.1:8080/reflect/api';
         const GENERATE_STORY_URL = `${API_BASE_URL}/simulator/story/generate`;
         const MAKE_CHOICE_URL = `${API_BASE_URL}/simulator/story/choice`;
-        const GET_INSIGHTS_URL = `${API_BASE_URL}/simulator/story/insights/`;
+        const GET_INSIGHTS_URL = `${API_BASE_URL}/simulator/story/insights`;
 
         // Generate image URL function is no longer needed since we display the prompt directly
         function generateImageUrl(imagePrompt) {
@@ -1190,8 +1190,8 @@
                 endStoryButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
 
                 endStoryButton.innerHTML = `
-                    <span class="button-text">End Simulation & See Insights</span>
-                    <span class="button-icon">🔍</span>
+                    <span class="button-text">Finish Journey & Reflect</span>
+                    <span class="button-icon">✨</span>
                 `;
 
                 endStoryButton.addEventListener('mouseenter', () => {
@@ -1305,12 +1305,15 @@
             showSection(loadingSection);
 
             try {
-                const response = await fetch(`${GET_INSIGHTS_URL}${currentSession.sessionId}`, {
-                    method: 'GET',
+                const response = await fetch(GET_INSIGHTS_URL, {
+                    method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-User-ID': userId
-                    }
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        sessionId: currentSession.sessionId
+                    })
                 });
 
                 if (!response.ok) {

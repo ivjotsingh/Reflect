@@ -10,7 +10,7 @@ import { log } from "../log";
 /**
  * Process a user's choice in the story
  */
-export const generateNextScenario = async (
+export const simulatorGenerateNextScenario = async (
     request: FastifyRequest<MakeChoiceRequest>,
     reply: FastifyReply
 ) => {

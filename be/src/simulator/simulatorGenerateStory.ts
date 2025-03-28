@@ -10,7 +10,7 @@ import { log } from "../log";
 /**
  * Generate a new interactive story based on user input
  */
-export const generateStorySimulation = async (
+export const simulatorGenerateStory = async (
     request: FastifyRequest<GenerateStoryRequest>,
     reply: FastifyReply
 ) => {
