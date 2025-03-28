@@ -774,6 +774,187 @@
             color: var(--text-secondary);
             margin: 0;
         }
+
+        /* Timer styles */
+        .timer-options {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .timer-option {
+            flex: 1;
+            min-width: 70px;
+            text-align: center;
+            padding: var(--space-sm) var(--space-md);
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .timer-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .timer-option.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(76, 201, 240, 0.3);
+        }
+
+        .timer-display-container {
+            margin: var(--space-lg) auto;
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+
+        .timer-display {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .timer-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent) 0%, transparent 0%);
+            transition: background 0.3s ease;
+            transform: rotate(-90deg);
+        }
+
+        .timer-center {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            background: var(--background);
+            border-radius: 50%;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-time {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .timer-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: var(--space-xs);
+        }
+
+        .timer-markers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .timer-marker {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            margin-left: -2px;
+            margin-top: -2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform-origin: center;
+        }
+
+        .timer-marker:nth-child(3n) {
+            width: 6px;
+            height: 6px;
+            margin-left: -3px;
+            margin-top: -3px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+            justify-content: center;
+        }
+
+        .timer-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-sm) var(--space-lg);
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-weight: 500;
+            gap: var(--space-sm);
+        }
+
+        .timer-btn.primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .timer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer-btn:active {
+            transform: translateY(0);
+        }
+
+        .timer-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+    <style>
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.7);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 20px 10px rgba(76, 201, 240, 0.3);
+                transform: scale(1.02);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0);
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 
@@ -1193,13 +1374,6 @@
                         <button class="start-btn">Start Worksheet</button>
                     </div>
 
-                    <div class="worksheet-option" data-worksheet="behavioral-activation">
-                        <h3><span class="icon-behavioral"></span>Behavioral Activation</h3>
-                        <p>Schedule positive activities to improve your mood and energy. This technique helps break the
-                            cycle of depression by gradually increasing engagement with rewarding experiences.</p>
-                        <button class="start-btn">Start Worksheet</button>
-                    </div>
-
                     <div class="worksheet-option" data-worksheet="worry-time">
                         <h3><span class="icon-worry-time"></span>Worry Time</h3>
                         <p>Set aside dedicated time to address worries, preventing them from interfering with your daily
@@ -1285,79 +1459,6 @@
                     </div>
                 </div>
 
-                <!-- Behavioral Activation Section -->
-                <div id="behavioral-activation-section" class="cbt-section">
-                    <button class="back-to-selection">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="19" y1="12" x2="5" y2="12"></line>
-                            <polyline points="12 19 5 12 12 5"></polyline>
-                        </svg>
-                        Back to Worksheets
-                    </button>
-
-                    <div class="cbt-reminder">
-                        <h4>About Behavioral Activation</h4>
-                        <p>Behavioral activation helps you engage in positive activities to improve your mood. By
-                            scheduling and tracking these activities, you can increase your sense of accomplishment and
-                            pleasure.</p>
-                    </div>
-
-                    <div class="activity-form">
-                        <h3>Schedule a Positive Activity</h3>
-                        <div class="form-group">
-                            <label for="activity-name">Activity Name</label>
-                            <input type="text" id="activity-name" placeholder="e.g., Morning walk, Reading, etc.">
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-type">Activity Type</label>
-                            <select id="activity-type">
-                                <option value="pleasure">Pleasure</option>
-                                <option value="mastery">Mastery/Achievement</option>
-                                <option value="social">Social Connection</option>
-                                <option value="physical">Physical Health</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-date">Date & Time</label>
-                            <input type="datetime-local" id="activity-date">
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-notes">Notes (Optional)</label>
-                            <textarea id="activity-notes"
-                                placeholder="Any additional details about this activity..."></textarea>
-                        </div>
-                        <button id="save-activity" class="cbt-btn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                            Schedule Activity
-                        </button>
-                    </div>
-
-                    <div class="activity-list">
-                        <h3>Your Scheduled Activities</h3>
-                        <div id="activities-container">
-                            <!-- Activities will be populated here -->
-                            <div class="empty-state">
-                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                </svg>
-                                <p>You haven't scheduled any activities yet</p>
-                                <button class="cbt-btn">Schedule Your First Activity</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Worry Time Section -->
                 <div id="worry-time-section" class="cbt-section">
                     <button class="back-to-selection">
@@ -1379,24 +1480,46 @@
 
                     <div class="worry-form">
                         <h3>Schedule Your Daily Worry Time</h3>
-                        <div class="form-group">
-                            <label for="worry-time-preference">Preferred Worry Time</label>
-                            <input type="time" id="worry-time-preference">
-                        </div>
-                        <div class="form-group">
-                            <label for="worry-duration">Duration (minutes)</label>
-                            <input type="number" id="worry-duration" min="10" max="30" value="15">
-                        </div>
-                        <button id="save-worry-time" class="cbt-btn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            Set Worry Time
-                        </button>
-                    </div>
 
+                        <div class="timer-options">
+                            <div class="timer-option" data-duration="15">15 mins</div>
+                            <div class="timer-option" data-duration="30">30 mins</div>
+                            <div class="timer-option" data-duration="45">45 mins</div>
+                            <div class="timer-option" data-duration="60">60 mins</div>
+                        </div>
+
+                        <div class="timer-display-container">
+                            <div class="timer-display">
+                                <div class="timer-progress"></div>
+                                <div class="timer-center">
+                                    <div class="timer-time">00:00</div>
+                                    <div class="timer-label">Select duration</div>
+                                </div>
+                                <div class="timer-markers">
+                                    <!-- Markers will be added via JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timer-controls">
+                            <button id="start-worry-timer" class="timer-btn primary">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                Start Timer
+                            </button>
+                            <button id="stop-worry-timer" class="timer-btn" style="display: none;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="6" y="4" width="4" height="16"></rect>
+                                    <rect x="14" y="4" width="4" height="16"></rect>
+                                </svg>
+                                Stop & Save
+                            </button>
+                        </div>
+                    </div>
+                    <br>
                     <div class="worry-container">
                         <div class="worry-list-container">
                             <h3>Worry List</h3>
@@ -2315,7 +2438,8 @@
                 if (thoughtRecords.length === 0) {
                     thoughtRecordsContainer.innerHTML = `
                         <div class="empty-state">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                 <line x1="9" y1="3" x2="9" y2="21"></line>
                             </svg>
@@ -2351,7 +2475,8 @@
                         <div class="thought-record-detail"><strong>Evidence Against:</strong> ${record.evidenceAgainst}</div>
                         <div class="thought-record-detail"><strong>Balanced Thought:</strong> ${record.balancedThought}</div>
                         <button class="cbt-btn delete-record" data-index="${index}">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="3 6 5 6 21 6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                             </svg>
@@ -2412,198 +2537,180 @@
             // Initialize thought records display
             displayThoughtRecords();
 
-            // ============== BEHAVIORAL ACTIVATION FUNCTIONALITY ==============
-            const saveActivityBtn = document.getElementById('save-activity');
-            const activitiesContainer = document.getElementById('activities-container');
-            const activities = JSON.parse(localStorage.getItem('activities') || '[]');
-
-            // Activity type icons
-            const activityIcons = {
-                pleasure: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line>
-                           </svg>`,
-                mastery: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                          </svg>`,
-                social: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                         </svg>`,
-                physical: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path>
-                           </svg>`
-            };
-
-            // Display activities
-            function displayActivities() {
-                if (activities.length === 0) {
-                    activitiesContainer.innerHTML = `
-                        <div class="empty-state">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                            <p>You haven't scheduled any activities yet</p>
-                            <button class="cbt-btn">Schedule Your First Activity</button>
-                        </div>
-                    `;
-
-                    // Add event listener to the "Schedule Your First Activity" button
-                    const scheduleFirstActivityBtn = activitiesContainer.querySelector('.cbt-btn');
-                    if (scheduleFirstActivityBtn) {
-                        scheduleFirstActivityBtn.addEventListener('click', () => {
-                            // Scroll to the form
-                            document.querySelector('.activity-form').scrollIntoView({ behavior: 'smooth' });
-                        });
-                    }
-                    return;
-                }
-
-                activitiesContainer.innerHTML = '';
-
-                // Sort activities by date
-                const sortedActivities = [...activities].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                sortedActivities.forEach((activity, index) => {
-                    const activityDate = new Date(activity.date);
-                    const now = new Date();
-                    const isPast = activityDate < now;
-
-                    const activityItem = document.createElement('div');
-                    activityItem.className = 'activity-item';
-                    if (isPast) {
-                        activityItem.classList.add('past-activity');
-                    }
-
-                    activityItem.innerHTML = `
-                        <div class="activity-info">
-                            <div class="activity-title">${activity.name}</div>
-                            <div class="activity-schedule">
-                                ${activityIcons[activity.type]}
-                                <span>${activityDate.toLocaleString()}</span>
-                                ${isPast ? '<span class="activity-completed">Passed</span>' : ''}
-                            </div>
-                            ${activity.notes ? `<div class="activity-notes">${activity.notes}</div>` : ''}
-                        </div>
-                        <div class="activity-controls">
-                            <button class="activity-control mark-complete" title="Mark as completed" data-index="${index}">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                </svg>
-                                Mark as completed
-                            </button>
-                            <button class="activity-control delete-activity" title="Delete activity" data-index="${index}">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                                Delete
-                            </button>
-                        </div>
-                    `;
-
-                    activitiesContainer.appendChild(activityItem);
-
-                    // Add event listeners to controls
-                    const markCompleteBtn = activityItem.querySelector('.mark-complete');
-                    const deleteActivityBtn = activityItem.querySelector('.delete-activity');
-
-                    markCompleteBtn.addEventListener('click', (e) => {
-                        const index = parseInt(e.currentTarget.getAttribute('data-index'));
-                        activities[index].completed = true;
-                        localStorage.setItem('activities', JSON.stringify(activities));
-                        displayActivities();
-                    });
-
-                    deleteActivityBtn.addEventListener('click', (e) => {
-                        const index = parseInt(e.currentTarget.getAttribute('data-index'));
-                        activities.splice(index, 1);
-                        localStorage.setItem('activities', JSON.stringify(activities));
-                        displayActivities();
-                    });
-                });
-            }
-
-            // Save activity
-            saveActivityBtn.addEventListener('click', () => {
-                const name = document.getElementById('activity-name').value.trim();
-                const type = document.getElementById('activity-type').value;
-                const date = document.getElementById('activity-date').value;
-                const notes = document.getElementById('activity-notes').value.trim();
-
-                if (!name || !date) {
-                    alert('Please fill in the Activity Name and Date fields.');
-                    return;
-                }
-
-                const activity = {
-                    name,
-                    type,
-                    date,
-                    notes,
-                    completed: false,
-                    timestamp: new Date().toISOString()
-                };
-
-                activities.push(activity);
-                localStorage.setItem('activities', JSON.stringify(activities));
-
-                // Clear form
-                document.getElementById('activity-name').value = '';
-                document.getElementById('activity-type').value = 'pleasure';
-                document.getElementById('activity-notes').value = '';
-
-                displayActivities();
-            });
-
-            // Initialize activities display
-            displayActivities();
-
             // ============== WORRY TIME FUNCTIONALITY ==============
-            const saveWorryTimeBtn = document.getElementById('save-worry-time');
             const addWorryBtn = document.getElementById('add-worry');
             const addSolutionBtn = document.getElementById('add-solution');
             const worriesContainer = document.getElementById('worries-container');
             const solutionsContainer = document.getElementById('solutions-container');
 
-            let worryTime = localStorage.getItem('worryTime') || '';
-            let worryDuration = localStorage.getItem('worryDuration') || '15';
+            // Timer elements
+            const timerOptions = document.querySelectorAll('.timer-option');
+            const timerProgress = document.querySelector('.timer-progress');
+            const timerTime = document.querySelector('.timer-time');
+            const timerLabel = document.querySelector('.timer-label');
+            const startTimerBtn = document.getElementById('start-worry-timer');
+            const stopTimerBtn = document.getElementById('stop-worry-timer');
+            const timerMarkers = document.querySelector('.timer-markers');
+
             const worries = JSON.parse(localStorage.getItem('worries') || '[]');
             const solutions = JSON.parse(localStorage.getItem('solutions') || '[]');
 
-            // Set initial worry time values if they exist
-            if (worryTime) {
-                document.getElementById('worry-time-preference').value = worryTime;
-            }
-            if (worryDuration) {
-                document.getElementById('worry-duration').value = worryDuration;
+            // Timer variables
+            let selectedDuration = 0;
+            let timerInterval = null;
+            let startTime = null;
+            let remainingTime = 0;
+            let timerRunning = false;
+
+            // Create timer markers (60 dots around the circle)
+            for (let i = 0; i < 60; i++) {
+                const marker = document.createElement('div');
+                marker.className = 'timer-marker';
+                marker.style.transform = `rotate(${i * 6}deg) translate(97px)`;
+                timerMarkers.appendChild(marker);
             }
 
-            // Save worry time
-            saveWorryTimeBtn.addEventListener('click', () => {
-                worryTime = document.getElementById('worry-time-preference').value;
-                worryDuration = document.getElementById('worry-duration').value;
+            // Timer option selection
+            timerOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    if (timerRunning) return; // Don't allow changing while timer is running
 
-                if (!worryTime) {
-                    alert('Please set a time for your daily worry time.');
+                    // Remove active class from all options
+                    timerOptions.forEach(opt => opt.classList.remove('active'));
+
+                    // Add active class to selected option
+                    option.classList.add('active');
+
+                    // Get duration from data attribute
+                    selectedDuration = parseInt(option.getAttribute('data-duration'));
+
+                    // Update timer display
+                    const minutes = Math.floor(selectedDuration);
+                    const seconds = 0;
+                    timerTime.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    timerLabel.textContent = `${selectedDuration} minutes`;
+
+                    // Set initial timer position based on duration
+                    let startPosition = 0;
+                    if (selectedDuration === 15) startPosition = 25; // Start from 3 o'clock (25%)
+                    else if (selectedDuration === 30) startPosition = 50; // Start from 6 o'clock (50%)
+                    else if (selectedDuration === 45) startPosition = 75; // Start from 9 o'clock (75%)
+                    else if (selectedDuration === 60) startPosition = 0; // Start from 12 o'clock (0%)
+
+                    timerProgress.style.background = `conic-gradient(var(--accent) ${startPosition}%, transparent ${startPosition}%)`;
+                });
+            });
+
+            // Start timer
+            startTimerBtn.addEventListener('click', () => {
+                if (selectedDuration === 0) {
+                    alert('Please select a duration first');
                     return;
                 }
 
-                localStorage.setItem('worryTime', worryTime);
-                localStorage.setItem('worryDuration', worryDuration);
-
-                alert(`Your daily worry time has been set for ${formatWorryTime(worryTime)} for ${worryDuration} minutes.`);
+                startTimer();
             });
 
-            // Format worry time
-            function formatWorryTime(timeString) {
-                const [hours, minutes] = timeString.split(':');
-                const date = new Date();
-                date.setHours(parseInt(hours));
-                date.setMinutes(parseInt(minutes));
-                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            // Stop timer
+            stopTimerBtn.addEventListener('click', () => {
+                stopTimer();
+
+                // Save progress to localStorage
+                const completedPercentage = ((selectedDuration * 60) - remainingTime) / (selectedDuration * 60) * 100;
+                const worrySession = {
+                    duration: selectedDuration,
+                    completedPercentage: Math.round(completedPercentage),
+                    timestamp: new Date().toISOString()
+                };
+
+                const worrySessions = JSON.parse(localStorage.getItem('worrySessions') || '[]');
+                worrySessions.push(worrySession);
+                localStorage.setItem('worrySessions', JSON.stringify(worrySessions));
+
+                // Show success message
+                alert(`Worry session saved! You completed ${Math.round(completedPercentage)}% of your scheduled worry time.`);
+
+                resetTimer();
+            });
+
+            function startTimer() {
+                if (timerRunning) return;
+
+                timerRunning = true;
+                startTime = Date.now();
+                remainingTime = selectedDuration * 60; // Convert to seconds
+
+                // Update UI
+                startTimerBtn.style.display = 'none';
+                stopTimerBtn.style.display = 'flex';
+                timerOptions.forEach(opt => opt.style.pointerEvents = 'none');
+
+                // Add pulsing animation to timer display
+                document.querySelector('.timer-display').style.animation = 'pulse 2s infinite';
+
+                // Set initial timer position based on duration
+                let startPosition = 0;
+                if (selectedDuration === 15) startPosition = 25; // Start from 3 o'clock (25%)
+                else if (selectedDuration === 30) startPosition = 50; // Start from 6 o'clock (50%)
+                else if (selectedDuration === 45) startPosition = 75; // Start from 9 o'clock (75%)
+                else if (selectedDuration === 60) startPosition = 0; // Start from 12 o'clock (0%)
+
+                timerInterval = setInterval(() => {
+                    // Calculate remaining time
+                    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                    remainingTime = (selectedDuration * 60) - elapsed;
+
+                    if (remainingTime <= 0) {
+                        // Timer complete
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        remainingTime = 0;
+
+                        // Update UI
+                        timerTime.textContent = '00:00';
+                        timerLabel.textContent = 'Time complete!';
+                        timerProgress.style.background = 'conic-gradient(var(--accent) 100%, transparent 0%)';
+
+                        // Reset UI after delay
+                        setTimeout(resetTimer, 3000);
+
+                        return;
+                    }
+
+                    // Update timer display
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    timerTime.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                    // Calculate and update progress
+                    const progress = (1 - (remainingTime / (selectedDuration * 60))) * 100;
+                    const currentPosition = (startPosition + progress) % 100;
+                    timerProgress.style.background = `conic-gradient(var(--accent) ${currentPosition}%, transparent ${currentPosition}%)`;
+
+                }, 1000);
+            }
+
+            function stopTimer() {
+                if (!timerRunning) return;
+
+                clearInterval(timerInterval);
+                timerRunning = false;
+            }
+
+            function resetTimer() {
+                // Reset UI
+                stopTimer();
+                startTimerBtn.style.display = 'flex';
+                stopTimerBtn.style.display = 'none';
+                timerOptions.forEach(opt => opt.style.pointerEvents = 'auto');
+                timerOptions.forEach(opt => opt.classList.remove('active'));
+                timerTime.textContent = '00:00';
+                timerLabel.textContent = 'Select duration';
+                timerProgress.style.background = 'conic-gradient(var(--accent) 0%, transparent 0%)';
+                selectedDuration = 0;
+
+                // Remove pulsing animation
+                document.querySelector('.timer-display').style.animation = '';
             }
 
             // Display worries
