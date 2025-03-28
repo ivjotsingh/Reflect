@@ -1642,6 +1642,15 @@
             }
         };
 
+        // Helper function to ensure consistent userId retrieval throughout the app
+        function getConsistentUserId() {
+            // Try all possible localStorage keys that might contain the userId
+            let userId = localStorage.getItem('reflectai-userid')
+
+            console.log('Retrieved userId from localStorage:', userId);
+            return userId;
+        }
+
         // Initialize application
         document.addEventListener('DOMContentLoaded', async () => {
             try {
@@ -1654,12 +1663,13 @@
                 const messageInput = document.getElementById('message-input');
                 const loader = document.getElementById('loader');
                 const chatMessages = document.getElementById('chat-messages');
+                const logoutBtn = document.getElementById('logout-btn');
 
                 // Show loader
                 loader.classList.add('active');
 
                 // Get user ID from local storage or create a new one
-                const userId = getUserId();
+                const userId = getConsistentUserId();
 
                 console.log('Initializing application for user:', userId);
 
@@ -1670,11 +1680,25 @@
                 initializeMessageInput();
 
                 // Initialize mood tracker with a slight delay to ensure all DOM elements are ready
-                console.log('Initializing mood tracker for user:', userId);
+                console.log('Will initialize mood tracker for user:', userId);
+
+                // Get a consistent userId for mood tracking
+                const moodTrackerId = getConsistentUserId();
+                console.log('Using consistent userId for mood tracking:', moodTrackerId);
+
+                // Run the initial mood history fetch directly
+                console.log('Immediately fetching mood history');
+                fetchMoodHistory(moodTrackerId);
+
+                // Also initialize with a delay to ensure DOM is fully loaded
                 setTimeout(() => {
-                    // Make sure we're passing the same userId that was used for setupChatFunctionality
-                    initMoodTracker(userId);
-                }, 1000);
+                    console.log('Now initializing mood tracker after delay for user:', moodTrackerId);
+                    initMoodTracker(moodTrackerId);
+
+                    // Also directly call fetchMoodHistory to ensure it runs
+                    console.log('Directly calling fetchMoodHistory for user:', moodTrackerId);
+                    fetchMoodHistory(moodTrackerId);
+                }, 1500);
             } catch (error) {
                 console.error('Error initializing application:', error);
                 addSystemMessage('Error initializing application. Please refresh the page.');
@@ -1698,7 +1722,7 @@
                     moodOptions.forEach(opt => opt.classList.remove('selected'));
                     option.classList.add('selected');
                     const mood = option.getAttribute('data-mood');
-                    const userId = localStorage.getItem('reflectAI_userId');
+                    const userId = getConsistentUserId();
                     if (userId) {
                         saveMood(userId, mood);
                     } else {
@@ -1715,7 +1739,8 @@
 
         // Check if user is logged in
         document.addEventListener('DOMContentLoaded', function () {
-            const userId = localStorage.getItem('reflectAI_userId');
+            const userId = getConsistentUserId();
+
             if (!userId) {
                 window.location.href = 'index.html';
                 return;
@@ -3088,6 +3113,12 @@
             try {
                 console.log('Fetching mood history for user:', userId);
 
+                if (!userId) {
+                    console.error('No userId provided to fetchMoodHistory');
+                    userId = getConsistentUserId();
+                    console.log('Using consistent userId instead:', userId);
+                }
+
                 // Create URL with properly encoded userId query parameter
                 const url = `${CONFIG.apiEndpoints.mood.history}?userId=${encodeURIComponent(userId)}`;
                 console.log('Mood history API URL:', url);
@@ -3100,31 +3131,60 @@
                 })
                     .then(response => {
                         console.log('Mood history response status:', response.status);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
                         return response.json();
                     })
                     .then(data => {
                         console.log('Mood history response data:', data);
-                        if (data.status === 'success' && data.data && data.data.length > 0) {
+
+                        // Check various data structures that might be returned
+                        let moodEntries = [];
+                        if (data.status === 'success' && data.data && Array.isArray(data.data)) {
+                            moodEntries = data.data;
+                        } else if (Array.isArray(data)) {
+                            moodEntries = data;
+                        }
+
+                        console.log('Processed mood entries:', moodEntries);
+
+                        if (moodEntries.length > 0) {
                             // Display mood history
-                            displayMoodHistory(data.data);
+                            displayMoodHistory(moodEntries);
 
                             // Show the mood history container
-                            document.getElementById('mood-history-container').style.display = 'block';
+                            const historyContainer = document.getElementById('mood-history-container');
+                            if (historyContainer) {
+                                historyContainer.style.display = 'block';
+                                console.log('Displaying mood history container');
+                            } else {
+                                console.error('Mood history container element not found');
+                            }
                         } else {
                             console.log('No mood history found or empty response');
-                            // Hide the mood history container if no entries
-                            document.getElementById('mood-history-container').style.display = 'none';
+                            // Hide the mood history container on error
+                            const historyContainer = document.getElementById('mood-history-container');
+                            if (historyContainer) {
+                                historyContainer.style.display = 'none';
+                            }
                         }
                     })
                     .catch(error => {
                         console.error('Error processing mood history response:', error);
                         // Hide the mood history container on error
-                        document.getElementById('mood-history-container').style.display = 'none';
+                        const historyContainer = document.getElementById('mood-history-container');
+                        if (historyContainer) {
+                            historyContainer.style.display = 'none';
+                        }
                     });
             } catch (error) {
                 console.error('Error fetching mood history:', error);
                 // Hide the mood history container on error
-                document.getElementById('mood-history-container').style.display = 'none';
+                const historyContainer = document.getElementById('mood-history-container');
+                if (historyContainer) {
+                    historyContainer.style.display = 'none';
+                }
             }
         }
 
@@ -3184,6 +3244,52 @@
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             return `${day}/${month}`;
         }
+    </script>
+
+    <script>
+        // Add a window.onload event to ensure all resources are loaded
+        window.onload = function () {
+            console.log('Window fully loaded - direct call to fetch mood history');
+            const userId = getConsistentUserId();
+            console.log('Using userId for direct mood history fetch:', userId);
+
+            // Direct call to the API
+            try {
+                const url = `${CONFIG.apiEndpoints.mood.history}?userId=${encodeURIComponent(userId)}`;
+                console.log('Direct mood history call to URL:', url);
+
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        console.log('Direct mood history response status:', response.status);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Direct mood history response data:', data);
+                        if (data.status === 'success' && data.data && data.data.length > 0) {
+                            // Display mood history
+                            displayMoodHistory(data.data);
+
+                            // Show the mood history container
+                            const historyContainer = document.getElementById('mood-history-container');
+                            if (historyContainer) {
+                                historyContainer.style.display = 'block';
+                            }
+                        } else {
+                            console.log('No mood history found in direct call');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error in direct mood history call:', error);
+                    });
+            } catch (error) {
+                console.error('Exception in direct mood history call:', error);
+            }
+        };
     </script>
 </body>
 
