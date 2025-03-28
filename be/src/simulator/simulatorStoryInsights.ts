@@ -22,7 +22,7 @@ export const simulatorGenerateStoryInsights = async (
     reply: FastifyReply
 ) => {
     // add a 5 second timeout 
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     return reply.status(200).send(
         {
             "primaryEmotionalResponse": "Hopeful",
