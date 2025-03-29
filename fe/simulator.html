@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReflectAI - Life simulator</title>
+    <title>ReflectAI - Life Simulator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/chat.css">
     <style>
@@ -367,7 +367,7 @@
         }
 
         .brand-logo {
-            height: 32px;
+            height: 80px;
             margin-right: var(--space-sm);
             transition: transform 0.3s ease;
         }
@@ -867,6 +867,28 @@
         .hidden {
             display: none;
         }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            background-color: rgba(231, 76, 60, 0.1);
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease;
+        }
     </style>
 </head>
 
@@ -875,10 +897,10 @@
     <header>
         <div class="brand">
             <a href="chat.html">
-                <img src="https://placehold.co/200x40/2c3e50/white?text=ReflectAI" alt="ReflectAI Logo"
-                    class="brand-logo">
+                <!-- <img src="https://placehold.co/600x90/2c3e50/white?text=ReflectAI" alt="ReflectAI Logo"
+                    class="brand-logo"> -->
+                <span class="brand-name">ReflectAI</span>
             </a>
-            <span class="brand-name">ReflectAI</span>
         </div>
         <nav class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
@@ -895,7 +917,7 @@
     <div class="story-container">
         <!-- Welcome/Introduction Section -->
         <div class="story-welcome" id="story-welcome">
-            <h1>Life simulator</h1>
+            <h1>Life Simulator</h1>
             <p>Explore life situations through immersive stories where your emotional choices shape the narrative. Gain
                 insights about your decision patterns and emotional responses while engaging with realistic scenarios.
             </p>
@@ -904,10 +926,10 @@
         <!-- Start Story Section -->
         <div class="story-card" id="start-story-section">
             <h2>Begin Your Journey</h2>
-            <p>Share a personal dilemma you're facing, or a scenario you want to simulate</p>
+            <p>Share a personal dilemma you're facing or any scenario you want to simulate</p>
             <textarea class="story-input" id="dilemma-input"
-                placeholder="e.g., &quot;I'm torn between taking a higher-paying job that requires relocation or staying at my current position close to family&quot; or &quot;I am starting a new job at google, what should I expect&quot;"></textarea>
-
+                placeholder="e.g., &quot;I'm torn between taking a higher-paying job that requires relocation or staying at my current position close to family&quot; or &quot;I am starting a new job at google, what should I expect?&quot;"></textarea>
+            <div id="input-error" class="error-message hidden">Please enter a scenario or dilemma to continue</div>
             <div class="story-buttons">
                 <button class="story-button" id="generate-story-button">Start Simulation</button>
             </div>
@@ -1366,7 +1388,26 @@
         }
 
         // Event listeners
-        generateStoryButton.addEventListener('click', () => generateStory(false));
+        generateStoryButton.addEventListener('click', () => {
+            // Validate input
+            const inputErrorElement = document.getElementById('input-error');
+            if (!dilemmaInput.value.trim()) {
+                // Show error message
+                inputErrorElement.classList.remove('hidden');
+                // Add shake animation
+                dilemmaInput.classList.add('shake');
+                setTimeout(() => {
+                    dilemmaInput.classList.remove('shake');
+                }, 500);
+                return;
+            }
+            
+            // Hide error message if it was shown
+            inputErrorElement.classList.add('hidden');
+            
+            // Continue with story generation
+            generateStory(false);
+        });
         newStoryButton.addEventListener('click', startNewStory);
 
         // Initialize the app
