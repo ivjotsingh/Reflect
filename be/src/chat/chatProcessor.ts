@@ -14,6 +14,7 @@ import { log } from '../log/log';
 import { chatMemory } from './chatMemory';
 import { Timestamp } from 'firebase-admin/firestore';
 import { utlNewId } from '../utl/utl';
+import { RagService } from '../rag/ragService';
 
 // System prompt for the AI therapist
 const SYSTEM_PROMPT = `You are ReflectAI, an empathetic and qualified AI therapist with academic credentials in Clinical Psychology. You provide concise, helpful responses to users seeking mental health guidance.
@@ -84,7 +85,7 @@ export async function chatGetResponse(userId: string, message: string): Promise<
 
         // Get history from memory
         const chatHistory = await memory.getMessages();
-        
+
         // Initialize or update user context
         if (!userContextCache[userId]) {
             userContextCache[userId] = {
@@ -94,15 +95,15 @@ export async function chatGetResponse(userId: string, message: string): Promise<
                 sessionThemes: []
             };
         }
-        
+
         // Update context based on current message
         await updateUserContext(userId, message, chatHistory);
-        
+
         // Always use the standard model (OPENAI_JSON)
         const llmMode = LlmApiMode.OPENAI_JSON;
-        
+
         // Create a context prompt with user-specific information
-        const contextPrompt = generateContextPrompt(userId);
+        const contextPrompt = await generateContextPrompt(userId, message);
 
         // Create the prompt template with system prompt, context, and chat history
         const promptTemplate = ChatPromptTemplate.fromMessages([
@@ -122,19 +123,19 @@ export async function chatGetResponse(userId: string, message: string): Promise<
 
         // Extract the raw response (will be stored in content field)
         let rawResponse = result.content.toString();
-        
+
         // Clean up excessive blank lines and spaces
         rawResponse = rawResponse.replace(/(\n\s*){3,}/g, '\n\n').trim();
-        
+
         // Default to raw response for message field
         let finalResponse = rawResponse;
-        
+
         try {
             // Parse any JSON in the response
             const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
                 const jsonObj = JSON.parse(jsonMatch[0]);
-                
+
                 // Handle the therapy-specific response structure from JSON mode
                 if (jsonObj.message) {
                     // If the message is itself an object with a nested message field (the complex structure)
@@ -174,11 +175,11 @@ export async function chatGetResponse(userId: string, message: string): Promise<
             log.warn('Failed to parse JSON response, using raw content', { userId, parseError });
             // Fallback to the raw content if JSON parsing fails
         }
-        
+
         // Create a custom message document
         const chatId = utlNewId('chat');
         const timestamp = Timestamp.now();
-        
+
         // For AI response, store raw JSON in content and parsed message in message field
         await dbCreateOrUpdate(
             ChatMessage,
@@ -212,7 +213,7 @@ export async function chatGetResponse(userId: string, message: string): Promise<
 async function updateUserContext(userId: string, message: string, chatHistory: BaseMessage[]): Promise<void> {
     try {
         const context = userContextCache[userId];
-        
+
         // Simple keyword-based analysis for emotions
         const emotionKeywords = {
             "anxious": ["anxiety", "anxious", "nervous", "worry", "stressed"],
@@ -221,20 +222,20 @@ async function updateUserContext(userId: string, message: string, chatHistory: B
             "happy": ["happy", "joy", "excited", "pleased", "content"],
             "confused": ["confused", "uncertain", "unsure", "don't know"]
         };
-        
+
         let detectedEmotions: string[] = [];
-        
+
         // Check for emotion keywords in the current message
         Object.entries(emotionKeywords).forEach(([emotion, keywords]) => {
             if (keywords.some(keyword => message.toLowerCase().includes(keyword))) {
                 detectedEmotions.push(emotion);
             }
         });
-        
+
         if (detectedEmotions.length > 0) {
             context.emotionalState = detectedEmotions[0]; // Use first detected emotion
         }
-        
+
         // Extract potential concerns (simple implementation)
         const concernPhrases = ["worried about", "concerned about", "struggle with", "problem with", "issue with"];
         concernPhrases.forEach(phrase => {
@@ -251,7 +252,7 @@ async function updateUserContext(userId: string, message: string, chatHistory: B
                 }
             }
         });
-        
+
         // Extract therapy goals
         const goalPhrases = ["want to", "goal is", "trying to", "would like to", "hope to"];
         goalPhrases.forEach(phrase => {
@@ -268,11 +269,11 @@ async function updateUserContext(userId: string, message: string, chatHistory: B
                 }
             }
         });
-        
+
         // Update session themes
-        const commonThemes = ["work", "family", "relationship", "health", "anxiety", 
-                             "depression", "stress", "sleep", "motivation", "confidence"];
-        
+        const commonThemes = ["work", "family", "relationship", "health", "anxiety",
+            "depression", "stress", "sleep", "motivation", "confidence"];
+
         commonThemes.forEach(theme => {
             if (message.toLowerCase().includes(theme) && !context.sessionThemes.includes(theme)) {
                 context.sessionThemes.push(theme);
@@ -287,37 +288,67 @@ async function updateUserContext(userId: string, message: string, chatHistory: B
 /**
  * Generates a personalized context prompt based on user's history
  * @param userId User ID
+ * @param message Current message
  * @returns Context prompt string
  */
-function generateContextPrompt(userId: string): string {
+async function generateContextPrompt(userId: string, message?: string): Promise<string> {
     try {
         const context = userContextCache[userId];
         if (!context) return "";
-        
+
         let contextPrompt = "USER CONTEXT:\n";
-        
+
         // Add emotional state if known
         if (context.emotionalState && context.emotionalState !== "unknown") {
             contextPrompt += `The user appears to be feeling ${context.emotionalState}. `;
         }
-        
+
         // Add primary concerns if available
         if (context.primaryConcerns.length > 0) {
             contextPrompt += `Their primary concerns include: ${context.primaryConcerns.join(", ")}. `;
         }
-        
+
         // Add therapy goals if available
         if (context.therapyGoals.length > 0) {
             contextPrompt += `Their therapy goals include: ${context.therapyGoals.join(", ")}. `;
         }
-        
+
         // Add session themes if available
         if (context.sessionThemes.length > 0) {
             contextPrompt += `Common themes in their discussions: ${context.sessionThemes.join(", ")}. `;
         }
-        
+
         contextPrompt += "\nUse this context to provide more personalized and relevant therapeutic guidance, but do not explicitly reference this information in your response.";
-        
+
+        // Get relevant information from the RAG system if a message is provided
+        if (message) {
+            // Use the RAG service to retrieve contextually relevant information
+            const ragService = RagService.getInstance();
+
+            // Initialize the RAG service if not already initialized - this is async but we'll await it later
+            const ragPromise = (async () => {
+                try {
+                    await ragService.initialize();
+                    const relevantContext = await ragService.generateRelevantContext(message);
+                    console.log("Relevant context:", relevantContext);
+
+                    // Add RAG context if available
+                    if (relevantContext) {
+                        contextPrompt += "\n\n" + relevantContext;
+                    }
+
+                    return contextPrompt;
+                } catch (error) {
+                    log.error('Error retrieving RAG context', { userId, error });
+                    return contextPrompt; // Return the user context without RAG if there's an error
+                }
+            })();
+
+            // Since we need to return a string immediately but the RAG operation is async,
+            // we'll return a promise that will resolve to the full context string
+            return await ragPromise;
+        }
+
         return contextPrompt;
     } catch (error) {
         log.error('Error generating context prompt', { userId, error });
@@ -336,16 +367,16 @@ export async function chatSaveAIResponse(userId: string, content: string): Promi
         // Create a chat message document
         const chatId = utlNewId('chat');
         const timestamp = Timestamp.now();
-        
+
         // For AI messages, extract the message from the content if it's JSON
         let message = content;
-        
+
         try {
             // Check if the content is JSON and extract the message field
             const jsonMatch = content.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
                 const jsonObj = JSON.parse(jsonMatch[0]);
-                
+
                 // Handle the therapy-specific response structure
                 if (jsonObj.message) {
                     // If the message is itself an object with a nested message field
@@ -364,7 +395,7 @@ export async function chatSaveAIResponse(userId: string, content: string): Promi
             // Silent fail - just use the raw content if parsing fails
             // No need to log this as it's an expected case sometimes
         }
-        
+
         // Create the chat message document with both content and message fields
         const chatMessageData = {
             chatId,
@@ -376,7 +407,7 @@ export async function chatSaveAIResponse(userId: string, content: string): Promi
             timestamp: timestamp,
             updatedAt: timestamp
         };
-        
+
         // Save to Firestore
         await dbCreateOrUpdate(
             ChatMessage,
@@ -384,7 +415,7 @@ export async function chatSaveAIResponse(userId: string, content: string): Promi
             chatMessageData,
             userId  // Use userId as parentId (session ID)
         );
-        
+
         // Return the created message
         return new ChatMessage(chatMessageData);
     } catch (error) {

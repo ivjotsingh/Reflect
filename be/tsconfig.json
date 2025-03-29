@@ -18,12 +18,15 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "listEmittedFiles": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "src/**/*.ts",
     "*.ts",
     "src/**/*.tsx",
-    "*.tsx"
+    "*.tsx",
+    "src/rag/cleanVectorStore.js"
   ]
 }
