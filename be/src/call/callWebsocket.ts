@@ -59,7 +59,10 @@ Remember you are in a voice conversation limited to 30 seconds total. Be concise
  */
 export function callWebsocketInit(fastifyServer: FastifyInstance): void {
     // Create WebSocket server
-    const wss = new WebSocketServer({ server: fastifyServer.server });
+    const wss = new WebSocketServer({ 
+        server: fastifyServer.server,
+        path: '/reflect/api/call/ws'
+    });
 
     // Handle WebSocket connections
     wss.on('connection', (ws: WebSocket, request) => {

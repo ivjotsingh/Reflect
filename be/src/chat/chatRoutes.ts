@@ -16,7 +16,7 @@ import { utlNewId } from '../utl/utl';
 // Direct chat endpoint handler for v1/chat
 async function chatMessageHandler(request: FastifyRequest, reply: FastifyReply): Promise<any> {
     try {
-        const { message, userId } = request.body as { message: string, userId: string };
+        const { message, userId } = request.body as { message: string; userId: string };
 
         if (!message || typeof message !== 'string' || message.trim() === '') {
             return reply.status(400).send({
@@ -57,7 +57,8 @@ async function chatMessageHandler(request: FastifyRequest, reply: FastifyReply):
         return reply.status(200).send({
             status: 'success'
         });
-    } catch (error) {
+    }
+    catch (error) {
         log.error('Error in chat message handler', { error });
         return reply.status(500).send({
             status: 'error',
@@ -72,7 +73,8 @@ async function processAiResponse(userId: string, message: string): Promise<void>
         // chatGetResponse already saves the AI response to the database
         // so we don't need to call chatSaveAIResponse here
         await chatGetResponse(userId, message);
-    } catch (error) {
+    }
+    catch (error) {
         log.error('Error processing AI response', { error, userId });
     }
 }
