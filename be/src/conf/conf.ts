@@ -12,7 +12,7 @@ function confThrow(msg: string): never {
 
 class ConfEnv {
     public credentials = {
-        firebase: process.env.REFLECT_FIREBASE_CREDENTIALS || confThrow('REFLECT_FIREBASE_CREDENTIALS not set'),
+        firebase: process.env.REFLECT_FIREBASE_CREDENTIALS || '',
         openAIAPIKey: process.env.REFLECT_OPENAI_API_KEY || 'sk-xxxxxx',
     };
     public enableConsoleLogs = process.env.REFLECT_ENABLE_CONSOLE_LOGS !== 'false';

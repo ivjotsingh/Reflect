@@ -27,6 +27,7 @@
     "*.ts",
     "src/**/*.tsx",
     "*.tsx",
-    "src/rag/cleanVectorStore.js"
+    "src/rag/cleanVectorStore.js",
+    "src/rag/brainEnricher.js"
   ]
 }
