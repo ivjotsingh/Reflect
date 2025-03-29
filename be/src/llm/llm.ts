@@ -70,9 +70,10 @@ async function llmInitOpenAiModels() {
         llmOpenAiModels[LlmClients.REFLECT][LlmApiMode.GPT_4O_JSON] = reflectGpt4oJson;
         
         // Real-time voice model for voice calling feature
+        // Using a different model that is compatible with voice applications
         const reflectRealtimeVoice = new ChatOpenAI({
-            modelName: 'gpt-4o-mini-realtime-preview-2024-12-17',
-            maxTokens: 400, // Smaller tokens for faster real-time responses
+            modelName: 'gpt-4o-mini', // Using a standard chat model instead of the realtime preview
+            maxTokens: 400, // Smaller tokens for faster responses
             openAIApiKey: conf.env.credentials.openAIAPIKey,
             temperature: 0.3, // Lower temperature for more consistent therapy responses
             verbose: true,

@@ -80,20 +80,20 @@ export function callWebsocketInit(fastifyServer: FastifyInstance): void {
         // Handle incoming messages (audio chunks from client)
         ws.on('message', async (message: Buffer) => {
             try {
-                log.info('Received WebSocket message', { 
+                log.info('Received WebSocket message', {
                     messageLength: message.length,
                     messageType: typeof message,
                     messagePreview: message.toString().substring(0, 100)
                 });
-                
+
                 const msgData = JSON.parse(message.toString());
-                
-                log.info('Parsed WebSocket message', { 
+
+                log.info('Parsed WebSocket message', {
                     type: msgData.type,
                     userId: msgData.userId || userId, // Use either the message userId or the connection userId
                     hasData: !!msgData
                 });
-                
+
                 // Handle different message types
                 switch (msgData.type) {
                     case 'start-call':
@@ -181,14 +181,14 @@ async function handleStartCall(userId: string, ws: WebSocket): Promise<void> {
             status: 'active' as const,
             updatedAt: timestamp
         };
-        
+
         log.info('Creating call session', { sessionId, userId });
-        
+
         try {
             await dbCreateOrUpdate(CallSession, sessionId, callSessionData);
             log.info('Call session created successfully', { sessionId });
         } catch (dbError) {
-            log.error('Database error creating call session', { 
+            log.error('Database error creating call session', {
                 error: dbError instanceof Error ? dbError.message : String(dbError),
                 sessionId,
                 userId
@@ -451,8 +451,12 @@ async function processAIResponse(
             chat_history: messages
         });
 
-        // Extract the response content
-        return result.content.toString();
+        // Extract the response content - handle both string and BaseMessageChunk
+        if (typeof result === 'string') {
+            return result;
+        } else {
+            return result.content.toString();
+        }
     } catch (error) {
         log.error('Error generating AI response', { error, userId });
         return "I'm sorry, I'm having trouble processing that right now. Could you try again?";

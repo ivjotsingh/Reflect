@@ -111,15 +111,13 @@ export async function generateEmotionalProfile(userId: string): Promise<Record<s
 
     let emotionalProfile: Record<string, number>;
     try {
-      // Handle the response content which might be a string or complex object
-      let content = typeof response.content === 'string'
-        ? response.content
-        : JSON.stringify(response.content);
+      // Since we're now using ChatOpenAI consistently, we can safely access content
+      const content = response.content.toString();
 
       // Clean up excessive blank lines and spaces that could interfere with JSON parsing
-      content = content.replace(/(\n\s*){3,}/g, '\n\n').trim();
+      const cleanedContent = content.replace(/(\n\s*){3,}/g, '\n\n').trim();
 
-      emotionalProfile = JSON.parse(content);
+      emotionalProfile = JSON.parse(cleanedContent);
 
       // Validate the profile has proper format
       if (Object.keys(emotionalProfile).length === 0) {
@@ -134,7 +132,7 @@ export async function generateEmotionalProfile(userId: string): Promise<Record<s
       }
 
     } catch (error) {
-      log.error('Failed to parse emotional profile response', { error, content: response.content });
+      log.error('Failed to parse emotional profile response', { error, content: response.content.toString() });
       // Return the default profile
       return { ...DEFAULT_EMOTIONAL_PROFILE };
     }
