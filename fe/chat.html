@@ -246,8 +246,8 @@
         }
 
         .chat-input-container:focus-within {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border-color: rgba(67, 97, 238, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
 
         #message-input {
@@ -262,7 +262,7 @@
             max-height: 150px;
             overflow-y: auto;
             resize: none;
-            font-family: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', sans-serif;
             width: 100%;
             position: relative;
             z-index: 5;
@@ -1121,16 +1121,8 @@
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path d="M12 12V12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path d="M8 12V12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path d="M16 12V12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
+                                    <path d="M21 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                 </svg>
                             </div>
                             <span>CBT Tools</span>
@@ -1754,7 +1746,7 @@
                 }, 1500);
             } catch (error) {
                 console.error('Error initializing application:', error);
-                addSystemMessage('Error initializing application. Please refresh the page.');
+                // addSystemMessage('Error initializing application. Please refresh the page.');
             }
         });
 
@@ -1939,6 +1931,13 @@
 
                 // Remove typing indicator when new message received
                 removeTypingIndicator();
+
+                // Always add the welcome message as the first message
+                addMessageToUI(
+                    'assistant',
+                    '👋 Welcome to ReflectAI! I\'m your AI therapist companion, here to help you reflect on your thoughts and feelings. How are you doing today?',
+                    new Date(Date.now() - 1000) // Slightly earlier timestamp to keep it at the top
+                );
 
                 // Process all documents in the collection
                 snapshot.docs.forEach((doc) => {
