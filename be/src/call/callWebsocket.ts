@@ -26,32 +26,17 @@ const activeCalls: Map<string, {
     timerId?: NodeJS.Timeout
 }> = new Map();
 
-// System prompt for the AI therapist during voice calls
-const VOICE_SYSTEM_PROMPT = `You are ReflectAI, an empathetic and qualified AI therapist with academic credentials in Clinical Psychology. You are having a voice conversation with the user.
+// System prompt for AI therapist role
+const THERAPIST_SYSTEM_PROMPT = `You are a friendly, empathetic AI therapist that helps users with emotional support.
 
-Keep your responses concise, conversational, and natural for speech - typically 1-2 short sentences per response. Be direct and focused in your therapeutic approach.
-
-THERAPEUTIC FRAMEWORKS:
-- Cognitive Behavioral Therapy Tools (CBT): Help users identify and challenge negative thought patterns
-- Dialectical Behavior Therapy (DBT): Focus on emotional regulation and mindfulness
-- Solution-Focused Brief Therapy: Emphasize progress and solutions rather than problems
-- Motivational Interviewing: Guide users toward positive behavioral change
-- Person-Centered Therapy: Show unconditional positive regard and empathic understanding
-
-RESPONSE GUIDELINES FOR VOICE:
-- Speak naturally as if in conversation
-- Use short, simple sentences that flow well in speech
-- Show empathy in your tone and word choice
-- Ask occasional questions to keep the conversation going
-- Remember this is a real-time conversation, not text chat
-
-IMPORTANT:
-- Never prescribe medication or make medical diagnoses
-- Maintain confidentiality and respect privacy
+In this conversation, focus on:
+- Providing empathetic responses to user concerns
+- Asking clarifying questions to understand their situation
+- Offering brief, practical advice when appropriate
+- Using techniques like active listening and validation
 - For users in crisis, briefly provide appropriate resources
-- Keep the conversation flowing naturally
 
-Remember you are in a voice conversation limited to 30 seconds total. Be concise but helpful.`;
+Remember you are in a voice conversation. Be concise but helpful.`;
 
 /**
  * Initialize WebSocket server for voice call functionality
@@ -207,29 +192,11 @@ async function handleStartCall(userId: string, ws: WebSocket): Promise<void> {
             transcript: []
         });
 
-        // Set 30-second timer for the call
-        const timerId = setTimeout(async () => {
-            if (activeCalls.has(userId)) {
-                await handleEndCall(userId, ws);
-                ws.send(JSON.stringify({
-                    type: 'call-timeout',
-                    message: 'Call ended due to 30-second time limit'
-                }));
-            }
-        }, 30000); // 30 seconds
-
-        // Update active call with timer ID
-        activeCalls.set(userId, {
-            ...activeCalls.get(userId)!,
-            timerId
-        });
-
-        // Send confirmation to client
+        // Send success response to client
         ws.send(JSON.stringify({
             type: 'call-started',
             sessionId,
-            message: 'Call started successfully',
-            maxDuration: 30 // 30 seconds
+            message: 'Call started successfully'
         }));
 
         // Send initial greeting from AI
@@ -341,9 +308,19 @@ async function handleUserTranscript(userId: string, text: string, ws: WebSocket)
             text: aiResponse,
             useSpeechSynthesis: true,
             voiceOptions: {
-                voice: 'en-US-Neural2-F', // Female voice
-                rate: 1.0,
-                pitch: 1.0
+                preferFemale: true,
+                preferVoices: [
+                    'en-US-Neural2-F',
+                    'en-US-Wavenet-F',
+                    'Google UK English Female',
+                    'Microsoft Zira',
+                    'Samantha',
+                    'Karen',
+                    'Moira'
+                ],
+                rate: 0.95, // Slightly slower for more natural speech
+                pitch: 1.05, // Slightly higher pitch for female voice
+                volume: 1.0
             }
         }));
 
@@ -444,7 +421,7 @@ async function processAIResponse(
 
         // Create the prompt template with system prompt and chat history
         const promptTemplate = ChatPromptTemplate.fromMessages([
-            ['system', VOICE_SYSTEM_PROMPT],
+            ['system', THERAPIST_SYSTEM_PROMPT],
             new MessagesPlaceholder('chat_history'),
         ]);
 

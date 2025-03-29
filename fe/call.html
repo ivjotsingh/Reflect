@@ -197,18 +197,23 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0) translateX(0);
                 opacity: 0.1;
             }
+
             25% {
                 transform: translateY(-20px) translateX(10px);
                 opacity: 0.3;
             }
+
             50% {
                 transform: translateY(0) translateX(20px);
                 opacity: 0.1;
             }
+
             75% {
                 transform: translateY(20px) translateX(10px);
                 opacity: 0.3;
@@ -245,6 +250,97 @@
             background: radial-gradient(ellipse at center, rgba(76, 201, 240, 0.3) 0%, rgba(76, 201, 240, 0) 70%);
             border-radius: 50%;
             z-index: 1;
+        }
+
+        /* Visual sound wave animation */
+        @keyframes sound-wave {
+            0% {
+                height: 5px;
+                opacity: 0.3;
+            }
+
+            50% {
+                height: 20px;
+                opacity: 1;
+            }
+
+            100% {
+                height: 5px;
+                opacity: 0.3;
+            }
+        }
+
+        .sound-wave-container {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100px;
+            height: 30px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sound-wave-container.active {
+            opacity: 1;
+        }
+
+        .sound-bar {
+            width: 4px;
+            height: 5px;
+            margin: 0 2px;
+            background-color: var(--primary);
+            border-radius: 2px;
+            opacity: 0.3;
+        }
+
+        .speaking .sound-wave-container {
+            opacity: 1;
+        }
+
+        .speaking .sound-bar:nth-child(1) {
+            animation: sound-wave 0.8s ease-in-out infinite 0.1s;
+        }
+
+        .speaking .sound-bar:nth-child(2) {
+            animation: sound-wave 0.9s ease-in-out infinite 0.2s;
+        }
+
+        .speaking .sound-bar:nth-child(3) {
+            animation: sound-wave 1.0s ease-in-out infinite 0.15s;
+        }
+
+        .speaking .sound-bar:nth-child(4) {
+            animation: sound-wave 0.7s ease-in-out infinite 0.25s;
+        }
+
+        .speaking .sound-bar:nth-child(5) {
+            animation: sound-wave 0.8s ease-in-out infinite 0.1s;
+        }
+
+        /* Speaking animation for virtual character */
+        @keyframes pulse-speaking {
+            0% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 0 15px rgba(67, 97, 238, 0);
+                transform: scale(1.05);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+                transform: scale(1);
+            }
+        }
+
+        #virtual-character.speaking {
+            animation: pulse-speaking 1.5s infinite;
         }
 
         /* Wave animation for speaking */
@@ -292,32 +388,15 @@
         }
 
         @keyframes wave {
-            0%, 100% {
+
+            0%,
+            100% {
                 height: 5px;
             }
+
             50% {
                 height: 20px;
             }
-        }
-
-        /* Speaking animation for virtual character */
-        @keyframes pulse-speaking {
-            0% {
-                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 0 15px rgba(67, 97, 238, 0);
-                transform: scale(1.05);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
-                transform: scale(1);
-            }
-        }
-
-        #virtual-character.speaking {
-            animation: pulse-speaking 1.5s infinite;
         }
 
         /* Call controls */
@@ -484,6 +563,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -559,6 +639,7 @@
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -585,9 +666,11 @@
             0% {
                 box-shadow: 0 0 0 0 rgba(56, 176, 0, 0.7);
             }
+
             70% {
                 box-shadow: 0 0 0 10px rgba(56, 176, 0, 0);
             }
+
             100% {
                 box-shadow: 0 0 0 0 rgba(56, 176, 0, 0);
             }
@@ -626,11 +709,18 @@
                 <div class="particle"></div>
                 <div class="particle"></div>
             </div>
-            
+
             <!-- Virtual character -->
             <div class="virtual-character-container">
                 <div class="virtual-character" id="virtual-character"></div>
                 <div class="character-platform"></div>
+                <div class="sound-wave-container" id="sound-wave-container">
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                </div>
                 <div class="wave-container" id="wave-container">
                     <div class="wave"></div>
                     <div class="wave"></div>
@@ -656,17 +746,17 @@
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
-                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                            </path>
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                                fill="white" />
                         </svg>
                     </button>
                     <button id="end-call-btn" class="call-btn end-call" disabled>
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
-                                d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91">
-                            </path>
-                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"
+                                fill="white" />
+                            <line x1="1" y1="1" x2="23" y2="23" fill="white"></line>
                         </svg>
                     </button>
                 </div>
@@ -682,7 +772,8 @@
                     <div class="transcript-avatar system">i</div>
                     <div class="transcript-content">
                         <div class="transcript-sender">System</div>
-                        <div class="transcript-bubble">Start a call to begin your conversation with the AI therapist.</div>
+                        <div class="transcript-bubble">Start a call to begin your conversation with the AI therapist.
+                        </div>
                         <div class="transcript-time" id="current-time"></div>
                     </div>
                 </div>
@@ -730,7 +821,6 @@
         let sessionId = null;
         let timerInterval = null;
         let startTime = null;
-        let maxCallDuration = 30; // 30 seconds max call duration
         let userId = null;
         let recognition = null;
 
@@ -743,6 +833,7 @@
         let callTimer = null;
         let transcriptsContainer = null;
         let waveContainer = null;
+        let soundWaveContainer = null;
 
         // Helper function to ensure consistent userId retrieval throughout the app
         function getConsistentUserId() {
@@ -805,6 +896,7 @@
                 callTimer = document.getElementById('call-timer');
                 transcriptsContainer = document.getElementById('transcripts-container');
                 waveContainer = document.getElementById('wave-container');
+                soundWaveContainer = document.getElementById('sound-wave-container');
 
                 // Add subtle movement to character
                 addIdleAnimation();
@@ -818,7 +910,8 @@
                     callTimer: !!callTimer,
                     transcriptsContainer: !!transcriptsContainer,
                     statusIndicator: !!statusIndicator,
-                    waveContainer: !!waveContainer
+                    waveContainer: !!waveContainer,
+                    soundWaveContainer: !!soundWaveContainer
                 });
 
                 if (!startCallBtn || !endCallBtn || !virtualCharacter || !callStatus || !callTimer || !transcriptsContainer) {
@@ -899,12 +992,12 @@
                         // Build the WebSocket URL with debugging
                         const configWsUrl = config.api.callWsEndpoint(userId);
                         console.log('Config WebSocket URL:', configWsUrl);
-                        
+
                         // Debug hostname and location
                         console.log('window.location.hostname:', window.location.hostname);
                         console.log('window.location.host:', window.location.host);
                         console.log('window.location.port:', window.location.port);
-                        
+
                         // Temporarily hardcode the WebSocket URL for testing
                         const wsUrl = 'ws://localhost:8080/reflect/api/call/ws?userId=' + userId;
                         console.log('Using WebSocket URL:', wsUrl);
@@ -971,17 +1064,17 @@
                 // Add idle animation to character
                 function addIdleAnimation() {
                     let idleTimer = 0;
-                    
+
                     function animateIdle() {
                         idleTimer += 0.01;
                         const yMovement = Math.sin(idleTimer) * 3;
                         const xMovement = Math.sin(idleTimer * 0.5) * 1;
-                        
+
                         virtualCharacter.style.transform = `translateY(${yMovement}px) translateX(${xMovement}px)`;
-                        
+
                         requestAnimationFrame(animateIdle);
                     }
-                    
+
                     animateIdle();
                 }
 
@@ -1007,21 +1100,13 @@
                     startTime = new Date();
                     timerInterval = setInterval(updateTimer, 1000);
 
-                    // Auto-end call after maxCallDuration
-                    setTimeout(() => {
-                        if (callActive) {
-                            endCall();
-                            showNotification('Call ended - Maximum duration reached (30 seconds)', 'warning');
-                        }
-                    }, maxCallDuration * 1000);
-
                     addTranscriptToUI('system', 'Call started. Begin speaking...');
                 }
 
                 // Handle AI response
                 function handleAIResponse(message) {
                     console.log('Received AI response message:', message);
-                    
+
                     // Add AI response to UI
                     addTranscriptToUI('assistant', message.text);
 
@@ -1060,7 +1145,7 @@
                         statusIndicator.classList.remove('active');
                         statusIndicator.classList.add('ending');
                         callStatus.textContent = 'Ending';
-                        
+
                         ws.send(JSON.stringify({
                             type: 'end-call',
                             userId
@@ -1077,6 +1162,7 @@
                     // Update UI
                     virtualCharacter.classList.remove('active');
                     waveContainer.classList.remove('active');
+                    soundWaveContainer.classList.remove('active');
                     statusIndicator.classList.remove('active', 'ending');
                     statusIndicator.classList.add('ready');
                     callStatus.textContent = 'Ready';
@@ -1121,9 +1207,9 @@
                     callTimer.textContent = `${minutes}:${seconds}`;
 
                     // Warn when approaching the end
-                    if (diffSec >= maxCallDuration - 5 && diffSec < maxCallDuration) {
+                    if (diffSec >= 55 && diffSec < 60) {
                         callTimer.style.color = 'var(--warning)';
-                    } else if (diffSec >= maxCallDuration) {
+                    } else if (diffSec >= 60) {
                         callTimer.style.color = 'var(--error)';
                     }
                 }
@@ -1139,7 +1225,7 @@
                     const timeString = `${hours}:${minutes}`;
 
                     let avatar, senderName;
-                    
+
                     if (sender === 'user') {
                         avatar = 'U';
                         senderName = 'You';
@@ -1147,9 +1233,11 @@
                         avatar = 'A';
                         senderName = 'AI Therapist';
                         // Activate speaking animation
-                        waveContainer.classList.add('active');
+                        virtualCharacter.classList.add('speaking');
+                        soundWaveContainer.classList.add('active');
                         setTimeout(() => {
-                            waveContainer.classList.remove('active');
+                            virtualCharacter.classList.remove('speaking');
+                            soundWaveContainer.classList.remove('active');
                         }, 2000);
                     } else {
                         avatar = 'i';
@@ -1173,41 +1261,35 @@
                 function speakAIResponse(text, voiceOptions) {
                     console.log('speakAIResponse called with text:', text.substring(0, 50) + '...');
                     console.log('voiceOptions:', voiceOptions);
-                    
+
                     try {
                         if ('speechSynthesis' in window) {
                             console.log('Speech synthesis is supported by browser');
-                            
+
                             // Stop any ongoing speech
                             window.speechSynthesis.cancel();
 
                             const utterance = new SpeechSynthesisUtterance(text);
                             console.log('SpeechSynthesisUtterance created');
-                            
+
+                            // Get available voices
+                            let voices = window.speechSynthesis.getVoices();
+                            console.log('Available voices:', voices.length);
+
                             // Set voice options if provided
                             if (voiceOptions) {
-                                // Set voice if specified and available
-                                if (voiceOptions.voice) {
-                                    const voices = window.speechSynthesis.getVoices();
-                                    console.log('Available voices:', voices.length);
-                                    
-                                    if (voices.length === 0) {
-                                        console.warn('No voices available yet, using default voice');
-                                    } else {
-                                        console.log('Voice names:', voices.map(v => v.name).join(', '));
-                                        const preferredVoice = voices.find(v => 
-                                            v.name === voiceOptions.voice || 
-                                            v.voiceURI.includes(voiceOptions.voice)
-                                        );
-                                        if (preferredVoice) {
-                                            console.log('Selected voice:', preferredVoice.name);
-                                            utterance.voice = preferredVoice;
-                                        } else {
-                                            console.log('Preferred voice not found, using default');
-                                        }
-                                    }
+                                // Set preferred voice if available
+                                if (voices.length === 0) {
+                                    console.warn('No voices available yet, using default voice');
+                                    // Try to load voices again after a short delay
+                                    setTimeout(() => {
+                                        voices = window.speechSynthesis.getVoices();
+                                        setVoice(utterance, voices, voiceOptions);
+                                    }, 100);
+                                } else {
+                                    setVoice(utterance, voices, voiceOptions);
                                 }
-                                
+
                                 // Set rate and pitch if specified
                                 if (voiceOptions.rate) {
                                     utterance.rate = voiceOptions.rate;
@@ -1217,38 +1299,64 @@
                                     utterance.pitch = voiceOptions.pitch;
                                     console.log('Set speech pitch:', voiceOptions.pitch);
                                 }
+                                if (voiceOptions.volume) {
+                                    utterance.volume = voiceOptions.volume;
+                                    console.log('Set speech volume:', voiceOptions.volume);
+                                }
                             }
 
                             // Optional: Show visual indication that AI is speaking
                             virtualCharacter.classList.add('speaking');
                             console.log('Added speaking class to virtual character');
-                            
+
                             // Speech events
                             utterance.onstart = () => {
                                 console.log('Speech started');
                                 statusIndicator.style.backgroundColor = 'var(--accent)';
                                 callStatus.textContent = 'AI is speaking...';
+
+                                // Pause speech recognition while AI is speaking to prevent feedback
+                                if (recognition) {
+                                    try {
+                                        recognition.stop();
+                                        console.log('Speech recognition paused while AI is speaking');
+                                    } catch (e) {
+                                        console.error('Error stopping recognition:', e);
+                                    }
+                                }
                             };
-                            
+
                             utterance.onend = () => {
                                 console.log('Speech ended');
                                 statusIndicator.style.backgroundColor = 'var(--success)';
                                 callStatus.textContent = 'Connected';
                                 virtualCharacter.classList.remove('speaking');
+
+                                // Restart speech recognition after a short delay
+                                setTimeout(() => {
+                                    if (callActive && recognition) {
+                                        try {
+                                            recognition.start();
+                                            console.log('Speech recognition restarted after AI finished speaking');
+                                        } catch (e) {
+                                            console.error('Error restarting recognition:', e);
+                                        }
+                                    }
+                                }, 10); // 10ms delay before restarting recognition
                             };
-                            
+
                             utterance.onerror = (event) => {
                                 console.error('Speech synthesis error', event);
                                 statusIndicator.style.backgroundColor = 'var(--success)';
                                 callStatus.textContent = 'Connected';
                                 virtualCharacter.classList.remove('speaking');
                             };
-                            
+
                             // Speak the text
                             console.log('Attempting to speak...');
                             window.speechSynthesis.speak(utterance);
                             console.log('Speech synthesis request submitted');
-                            
+
                             // Force Chrome to not cut off speech (known Chrome bug)
                             if (window.chrome) {
                                 console.log('Applying Chrome workaround for speech synthesis');
@@ -1271,6 +1379,90 @@
                     }
                 }
 
+                // Helper function to set the best available voice
+                function setVoice(utterance, voices, voiceOptions) {
+                    console.log('Setting voice from available options');
+
+                    let selectedVoice = null;
+                    let voiceNames = voices.map(v => v.name).join(', ');
+                    console.log('Available voice names:', voiceNames);
+
+                    // First try to find one of the preferred voices
+                    if (voiceOptions.preferVoices && Array.isArray(voiceOptions.preferVoices)) {
+                        for (const preferredVoice of voiceOptions.preferVoices) {
+                            const voice = voices.find(v =>
+                                v.name === preferredVoice ||
+                                v.voiceURI.includes(preferredVoice)
+                            );
+
+                            if (voice) {
+                                selectedVoice = voice;
+                                console.log('Found preferred voice:', voice.name);
+                                break;
+                            }
+                        }
+                    }
+
+                    // If no preferred voice found and gender preference specified, try to find by language and gender
+                    if (!selectedVoice && voiceOptions.preferFemale) {
+                        // Look for English female voices
+                        const femaleVoices = voices.filter(v =>
+                            (v.name.includes('Female') ||
+                                v.name.includes('female') ||
+                                v.name.includes('woman') ||
+                                v.name.includes('Woman') ||
+                                v.name.includes('Girl') ||
+                                /\b(Samantha|Karen|Moira|Victoria|Tessa|Serena|Zira|Monica|Fiona)\b/i.test(v.name) || // Common female voice names
+                                /\b[A-Z][a-z]+a\b/.test(v.name)) && // Names ending with 'a' are often female
+                            (v.lang.startsWith('en-'))
+                        );
+
+                        console.log('Found female voices:', femaleVoices.length);
+
+                        if (femaleVoices.length > 0) {
+                            // Prefer voices with "natural" or "premium" in the name
+                            const premiumVoice = femaleVoices.find(v =>
+                                v.name.includes('Natural') ||
+                                v.name.includes('Premium') ||
+                                v.name.includes('Neural') ||
+                                v.name.includes('Wavenet')
+                            );
+
+                            selectedVoice = premiumVoice || femaleVoices[0];
+                            console.log('Selected female voice:', selectedVoice.name);
+                        }
+                    }
+
+                    // Fallback to any English voice only if absolutely necessary
+                    if (!selectedVoice) {
+                        // As a last resort, check if there's any voice with "female" in the name
+                        const anyFemaleVoice = voices.find(v =>
+                            v.name.toLowerCase().includes('female') ||
+                            v.name.toLowerCase().includes('woman')
+                        );
+
+                        if (anyFemaleVoice) {
+                            selectedVoice = anyFemaleVoice;
+                            console.log('Last resort female voice:', selectedVoice.name);
+                        } else {
+                            // Only use a default voice if we absolutely can't find a female one
+                            const englishVoices = voices.filter(v => v.lang.startsWith('en-'));
+                            if (englishVoices.length > 0) {
+                                selectedVoice = englishVoices[0];
+                                console.log('Falling back to first English voice:', selectedVoice.name);
+                            }
+                        }
+                    }
+
+                    // Set the selected voice
+                    if (selectedVoice) {
+                        utterance.voice = selectedVoice;
+                        console.log('Set voice to:', selectedVoice.name);
+                    } else {
+                        console.log('No suitable voice found, using browser default');
+                    }
+                }
+
                 // Function to initialize voices (needed for some browsers)
                 function initializeVoices() {
                     return new Promise((resolve) => {
@@ -1290,7 +1482,7 @@
                         }
                     });
                 }
-                
+
                 // Initialize voices on page load
                 initializeVoices().then(voices => {
                     console.log(`${voices.length} speech synthesis voices available`);
@@ -1300,7 +1492,7 @@
                 async function fetchCallTranscripts(sessionId) {
                     try {
                         const response = await fetch(`${config.api.baseUrl}${config.api.endpoints.callTranscripts}/${sessionId}`);
-                        
+
                         if (!response.ok) {
                             console.error('Failed to fetch call transcripts:', response.status);
                             return;
@@ -1320,10 +1512,10 @@
                     const notification = document.getElementById('notification');
                     notification.textContent = message;
                     notification.className = `notification ${type}`;
-                    
+
                     // Show notification
                     notification.classList.remove('hidden');
-                    
+
                     // Hide after 5 seconds
                     setTimeout(() => {
                         notification.classList.add('hidden');
