@@ -24,6 +24,7 @@ export let llmOpenAiModels: Record<
     [LlmClients.REFLECT]: {
         [LlmApiMode.OPENAI_JSON]: null,
         [LlmApiMode.GPT_4O_JSON]: null,
+        [LlmApiMode.REALTIME_VOICE]: null,
     }
 };
 
@@ -67,8 +68,19 @@ async function llmInitOpenAiModels() {
             }
         });
         llmOpenAiModels[LlmClients.REFLECT][LlmApiMode.GPT_4O_JSON] = reflectGpt4oJson;
+        
+        // Real-time voice model for voice calling feature
+        const reflectRealtimeVoice = new ChatOpenAI({
+            modelName: 'gpt-4o-mini-realtime-preview-2024-12-17',
+            maxTokens: 400, // Smaller tokens for faster real-time responses
+            openAIApiKey: conf.env.credentials.openAIAPIKey,
+            temperature: 0.3, // Lower temperature for more consistent therapy responses
+            verbose: true,
+        });
+        
+        llmOpenAiModels[LlmClients.REFLECT][LlmApiMode.REALTIME_VOICE] = reflectRealtimeVoice;
 
-        log.info('OpenAI JSON models initialized successfully');
+        log.info('OpenAI models initialized successfully');
     } catch (err) {
         log.error('Failed to initialize OpenAI models', { err });
         throw err;

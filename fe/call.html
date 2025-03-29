@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReflectAI - Voice Call</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Modern color palette */
+            --primary: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #4cc9f0;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --success: #38b000;
+            --error: #d00000;
+            --warning: #ffaa00;
+            --info: #00b4d8;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            /* Border radius */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+
+            /* Typography */
+            --heading-line-height: 1.2;
+            --body-line-height: 1.6;
+            --heading-letter-spacing: -0.02em;
+            --body-letter-spacing: 0.01em;
+
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: var(--body-line-height);
+            letter-spacing: var(--body-letter-spacing);
+        }
+
+        header {
+            background-color: var(--surface);
+            box-shadow: var(--shadow-sm);
+            padding: var(--space-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 70px);
+        }
+
+        .call-container {
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            overflow: hidden;
+        }
+
+        .call-area {
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-lg);
+        }
+
+        .call-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .call-header h1 {
+            color: var(--primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .call-header p {
+            color: var(--text-secondary);
+        }
+
+        .call-visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: var(--space-xl);
+            position: relative;
+        }
+
+        .call-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .call-circle.active {
+            background-color: var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(76, 201, 240, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0);
+            }
+        }
+
+        .call-timer {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--surface);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .call-controls {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        .call-btn {
+            border: none;
+            background-color: var(--primary);
+            color: white;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .call-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .call-btn.start-call {
+            background-color: var(--success);
+        }
+
+        .call-btn.start-call:hover {
+            background-color: #2a9000;
+        }
+
+        .call-btn.end-call {
+            background-color: var(--error);
+        }
+
+        .call-btn.end-call:hover {
+            background-color: #b00000;
+        }
+
+        .call-btn:disabled {
+            background-color: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .call-btn .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .transcripts-container {
+            flex: 1;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            max-height: 400px;
+        }
+
+        .transcript {
+            display: flex;
+            gap: var(--space-md);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .transcript-user {
+            justify-content: flex-end;
+        }
+
+        .transcript-bubble {
+            background-color: var(--primary);
+            color: white;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            max-width: 70%;
+        }
+
+        .transcript-bubble.user {
+            background-color: var(--secondary);
+        }
+
+        .transcript-bubble.system {
+            background-color: var(--text-secondary);
+            align-self: center;
+            text-align: center;
+        }
+
+        .transcript-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: var(--space-xs);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--surface);
+            border-left: 4px solid var(--primary);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.error {
+            border-left-color: var(--error);
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <svg class="brand-logo" width="36" height="36" viewBox="0 0 100 100" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" fill="#4361EE" />
+                <path
+                    d="M35 65C35 57.268 41.268 51 49 51H51C58.732 51 65 57.268 65 65V65C65 66.105 64.105 67 63 67H37C35.895 67 35 66.105 35 65V65Z"
+                    fill="white" />
+                <circle cx="50" cy="37" r="12" fill="white" />
+            </svg>
+            <span>ReflectAI</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="chat.html" class="nav-link">Chat</a>
+            <a href="call.html" class="nav-link active">Voice Call</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="call-container">
+            <div class="call-area">
+                <div class="call-header">
+                    <h1>AI Voice Therapy Call</h1>
+                    <p>Have a real-time voice conversation with your AI therapist for up to 30 seconds.</p>
+                </div>
+
+                <div class="call-visualizer">
+                    <div id="call-circle" class="call-circle">
+                        <span id="call-status">Ready</span>
+                    </div>
+                    <div id="call-timer" class="call-timer">00:00</div>
+                </div>
+
+                <div class="call-controls">
+                    <button id="start-call-btn" class="call-btn start-call">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        Start Call
+                    </button>
+                    <button id="end-call-btn" class="call-btn end-call" disabled>
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                        End Call
+                    </button>
+                </div>
+
+                <div class="transcripts-container" id="transcripts-container">
+                    <div class="transcript">
+                        <div class="transcript-bubble system">
+                            Your call transcripts will appear here
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification hidden"></div>
+
+    <!-- Include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Configuration
+        const config = {
+            api: {
+                baseUrl: window.location.hostname === 'localhost' ? 'http://localhost:3000' : '',
+                callWsEndpoint: () => {
+                    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                    const host = window.location.hostname === 'localhost' ? 'localhost:3000' : window.location.host;
+                    return `${protocol}//${host}/reflect/api/call/ws`;
+                },
+                endpoints: {
+                    callHistory: '/reflect/api/call/v1/calls',
+                    callTranscripts: '/reflect/api/call/v1/calls'
+                }
+            },
+            ui: {
+                themeStorageKey: 'reflectai-theme'
+            },
+            firebase: {
+                apiKey: "AIzaSyB54DNM8j73Xz3bK4TTyVDT3qh5AmDYlLg",
+                authDomain: "reflect-ai.firebaseapp.com",
+                projectId: "reflect-ai",
+                storageBucket: "reflect-ai.appspot.com",
+                messagingSenderId: "705360251270",
+                appId: "1:705360251270:web:0f8a48bb7fe82ab5e54523"
+            }
+        };
+
+        // Helper function to ensure consistent userId retrieval throughout the app
+        function getConsistentUserId() {
+            let userId = localStorage.getItem('reflectai-user-id');
+            if (!userId) {
+                userId = 'user-' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('reflectai-user-id', userId);
+            }
+            return userId;
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Initialize Firebase
+                firebase.initializeApp(config.firebase);
+                
+                const userId = getConsistentUserId();
+                
+                // Get DOM elements
+                const startCallBtn = document.getElementById('start-call-btn');
+                const endCallBtn = document.getElementById('end-call-btn');
+                const callCircle = document.getElementById('call-circle');
+                const callStatus = document.getElementById('call-status');
+                const callTimer = document.getElementById('call-timer');
+                const transcriptsContainer = document.getElementById('transcripts-container');
+                
+                // WebSocket and call variables
+                let ws = null;
+                let callActive = false;
+                let sessionId = null;
+                let timerInterval = null;
+                let startTime = null;
+                let maxCallDuration = 30; // 30 seconds max call duration
+                
+                // Speech recognition setup
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                let recognition = null;
+                
+                if (!SpeechRecognition) {
+                    showNotification("Your browser doesn't support speech recognition. Please use Chrome or Edge.", "error");
+                    startCallBtn.disabled = true;
+                } else {
+                    recognition = new SpeechRecognition();
+                    recognition.continuous = true;
+                    recognition.interimResults = false;
+                    recognition.lang = 'en-US';
+                    
+                    recognition.onresult = (event) => {
+                        const lastResult = event.results[event.results.length - 1];
+                        const text = lastResult[0].transcript;
+                        
+                        if (ws && ws.readyState === WebSocket.OPEN && callActive) {
+                            ws.send(JSON.stringify({
+                                type: 'transcript',
+                                userId,
+                                text
+                            }));
+                            
+                            // Add user transcript to UI
+                            addTranscriptToUI('user', text);
+                        }
+                    };
+                    
+                    recognition.onerror = (event) => {
+                        console.error('Speech recognition error', event.error);
+                        if (event.error === 'no-speech') {
+                            // Ignore no-speech errors
+                            return;
+                        }
+                        showNotification(`Speech recognition error: ${event.error}`, "error");
+                    };
+                }
+                
+                // Start call
+                startCallBtn.addEventListener('click', () => {
+                    if (callActive) return;
+                    
+                    initializeCall(userId);
+                });
+                
+                // End call
+                endCallBtn.addEventListener('click', () => {
+                    if (!callActive) return;
+                    
+                    endCall();
+                });
+                
+                // Initialize call
+                async function initializeCall(userId) {
+                    try {
+                        // Clear previous transcripts
+                        transcriptsContainer.innerHTML = '';
+                        
+                        // Connect WebSocket
+                        ws = new WebSocket(config.api.callWsEndpoint());
+                        
+                        ws.onopen = () => {
+                            console.log('WebSocket connected');
+                            
+                            // Send start call request
+                            ws.send(JSON.stringify({
+                                type: 'start-call',
+                                userId
+                            }));
+                            
+                            addTranscriptToUI('system', 'Connecting to AI therapist...');
+                        };
+                        
+                        ws.onmessage = (event) => {
+                            const message = JSON.parse(event.data);
+                            
+                            switch (message.type) {
+                                case 'call-started':
+                                    handleCallStarted(message);
+                                    break;
+                                case 'ai-response':
+                                    handleAIResponse(message);
+                                    break;
+                                case 'call-ended':
+                                    handleCallEnded(message);
+                                    break;
+                                case 'error':
+                                    showNotification(message.message, 'error');
+                                    break;
+                            }
+                        };
+                        
+                        ws.onerror = (error) => {
+                            console.error('WebSocket error:', error);
+                            showNotification('WebSocket connection error', 'error');
+                            resetCallState();
+                        };
+                        
+                        ws.onclose = () => {
+                            console.log('WebSocket closed');
+                            if (callActive) {
+                                resetCallState();
+                            }
+                        };
+                    } catch (error) {
+                        console.error('Error initializing call:', error);
+                        showNotification('Failed to start call', 'error');
+                    }
+                }
+                
+                // Handle call started event
+                function handleCallStarted(message) {
+                    sessionId = message.sessionId;
+                    callActive = true;
+                    
+                    // Update UI
+                    callCircle.classList.add('active');
+                    callStatus.textContent = 'Active';
+                    startCallBtn.disabled = true;
+                    endCallBtn.disabled = false;
+                    
+                    // Start speech recognition
+                    if (recognition) {
+                        recognition.start();
+                    }
+                    
+                    // Start timer
+                    startTime = new Date();
+                    timerInterval = setInterval(updateTimer, 1000);
+                    
+                    // Auto-end call after maxCallDuration
+                    setTimeout(() => {
+                        if (callActive) {
+                            endCall();
+                            showNotification('Call ended - Maximum duration reached (30 seconds)', 'warning');
+                        }
+                    }, maxCallDuration * 1000);
+                    
+                    addTranscriptToUI('system', 'Call started. Begin speaking...');
+                }
+                
+                // Handle AI response
+                function handleAIResponse(message) {
+                    addTranscriptToUI('assistant', message.text);
+                }
+                
+                // Handle call ended event
+                function handleCallEnded(message) {
+                    addTranscriptToUI('system', `Call ended (${message.duration} seconds)`);
+                    resetCallState();
+                    
+                    // Show notification
+                    showNotification('Call ended successfully', 'success');
+                    
+                    // Fetch and display call transcript history after a short delay
+                    setTimeout(() => {
+                        fetchCallTranscripts(message.sessionId);
+                    }, 1000);
+                }
+                
+                // End call
+                function endCall() {
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({
+                            type: 'end-call',
+                            userId
+                        }));
+                    } else {
+                        resetCallState();
+                    }
+                }
+                
+                // Reset call state
+                function resetCallState() {
+                    callActive = false;
+                    
+                    // Update UI
+                    callCircle.classList.remove('active');
+                    callStatus.textContent = 'Ready';
+                    startCallBtn.disabled = false;
+                    endCallBtn.disabled = true;
+                    
+                    // Stop speech recognition
+                    if (recognition) {
+                        try {
+                            recognition.stop();
+                        } catch (e) {
+                            // Ignore errors when stopping recognition
+                        }
+                    }
+                    
+                    // Stop timer
+                    if (timerInterval) {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                    }
+                    
+                    // Close WebSocket
+                    if (ws) {
+                        ws.close();
+                        ws = null;
+                    }
+                }
+                
+                // Update timer
+                function updateTimer() {
+                    if (!startTime) return;
+                    
+                    const now = new Date();
+                    const diffSec = Math.floor((now - startTime) / 1000);
+                    const minutes = Math.floor(diffSec / 60).toString().padStart(2, '0');
+                    const seconds = (diffSec % 60).toString().padStart(2, '0');
+                    
+                    callTimer.textContent = `${minutes}:${seconds}`;
+                    
+                    // Warn when approaching the end
+                    if (diffSec >= maxCallDuration - 5 && diffSec < maxCallDuration) {
+                        callTimer.style.color = 'var(--warning)';
+                    } else if (diffSec >= maxCallDuration) {
+                        callTimer.style.color = 'var(--error)';
+                    }
+                }
+                
+                // Add transcript to UI
+                function addTranscriptToUI(role, content) {
+                    const transcript = document.createElement('div');
+                    transcript.className = `transcript ${role === 'user' ? 'transcript-user' : ''}`;
+                    
+                    const bubble = document.createElement('div');
+                    bubble.className = `transcript-bubble ${role}`;
+                    bubble.textContent = content;
+                    
+                    const time = document.createElement('div');
+                    time.className = 'transcript-time';
+                    time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    bubble.appendChild(time);
+                    transcript.appendChild(bubble);
+                    transcriptsContainer.appendChild(transcript);
+                    
+                    // Scroll to bottom
+                    transcriptsContainer.scrollTop = transcriptsContainer.scrollHeight;
+                }
+                
+                // Fetch call transcripts
+                async function fetchCallTranscripts(sessionId) {
+                    try {
+                        const response = await fetch(`${config.api.baseUrl}${config.api.endpoints.callTranscripts}/${sessionId}/transcripts`);
+                        const data = await response.json();
+                        
+                        if (data.status === 'success') {
+                            // Clear existing transcripts
+                            transcriptsContainer.innerHTML = '';
+                            
+                            // Add system message
+                            addTranscriptToUI('system', 'Call Transcript History');
+                            
+                            // Add each message
+                            data.messages.forEach(msg => {
+                                addTranscriptToUI(msg.role, msg.content);
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error fetching call transcripts:', error);
+                    }
+                }
+                
+                // Fetch call history (for future use)
+                async function fetchCallHistory(userId) {
+                    try {
+                        const response = await fetch(`${config.api.baseUrl}${config.api.endpoints.callHistory}/${userId}`);
+                        const data = await response.json();
+                        
+                        if (data.status === 'success') {
+                            console.log('Call history:', data.calls);
+                            // We could implement a call history UI element here in the future
+                        }
+                    } catch (error) {
+                        console.error('Error fetching call history:', error);
+                    }
+                }
+                
+                // Show notification
+                function showNotification(message, type = 'info') {
+                    const notification = document.getElementById('notification');
+                    notification.textContent = message;
+                    notification.className = `notification ${type}`;
+                    
+                    // Show notification
+                    notification.classList.remove('hidden');
+                    
+                    // Hide after 5 seconds
+                    setTimeout(() => {
+                        notification.classList.add('hidden');
+                    }, 5000);
+                }
+                
+                // Check browser compatibility
+                if (!('WebSocket' in window)) {
+                    showNotification("Your browser doesn't support WebSockets. Please use a modern browser.", "error");
+                    startCallBtn.disabled = true;
+                }
+                
+                // Clean up on page unload
+                window.addEventListener('beforeunload', () => {
+                    if (callActive) {
+                        endCall();
+                    }
+                });
+            } catch (error) {
+                console.error('Error initializing app:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

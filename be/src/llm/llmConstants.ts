@@ -7,6 +7,7 @@
 export enum LlmApiMode {
     OPENAI_JSON = 'openAIJson',
     GPT_4O_JSON = 'gpt4oJson',
+    REALTIME_VOICE = 'realtimeVoice',
 }
 
 export enum LlmClients {

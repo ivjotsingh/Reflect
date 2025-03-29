@@ -13,6 +13,7 @@ import { chatInit, chatRoutesInit } from './chat';
 import { llmInit } from './llm';
 import { simulatorRouter, simulatorInit } from './simulator';
 import { moodTrackerRoutesInit } from './moodTracker';
+import { callInit, callRoutesInit } from './call';
 
 async function reflectRoutesInit() {
     /*
@@ -21,6 +22,7 @@ async function reflectRoutesInit() {
     healthCheckRoutesInit('/reflect/api/healthCheck');
     chatRoutesInit('/reflect/api/chat');
     moodTrackerRoutesInit('/reflect/api/mood');
+    callRoutesInit('/reflect/api/call', srvServer);
 
     // Initialize the simulator routes
     srvServer.register(simulatorRouter, { prefix: '/reflect/api' });
@@ -40,6 +42,7 @@ export async function reflectInit() {
     dbInit(conf.env.credentials.firebase);
     await llmInit();
     chatInit();
+    callInit(); // Initialize call module
     simulatorInit(); // Initialize simulator module
     await srvInit();
 
