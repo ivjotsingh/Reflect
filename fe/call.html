@@ -13,24 +13,27 @@
             --primary-hover: #3a56d4;
             --secondary: #7209b7;
             --accent: #4cc9f0;
-            --background: #f8fafc;
-            --surface: #ffffff;
-            --text: #1e293b;
-            --text-secondary: #64748b;
+            --background: #12151e;
+            --surface: #1e2435;
+            --surface-light: #2a3349;
+            --text: #ffffff;
+            --text-secondary: #a0aec0;
             --success: #38b000;
             --error: #d00000;
             --warning: #ffaa00;
             --info: #00b4d8;
 
             /* Shadows */
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 
             /* Border radius */
             --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 12px;
+            --radius-xl: 20px;
+            --radius-full: 9999px;
 
             /* Typography */
             --heading-line-height: 1.2;
@@ -58,24 +61,28 @@
             color: var(--text);
             line-height: var(--body-line-height);
             letter-spacing: var(--body-letter-spacing);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         header {
-            background-color: var(--surface);
-            box-shadow: var(--shadow-sm);
-            padding: var(--space-md);
+            background-color: transparent;
+            padding: var(--space-md) var(--space-xl);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 10;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: var(--space-sm);
-            color: var(--primary);
+            color: var(--text);
             font-weight: 600;
             font-size: 1.25rem;
+            text-decoration: none;
         }
 
         .brand-logo {
@@ -93,10 +100,13 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s ease;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .nav-link:hover {
-            color: var(--primary);
+            color: var(--text);
         }
 
         .nav-link.active {
@@ -104,125 +114,230 @@
         }
 
         .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--space-xl);
             display: flex;
-            flex-direction: column;
-            min-height: calc(100vh - 70px);
+            height: calc(100vh - 70px);
+            position: relative;
         }
 
-        .call-container {
-            background-color: var(--surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+        /* Virtual environment styles */
+        .virtual-environment {
+            position: relative;
             flex: 1;
-            display: grid;
-            grid-template-columns: 1fr;
             overflow: hidden;
-        }
-
-        .call-area {
-            display: flex;
-            flex-direction: column;
-            padding: var(--space-lg);
-        }
-
-        .call-header {
-            text-align: center;
-            margin-bottom: var(--space-xl);
-        }
-
-        .call-header h1 {
-            color: var(--primary);
-            margin-bottom: var(--space-sm);
-        }
-
-        .call-header p {
-            color: var(--text-secondary);
-        }
-
-        .call-visualizer {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: var(--space-xl);
-            position: relative;
+            background: radial-gradient(circle at center, #1f2a4f 0%, #12151e 60%);
         }
 
-        .call-circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .call-circle.active {
-            background-color: var(--accent);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.7);
-            }
-
-            70% {
-                box-shadow: 0 0 0 15px rgba(76, 201, 240, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0);
-            }
-        }
-
-        .call-timer {
+        .environment-bg {
             position: absolute;
-            bottom: -30px;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2784&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: blur(30px) brightness(0.3);
+            transform: scale(1.2);
+        }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            top: 40%;
+            left: 70%;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(3) {
+            top: 70%;
+            left: 30%;
+            animation-delay: 4s;
+        }
+
+        .particle:nth-child(4) {
+            top: 30%;
+            left: 10%;
+            animation-delay: 6s;
+        }
+
+        .particle:nth-child(5) {
+            top: 60%;
+            left: 60%;
+            animation-delay: 8s;
+        }
+
+        .particle:nth-child(6) {
+            top: 20%;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0.1;
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(0) translateX(20px);
+                opacity: 0.1;
+            }
+            75% {
+                transform: translateY(20px) translateX(10px);
+                opacity: 0.3;
+            }
+        }
+
+        /* Character */
+        .virtual-character-container {
+            position: relative;
+            width: 450px;
+            height: 550px;
+            z-index: 2;
+            perspective: 1000px;
+        }
+
+        .virtual-character {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.imgur.com/QbKahvA.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.5s ease;
+            transform-style: preserve-3d;
+        }
+
+        .character-platform {
+            position: absolute;
+            bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: var(--surface);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-md);
-            font-weight: 600;
-            color: var(--text);
+            width: 250px;
+            height: 20px;
+            background: radial-gradient(ellipse at center, rgba(76, 201, 240, 0.3) 0%, rgba(76, 201, 240, 0) 70%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* Wave animation for speaking */
+        .wave-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            width: 300px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+            transition: transform 0.3s ease;
+        }
+
+        .wave-container.active {
+            transform: translateX(-50%) scale(1);
+        }
+
+        .wave {
+            width: 5px;
+            height: 20px;
+            background: var(--primary);
+            margin: 0 2px;
+            border-radius: var(--radius-full);
+            animation: wave 0.8s infinite ease-in-out;
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .wave:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .wave:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                height: 5px;
+            }
+            50% {
+                height: 20px;
+            }
+        }
+
+        /* Call controls */
+        .call-controls-container {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
         }
 
         .call-controls {
             display: flex;
-            justify-content: center;
-            gap: var(--space-lg);
-            margin-bottom: var(--space-xl);
+            gap: var(--space-md);
+            background: rgba(30, 36, 53, 0.7);
+            backdrop-filter: blur(10px);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-md);
         }
 
         .call-btn {
             border: none;
-            background-color: var(--primary);
-            color: white;
-            padding: var(--space-md) var(--space-lg);
-            border-radius: var(--radius-md);
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-full);
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.2s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
+            justify-content: center;
+            color: white;
         }
 
-        .call-btn:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
+        .call-btn .icon {
+            width: 24px;
+            height: 24px;
         }
 
         .call-btn.start-call {
@@ -231,6 +346,7 @@
 
         .call-btn.start-call:hover {
             background-color: #2a9000;
+            transform: scale(1.1);
         }
 
         .call-btn.end-call {
@@ -239,6 +355,7 @@
 
         .call-btn.end-call:hover {
             background-color: #b00000;
+            transform: scale(1.1);
         }
 
         .call-btn:disabled {
@@ -247,21 +364,93 @@
             transform: none;
         }
 
-        .call-btn .icon {
-            width: 20px;
-            height: 20px;
+        .call-status-container {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .call-status-display {
+            background: rgba(30, 36, 53, 0.7);
+            backdrop-filter: blur(10px);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--text-secondary);
+        }
+
+        .status-indicator.ready {
+            background-color: var(--info);
+        }
+
+        .status-indicator.active {
+            background-color: var(--success);
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-indicator.ending {
+            background-color: var(--warning);
+        }
+
+        #call-status {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        #call-timer {
+            margin-left: var(--space-md);
+            padding-left: var(--space-md);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        /* Transcript side panel */
+        .transcript-panel {
+            width: 350px;
+            background-color: var(--surface);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            z-index: 5;
+        }
+
+        .transcript-header {
+            padding: var(--space-md);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .transcript-title {
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         .transcripts-container {
             flex: 1;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--radius-md);
             padding: var(--space-md);
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: var(--space-md);
-            max-height: 400px;
         }
 
         .transcript {
@@ -275,38 +464,59 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .transcript-user {
-            justify-content: flex-end;
-        }
-
-        .transcript-bubble {
+        .transcript-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-full);
             background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 600;
             color: white;
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-md);
-            max-width: 70%;
         }
 
-        .transcript-bubble.user {
+        .transcript-avatar.user {
             background-color: var(--secondary);
         }
 
-        .transcript-bubble.system {
+        .transcript-avatar.system {
             background-color: var(--text-secondary);
-            align-self: center;
-            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .transcript-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .transcript-sender {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .transcript-bubble {
+            padding: var(--space-sm) var(--space-md);
+            background-color: var(--surface-light);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         .transcript-time {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-secondary);
+            align-self: flex-end;
             margin-top: var(--space-xs);
         }
 
@@ -329,7 +539,6 @@
                 transform: translateX(100%);
                 opacity: 0;
             }
-
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -351,12 +560,24 @@
         .hidden {
             display: none;
         }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(56, 176, 0, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(56, 176, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(56, 176, 0, 0);
+            }
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <div class="brand">
+        <a href="chat.html" class="brand">
             <svg class="brand-logo" width="36" height="36" viewBox="0 0 100 100" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <circle cx="50" cy="50" r="45" fill="#4361EE" />
@@ -366,29 +587,50 @@
                 <circle cx="50" cy="37" r="12" fill="white" />
             </svg>
             <span>ReflectAI</span>
-        </div>
+        </a>
         <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
             <a href="chat.html" class="nav-link">Chat</a>
+            <a href="simulator.html" class="nav-link">Life Simulator</a>
             <a href="call.html" class="nav-link active">Voice Call</a>
         </div>
     </header>
 
     <div class="main-container">
-        <div class="call-container">
-            <div class="call-area">
-                <div class="call-header">
-                    <h1>AI Voice Therapy Call</h1>
-                    <p>Have a real-time voice conversation with your AI therapist for up to 30 seconds.</p>
+        <div class="virtual-environment">
+            <div class="environment-bg"></div>
+            <div class="particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+            
+            <!-- Virtual character -->
+            <div class="virtual-character-container">
+                <div class="virtual-character" id="virtual-character"></div>
+                <div class="character-platform"></div>
+                <div class="wave-container" id="wave-container">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
                 </div>
+            </div>
 
-                <div class="call-visualizer">
-                    <div id="call-circle" class="call-circle">
-                        <span id="call-status">Ready</span>
-                    </div>
-                    <div id="call-timer" class="call-timer">00:00</div>
+            <!-- Call status display -->
+            <div class="call-status-container">
+                <div class="call-status-display">
+                    <div class="status-indicator ready" id="status-indicator"></div>
+                    <span id="call-status">Ready</span>
+                    <span id="call-timer">00:00</span>
                 </div>
+            </div>
 
+            <!-- Call controls -->
+            <div class="call-controls-container">
                 <div class="call-controls">
                     <button id="start-call-btn" class="call-btn start-call">
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -397,7 +639,6 @@
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                             </path>
                         </svg>
-                        Start Call
                     </button>
                     <button id="end-call-btn" class="call-btn end-call" disabled>
                         <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -407,15 +648,22 @@
                             </path>
                             <line x1="1" y1="1" x2="23" y2="23"></line>
                         </svg>
-                        End Call
                     </button>
                 </div>
+            </div>
+        </div>
 
-                <div class="transcripts-container" id="transcripts-container">
-                    <div class="transcript">
-                        <div class="transcript-bubble system">
-                            Your call transcripts will appear here
-                        </div>
+        <div class="transcript-panel">
+            <div class="transcript-header">
+                <div class="transcript-title">Call Transcript</div>
+            </div>
+            <div class="transcripts-container" id="transcripts-container">
+                <div class="transcript">
+                    <div class="transcript-avatar system">i</div>
+                    <div class="transcript-content">
+                        <div class="transcript-sender">System</div>
+                        <div class="transcript-bubble">Start a call to begin your conversation with the AI therapist.</div>
+                        <div class="transcript-time" id="current-time"></div>
                     </div>
                 </div>
             </div>
@@ -469,10 +717,12 @@
         // DOM elements
         let startCallBtn = null;
         let endCallBtn = null;
-        let callCircle = null;
+        let virtualCharacter = null;
+        let statusIndicator = null;
         let callStatus = null;
         let callTimer = null;
         let transcriptsContainer = null;
+        let waveContainer = null;
 
         // Helper function to ensure consistent userId retrieval throughout the app
         function getConsistentUserId() {
@@ -487,6 +737,15 @@
         // Initialize application
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM fully loaded');
+
+            // Set current time in the first message
+            const currentTimeElement = document.getElementById('current-time');
+            if (currentTimeElement) {
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                currentTimeElement.textContent = `${hours}:${minutes}`;
+            }
 
             // Check if browser supports WebSockets and Speech Recognition
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -504,20 +763,6 @@
             }
 
             initApp();
-
-            // Simple immediate test to ensure the click events can be triggered
-            window.setTimeout(() => {
-                console.log('Adding direct click test handler');
-                const startBtn = document.getElementById('start-call-btn');
-                if (startBtn) {
-                    startBtn.onclick = function () {
-                        console.log('Direct click handler triggered');
-                        alert('Button clicked directly!');
-                    };
-                } else {
-                    console.error('Could not find start-call-btn for test handler');
-                }
-            }, 1000);
         });
 
         // Separate initialization function for better error handling
@@ -534,28 +779,33 @@
                 // Get DOM elements
                 startCallBtn = document.getElementById('start-call-btn');
                 endCallBtn = document.getElementById('end-call-btn');
-                callCircle = document.getElementById('call-circle');
+                virtualCharacter = document.getElementById('virtual-character');
+                statusIndicator = document.getElementById('status-indicator');
                 callStatus = document.getElementById('call-status');
                 callTimer = document.getElementById('call-timer');
                 transcriptsContainer = document.getElementById('transcripts-container');
+                waveContainer = document.getElementById('wave-container');
+
+                // Add subtle movement to character
+                addIdleAnimation();
 
                 // Log DOM elements to verify they're found
                 console.log('DOM elements:', {
                     startCallBtn: !!startCallBtn,
                     endCallBtn: !!endCallBtn,
-                    callCircle: !!callCircle,
+                    virtualCharacter: !!virtualCharacter,
                     callStatus: !!callStatus,
                     callTimer: !!callTimer,
-                    transcriptsContainer: !!transcriptsContainer
+                    transcriptsContainer: !!transcriptsContainer,
+                    statusIndicator: !!statusIndicator,
+                    waveContainer: !!waveContainer
                 });
 
-                if (!startCallBtn || !endCallBtn || !callCircle || !callStatus || !callTimer || !transcriptsContainer) {
+                if (!startCallBtn || !endCallBtn || !virtualCharacter || !callStatus || !callTimer || !transcriptsContainer) {
                     console.error('Some DOM elements not found!');
                     showNotification('Application initialization error: UI elements not found', 'error');
                     return;
                 }
-
-                // WebSocket and call variables
 
                 // Speech recognition setup
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -689,13 +939,32 @@
                     }
                 }
 
+                // Add idle animation to character
+                function addIdleAnimation() {
+                    let idleTimer = 0;
+                    
+                    function animateIdle() {
+                        idleTimer += 0.01;
+                        const yMovement = Math.sin(idleTimer) * 3;
+                        const xMovement = Math.sin(idleTimer * 0.5) * 1;
+                        
+                        virtualCharacter.style.transform = `translateY(${yMovement}px) translateX(${xMovement}px)`;
+                        
+                        requestAnimationFrame(animateIdle);
+                    }
+                    
+                    animateIdle();
+                }
+
                 // Handle call started event
                 function handleCallStarted(message) {
                     sessionId = message.sessionId;
                     callActive = true;
 
                     // Update UI
-                    callCircle.classList.add('active');
+                    virtualCharacter.classList.add('active');
+                    statusIndicator.classList.remove('ready');
+                    statusIndicator.classList.add('active');
                     callStatus.textContent = 'Active';
                     startCallBtn.disabled = true;
                     endCallBtn.disabled = false;
@@ -722,7 +991,16 @@
 
                 // Handle AI response
                 function handleAIResponse(message) {
+                    // Show speaking animation
+                    waveContainer.classList.add('active');
+                    
+                    // Add transcript to UI
                     addTranscriptToUI('assistant', message.text);
+                    
+                    // Stop the speaking animation after a short delay
+                    setTimeout(() => {
+                        waveContainer.classList.remove('active');
+                    }, 2000);
                 }
 
                 // Handle call ended event
@@ -742,6 +1020,10 @@
                 // End call
                 function endCall() {
                     if (ws && ws.readyState === WebSocket.OPEN) {
+                        statusIndicator.classList.remove('active');
+                        statusIndicator.classList.add('ending');
+                        callStatus.textContent = 'Ending';
+                        
                         ws.send(JSON.stringify({
                             type: 'end-call',
                             userId
@@ -756,7 +1038,10 @@
                     callActive = false;
 
                     // Update UI
-                    callCircle.classList.remove('active');
+                    virtualCharacter.classList.remove('active');
+                    waveContainer.classList.remove('active');
+                    statusIndicator.classList.remove('active', 'ending');
+                    statusIndicator.classList.add('ready');
                     callStatus.textContent = 'Ready';
                     startCallBtn.disabled = false;
                     endCallBtn.disabled = true;
@@ -775,6 +1060,10 @@
                         clearInterval(timerInterval);
                         timerInterval = null;
                     }
+
+                    // Reset timer display
+                    callTimer.textContent = '00:00';
+                    callTimer.style.color = '';
 
                     // Close WebSocket
                     if (ws) {
@@ -803,61 +1092,62 @@
                 }
 
                 // Add transcript to UI
-                function addTranscriptToUI(role, content) {
+                function addTranscriptToUI(sender, text) {
                     const transcript = document.createElement('div');
-                    transcript.className = `transcript ${role === 'user' ? 'transcript-user' : ''}`;
+                    transcript.className = 'transcript';
 
-                    const bubble = document.createElement('div');
-                    bubble.className = `transcript-bubble ${role}`;
-                    bubble.textContent = content;
+                    const now = new Date();
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    const timeString = `${hours}:${minutes}`;
 
-                    const time = document.createElement('div');
-                    time.className = 'transcript-time';
-                    time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    let avatar, senderName;
+                    
+                    if (sender === 'user') {
+                        avatar = 'U';
+                        senderName = 'You';
+                    } else if (sender === 'assistant') {
+                        avatar = 'A';
+                        senderName = 'AI Therapist';
+                        // Activate speaking animation
+                        waveContainer.classList.add('active');
+                        setTimeout(() => {
+                            waveContainer.classList.remove('active');
+                        }, 2000);
+                    } else {
+                        avatar = 'i';
+                        senderName = 'System';
+                    }
 
-                    bubble.appendChild(time);
-                    transcript.appendChild(bubble);
+                    transcript.innerHTML = `
+                        <div class="transcript-avatar ${sender}">${avatar}</div>
+                        <div class="transcript-content">
+                            <div class="transcript-sender">${senderName}</div>
+                            <div class="transcript-bubble">${text}</div>
+                            <div class="transcript-time">${timeString}</div>
+                        </div>
+                    `;
+
                     transcriptsContainer.appendChild(transcript);
-
-                    // Scroll to bottom
                     transcriptsContainer.scrollTop = transcriptsContainer.scrollHeight;
                 }
 
                 // Fetch call transcripts
                 async function fetchCallTranscripts(sessionId) {
                     try {
-                        const response = await fetch(`${config.api.baseUrl}${config.api.endpoints.callTranscripts}/${sessionId}/transcripts`);
-                        const data = await response.json();
-
-                        if (data.status === 'success') {
-                            // Clear existing transcripts
-                            transcriptsContainer.innerHTML = '';
-
-                            // Add system message
-                            addTranscriptToUI('system', 'Call Transcript History');
-
-                            // Add each message
-                            data.messages.forEach(msg => {
-                                addTranscriptToUI(msg.role, msg.content);
-                            });
+                        const response = await fetch(`${config.api.baseUrl}${config.api.endpoints.callTranscripts}/${sessionId}`);
+                        
+                        if (!response.ok) {
+                            console.error('Failed to fetch call transcripts:', response.status);
+                            return;
                         }
+
+                        const data = await response.json();
+                        console.log('Call transcripts:', data);
+
+                        // Process transcripts if needed
                     } catch (error) {
                         console.error('Error fetching call transcripts:', error);
-                    }
-                }
-
-                // Fetch call history (for future use)
-                async function fetchCallHistory(userId) {
-                    try {
-                        const response = await fetch(`${config.api.baseUrl}${config.api.endpoints.callHistory}/${userId}`);
-                        const data = await response.json();
-
-                        if (data.status === 'success') {
-                            console.log('Call history:', data.calls);
-                            // We could implement a call history UI element here in the future
-                        }
-                    } catch (error) {
-                        console.error('Error fetching call history:', error);
                     }
                 }
 
@@ -866,30 +1156,18 @@
                     const notification = document.getElementById('notification');
                     notification.textContent = message;
                     notification.className = `notification ${type}`;
-
+                    
                     // Show notification
                     notification.classList.remove('hidden');
-
+                    
                     // Hide after 5 seconds
                     setTimeout(() => {
                         notification.classList.add('hidden');
                     }, 5000);
                 }
-
-                // Check browser compatibility
-                if (!('WebSocket' in window)) {
-                    showNotification("Your browser doesn't support WebSockets. Please use a modern browser.", "error");
-                    startCallBtn.disabled = true;
-                }
-
-                // Clean up on page unload
-                window.addEventListener('beforeunload', () => {
-                    if (callActive) {
-                        endCall();
-                    }
-                });
-            } catch (error) {
-                console.error('Error initializing app:', error);
+            } catch (initError) {
+                console.error('Application initialization error:', initError);
+                alert(`Application initialization error: ${initError.message}`);
             }
         }
     </script>
