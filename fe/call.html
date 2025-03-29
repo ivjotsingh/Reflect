@@ -66,51 +66,89 @@
         }
 
         header {
-            background-color: transparent;
-            padding: var(--space-md) var(--space-xl);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            position: relative;
-            z-index: 10;
+            padding: var(--space-sm) var(--space-md);
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
-            color: var(--text);
-            font-weight: 600;
-            font-size: 1.25rem;
-            text-decoration: none;
         }
 
         .brand-logo {
-            width: 36px;
             height: 36px;
+            margin-right: var(--space-sm);
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .brand-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text);
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nav-links {
             display: flex;
-            gap: var(--space-lg);
+            margin-left: var(--space-lg);
+            gap: var(--space-md);
         }
 
         .nav-link {
             color: var(--text-secondary);
             text-decoration: none;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-sm);
             font-weight: 500;
-            transition: color 0.2s ease;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
         }
 
         .nav-link:hover {
             color: var(--text);
+            background-color: var(--hover);
         }
 
         .nav-link.active {
             color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.05);
         }
 
         .main-container {
@@ -781,6 +819,11 @@
         .brand-name {
             font-weight: 600;
             font-size: 1.25rem;
+            color: var(--text);
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .user-area {
@@ -829,7 +872,7 @@
         </nav>
 
         <div class="user-area">
-            <div class="user-avatar">U</div>
+            <div class="user-avatar" id="header-user-avatar">U</div>
         </div>
     </header>
 
@@ -985,12 +1028,25 @@
 
         // Helper function to ensure consistent userId retrieval throughout the app
         function getConsistentUserId() {
-            let userId = localStorage.getItem('reflectai-user-id');
-            if (!userId) {
-                userId = 'user-' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('reflectai-user-id', userId);
-            }
+            let userId = localStorage.getItem('reflectai-userid');
             return userId;
+        }
+
+        // Helper function to get user initials or first character from userId
+        function getUserInitials(userId) {
+            console.log('Getting user initials for:', userId);
+            if (!userId) return 'U';
+
+            // If userId contains spaces, get initials from each word
+            if (userId.includes(' ')) {
+                return userId.split(' ')
+                    .map(word => word.charAt(0).toUpperCase())
+                    .join('')
+                    .substring(0, 2); // Limit to 2 characters
+            }
+
+            // Otherwise return first character, or first two if available
+            return userId.substring(0, Math.min(2, userId.length)).toUpperCase();
         }
 
         // Initialize application
@@ -1378,7 +1434,7 @@
                     let avatar, senderName;
 
                     if (sender === 'user') {
-                        avatar = 'U';
+                        avatar = getUserInitials(userId);
                         senderName = 'You';
                     } else if (sender === 'assistant') {
                         avatar = 'A';
@@ -1682,6 +1738,16 @@
                     setTimeout(() => {
                         notification.classList.add('hidden');
                     }, 5000);
+                }
+
+                // Set user avatar in header
+                const headerUserAvatar = document.getElementById('header-user-avatar');
+                if (headerUserAvatar) {
+                    const initials = getUserInitials(userId);
+                    console.log('Setting user avatar to:', initials);
+                    headerUserAvatar.textContent = initials;
+                } else {
+                    console.error('Header user avatar element not found');
                 }
             } catch (initError) {
                 console.error('Application initialization error:', initError);
