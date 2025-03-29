@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,30 +22,30 @@
             --gradient-end: #7209b7;
             --sidebar-bg: #1e293b;
             --chat-area-bg: #ffffff;
-            
+
             /* Shadows */
             --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            
+
             /* Border radius */
             --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 12px;
-            
+
             /* Typography */
             --heading-line-height: 1.2;
             --body-line-height: 1.6;
             --heading-letter-spacing: -0.02em;
             --body-letter-spacing: 0.01em;
-            
+
             /* Spacing */
             --space-xs: 0.25rem;
             --space-sm: 0.5rem;
             --space-md: 1rem;
             --space-lg: 1.5rem;
             --space-xl: 2.5rem;
-            
+
             /* Transitions */
             --transition-fast: 0.2s ease;
             --transition-normal: 0.3s ease;
@@ -131,7 +132,7 @@
             box-shadow: var(--shadow-md);
             transition: transform var(--transition-normal);
         }
-        
+
         .logo:hover {
             transform: scale(1.05);
         }
@@ -163,7 +164,7 @@
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
-        
+
         .theme-toggle:active {
             transform: translateY(1px);
         }
@@ -212,7 +213,7 @@
             margin-bottom: var(--space-xl);
             transition: transform var(--transition-normal), box-shadow var(--transition-normal);
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
@@ -280,7 +281,7 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
-        
+
         .btn:active {
             transform: translateY(1px);
         }
@@ -346,6 +347,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -407,6 +409,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="logo-container">
@@ -424,11 +427,13 @@
         <div class="main-content">
             <div class="welcome-text">
                 <h1>Welcome to ReflectAI</h1>
-                <p>A safe space to share your thoughts and feelings with an AI therapist designed to provide support, guidance, and a listening ear. Enter your user ID to begin your journey toward better mental well-being.</p>
+                <p>A safe space to share your thoughts and feelings with an AI therapist designed to provide support,
+                    guidance, and a listening ear. Enter your user ID to begin your journey toward better mental
+                    well-being.</p>
             </div>
 
             <div class="card">
-                <h2 class="form-title">Sign In to Your Account</h2>
+                <h2 class="form-title">Simple Access - Please Remember Your User ID</h2>
                 <form class="login-form" id="login-form">
                     <div class="form-group">
                         <label for="userId">User ID</label>
@@ -442,27 +447,38 @@
                 <div class="feature">
                     <div class="feature-icon">🔎</div>
                     <h3>Knowledge-Enhanced AI</h3>
-                    <p>Our AI therapist utilizes RAG (Retrieval-Augmented Generation) to access accurate mental health information for better guidance.</p>
+                    <p>Our AI therapist utilizes RAG (Retrieval-Augmented Generation) to access accurate mental health
+                        information for better guidance.</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🎮</div>
                     <h3>Life Simulator</h3>
-                    <p>Explore potential life paths and outcomes in a safe environment to help you make more confident decisions about your future.</p>
+                    <p>Explore potential life paths and outcomes in a safe environment to help you make more confident
+                        decisions about your future.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📞</div>
+                    <h3>Voice Calling</h3>
+                    <p>Connect with your AI therapist through voice calls for a more personal and immersive therapeutic
+                        experience that simulates traditional therapy sessions.</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🧠</div>
                     <h3>Cognitive Behavioral Therapy</h3>
-                    <p>Access tools and exercises based on proven CBT techniques to help manage negative thought patterns.</p>
+                    <p>Access tools and exercises based on proven CBT techniques to help manage negative thought
+                        patterns.</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🫁</div>
                     <h3>Breathing Exercises</h3>
-                    <p>Use guided breathing techniques to reduce anxiety and promote relaxation in moments of stress.</p>
+                    <p>Use guided breathing techniques to reduce anxiety and promote relaxation in moments of stress.
+                    </p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">📝</div>
                     <h3>Mood Tracking</h3>
-                    <p>Track your emotional state over time to identify patterns and progress in your mental health journey.</p>
+                    <p>Track your emotional state over time to identify patterns and progress in your mental health
+                        journey.</p>
                 </div>
             </div>
         </div>
@@ -472,8 +488,11 @@
         </footer>
 
         <div class="wave">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                preserveAspectRatio="none">
+                <path
+                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+                    class="shape-fill"></path>
             </svg>
         </div>
     </div>
@@ -498,17 +517,17 @@
             const themeToggle = document.getElementById('theme-toggle');
             const moonIcon = document.getElementById('moon-icon');
             const sunIcon = document.getElementById('sun-icon');
-            
+
             // Check for saved theme preference or default to light
             const savedTheme = localStorage.getItem(CONFIG.ui.themeStorageKey) || 'light';
-            
+
             // Apply the saved theme
             if (savedTheme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
                 moonIcon.style.display = 'none';
                 sunIcon.style.display = 'inline';
             }
-            
+
             // Toggle theme when button is clicked
             themeToggle.addEventListener('click', () => {
                 if (document.body.getAttribute('data-theme') === 'dark') {
@@ -523,29 +542,29 @@
                     sunIcon.style.display = 'inline';
                 }
             });
-            
+
             // Login Form Submission - Simple Implementation
             const loginForm = document.getElementById('login-form');
-            
+
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                
+
                 const userId = document.getElementById('userId').value.trim();
-                
+
                 if (!userId) {
                     alert('Please enter a valid user ID');
                     return;
                 }
-                
+
                 // Store user ID in local storage
                 localStorage.setItem(CONFIG.storage.userIdKey, userId);
-                
+
                 // Add a small visual indication that form is being submitted
                 const submitBtn = loginForm.querySelector('button[type="submit"]');
                 const originalText = submitBtn.textContent;
                 submitBtn.textContent = 'Redirecting...';
                 submitBtn.disabled = true;
-                
+
                 // Redirect to chat page
                 setTimeout(() => {
                     window.location.href = `chat.html?userId=${encodeURIComponent(userId)}`;
@@ -554,4 +573,5 @@
         });
     </script>
 </body>
+
 </html>

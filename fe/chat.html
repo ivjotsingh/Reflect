@@ -1056,7 +1056,7 @@
         </nav>
 
         <div class="user-area">
-            <div class="user-avatar">U</div>
+            <div class="user-avatar" id="header-user-avatar">U</div>
         </div>
     </header>
 
@@ -1283,9 +1283,8 @@
                                 reduction</p>
                         </div>
                         <button class="back-to-selection">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="19" y1="12" x2="5" y2="12"></line>
                                 <polyline points="12 19 5 12 12 5"></polyline>
                             </svg>
@@ -1652,6 +1651,22 @@
             return userId;
         }
 
+        // Helper function to get user initials or first character from userId
+        function getUserInitials(userId) {
+            if (!userId) return 'U';
+            
+            // If userId contains spaces, get initials from each word
+            if (userId.includes(' ')) {
+                return userId.split(' ')
+                    .map(word => word.charAt(0).toUpperCase())
+                    .join('')
+                    .substring(0, 2); // Limit to 2 characters
+            }
+            
+            // Otherwise return first character, or first two if available
+            return userId.substring(0, Math.min(2, userId.length)).toUpperCase();
+        }
+
         // Initialize application
         document.addEventListener('DOMContentLoaded', async () => {
             try {
@@ -1672,6 +1687,19 @@
                 const userId = getConsistentUserId();
 
                 console.log('Initializing application for user:', userId);
+
+                // Force update user avatar in header immediately
+                // This runs as a top priority to ensure the avatar is updated
+                setTimeout(() => {
+                    const headerUserAvatar = document.getElementById('header-user-avatar');
+                    if (headerUserAvatar) {
+                        const initials = getUserInitials(userId);
+                        console.log('Setting user avatar to:', initials);
+                        headerUserAvatar.textContent = initials;
+                    } else {
+                        console.error('Header user avatar element not found');
+                    }
+                }, 0);
 
                 // Setup chat functionality
                 setupChatFunctionality(userId);
@@ -1922,7 +1950,9 @@
 
             // Set appropriate avatar content based on role
             if (role === 'user') {
-                avatarDiv.textContent = 'U';
+                // Use user initials instead of just 'U'
+                const userId = getConsistentUserId();
+                avatarDiv.textContent = getUserInitials(userId);
             } else {
                 // AI avatar uses the logo
                 const aiSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -3251,6 +3281,14 @@
             console.log('Window fully loaded - direct call to fetch mood history');
             const userId = getConsistentUserId();
             console.log('Using userId for direct mood history fetch:', userId);
+
+            // Update user avatar in header after everything else has loaded
+            const headerUserAvatar = document.getElementById('header-user-avatar');
+            if (headerUserAvatar) {
+                const initials = getUserInitials(userId);
+                console.log('Window.onload: Setting user avatar to:', initials);
+                headerUserAvatar.textContent = initials;
+            }
 
             // Direct call to the API
             try {
