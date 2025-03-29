@@ -876,9 +876,18 @@
                         // Clear previous transcripts
                         transcriptsContainer.innerHTML = '';
 
-                        // Build the WebSocket URL
-                        const wsUrl = config.api.callWsEndpoint(userId);
-                        console.log('Creating WebSocket connection to:', wsUrl);
+                        // Build the WebSocket URL with debugging
+                        const configWsUrl = config.api.callWsEndpoint(userId);
+                        console.log('Config WebSocket URL:', configWsUrl);
+                        
+                        // Debug hostname and location
+                        console.log('window.location.hostname:', window.location.hostname);
+                        console.log('window.location.host:', window.location.host);
+                        console.log('window.location.port:', window.location.port);
+                        
+                        // Temporarily hardcode the WebSocket URL for testing
+                        const wsUrl = 'ws://localhost:8080/reflect/api/call/ws?userId=' + userId;
+                        console.log('Using WebSocket URL:', wsUrl);
 
                         // Connect WebSocket
                         try {

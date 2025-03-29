@@ -59,7 +59,7 @@ Remember you are in a voice conversation limited to 30 seconds total. Be concise
  */
 export function callWebsocketInit(fastifyServer: FastifyInstance): void {
     // Create WebSocket server
-    const wss = new WebSocketServer({ 
+    const wss = new WebSocketServer({
         server: fastifyServer.server,
         path: '/reflect/api/call/ws'
     });
@@ -80,19 +80,31 @@ export function callWebsocketInit(fastifyServer: FastifyInstance): void {
         // Handle incoming messages (audio chunks from client)
         ws.on('message', async (message: Buffer) => {
             try {
-                // Parse message from client
+                log.info('Received WebSocket message', { 
+                    messageLength: message.length,
+                    messageType: typeof message,
+                    messagePreview: message.toString().substring(0, 100)
+                });
+                
                 const msgData = JSON.parse(message.toString());
+                
+                log.info('Parsed WebSocket message', { 
+                    type: msgData.type,
+                    userId: msgData.userId || userId, // Use either the message userId or the connection userId
+                    hasData: !!msgData
+                });
                 
                 // Handle different message types
                 switch (msgData.type) {
                     case 'start-call':
+                        log.info('Processing start-call message', { userId });
                         await handleStartCall(userId, ws);
                         break;
-                    
+
                     case 'audio-chunk':
                         await handleAudioChunk(userId, msgData.audio, ws);
                         break;
-                    
+
                     case 'end-call':
                         await handleEndCall(userId, ws);
                         break;
@@ -100,19 +112,19 @@ export function callWebsocketInit(fastifyServer: FastifyInstance): void {
                     case 'transcript':
                         await handleUserTranscript(userId, msgData.text, ws);
                         break;
-                        
+
                     default:
                         log.warn('Unknown message type received', { type: msgData.type });
-                        ws.send(JSON.stringify({ 
-                            type: 'error', 
-                            message: 'Unknown message type' 
+                        ws.send(JSON.stringify({
+                            type: 'error',
+                            message: 'Unknown message type'
                         }));
                 }
             } catch (error) {
                 log.error('Error handling WebSocket message', { error, userId });
-                ws.send(JSON.stringify({ 
-                    type: 'error', 
-                    message: 'Error processing message' 
+                ws.send(JSON.stringify({
+                    type: 'error',
+                    message: 'Error processing message'
                 }));
             }
         });
@@ -120,12 +132,12 @@ export function callWebsocketInit(fastifyServer: FastifyInstance): void {
         // Handle client disconnection
         ws.on('close', async () => {
             log.info('WebSocket connection closed', { userId });
-            
+
             // Clean up any active call
             if (activeCalls.has(userId)) {
                 await handleEndCall(userId, ws);
             }
-            
+
             clients.delete(userId);
         });
 
@@ -160,16 +172,33 @@ async function handleStartCall(userId: string, ws: WebSocket): Promise<void> {
         const startTime = new Date();
         const timestamp = Timestamp.fromDate(startTime);
 
-        // Create call session in the database
-        const callSession = new CallSession({
+        // Create call session in the database - only include required fields
+        const callSessionData = {
             _id: sessionId,
             userId,
             startTime: timestamp,
             duration: 0,
-            status: 'active'
-        });
+            status: 'active' as const,
+            updatedAt: timestamp
+        };
         
-        await dbCreateOrUpdate(CallSession, sessionId, callSession);
+        log.info('Creating call session', { sessionId, userId });
+        
+        try {
+            await dbCreateOrUpdate(CallSession, sessionId, callSessionData);
+            log.info('Call session created successfully', { sessionId });
+        } catch (dbError) {
+            log.error('Database error creating call session', { 
+                error: dbError instanceof Error ? dbError.message : String(dbError),
+                sessionId,
+                userId
+            });
+            ws.send(JSON.stringify({
+                type: 'error',
+                message: 'Failed to create call session in database'
+            }));
+            return;
+        }
 
         // Store active call data
         activeCalls.set(userId, {
@@ -205,10 +234,10 @@ async function handleStartCall(userId: string, ws: WebSocket): Promise<void> {
 
         // Send initial greeting from AI
         const greeting = "Hello, I'm your ReflectAI therapist. How can I help you today?";
-        
+
         // Save AI greeting to transcript
         await saveTranscript(sessionId, userId, greeting, 'assistant');
-        
+
         // Add to in-memory transcript
         if (activeCalls.has(userId)) {
             const callData = activeCalls.get(userId)!;
@@ -218,13 +247,13 @@ async function handleStartCall(userId: string, ws: WebSocket): Promise<void> {
             });
             activeCalls.set(userId, callData);
         }
-        
+
         // Send greeting to client
         ws.send(JSON.stringify({
             type: 'ai-response',
             text: greeting
         }));
-        
+
         log.info('Call started', { userId, sessionId });
     } catch (error) {
         log.error('Error starting call', { error, userId });
@@ -245,14 +274,14 @@ async function handleAudioChunk(userId: string, audioData: string, ws: WebSocket
     // This function would process audio chunks if we were handling audio conversion ourselves
     // Since we're using the model that already supports voice-to-voice, we'll mainly
     // rely on the transcript handling function instead
-    
+
     // In a real implementation, we might:
     // 1. Buffer audio chunks
     // 2. Convert audio to text using a speech-to-text service
     // 3. Process the text with the AI model
     // 4. Convert the AI response to audio
     // 5. Send the audio back to the client
-    
+
     // For now, we'll just log the receipt of audio data
     log.debug('Received audio chunk', { userId, dataLength: audioData.length });
 }
@@ -279,39 +308,39 @@ async function handleUserTranscript(userId: string, text: string, ws: WebSocket)
 
         // Save user message to transcript
         await saveTranscript(sessionId, userId, text, 'user');
-        
+
         // Add to in-memory transcript
         transcript.push({
             role: 'user',
             content: text
         });
-        
+
         log.info('User transcript received', { userId, text });
 
         // Process with AI and get response
         const aiResponse = await processAIResponse(userId, transcript);
-        
+
         // Save AI response to transcript
         await saveTranscript(sessionId, userId, aiResponse, 'assistant');
-        
+
         // Add to in-memory transcript
         transcript.push({
             role: 'assistant',
             content: aiResponse
         });
-        
+
         // Update active call data
         activeCalls.set(userId, {
             ...callData,
             transcript
         });
-        
+
         // Send AI response to client
         ws.send(JSON.stringify({
             type: 'ai-response',
             text: aiResponse
         }));
-        
+
         log.info('AI response sent', { userId, aiResponse });
     } catch (error) {
         log.error('Error processing user transcript', { error, userId });
@@ -349,7 +378,7 @@ async function handleEndCall(userId: string, ws: WebSocket): Promise<void> {
         // Calculate call duration
         const endTime = new Date();
         const duration = Math.round((endTime.getTime() - startTime.getTime()) / 1000); // in seconds
-        
+
         // Update call session in the database
         await dbCreateOrUpdate(CallSession, sessionId, {
             _id: sessionId,
@@ -371,7 +400,7 @@ async function handleEndCall(userId: string, ws: WebSocket): Promise<void> {
             duration,
             message: 'Call ended successfully'
         }));
-        
+
         log.info('Call ended', { userId, sessionId, duration });
     } catch (error) {
         log.error('Error ending call', { error, userId });
@@ -379,7 +408,7 @@ async function handleEndCall(userId: string, ws: WebSocket): Promise<void> {
             type: 'error',
             message: 'Failed to end call properly'
         }));
-        
+
         // Remove from active calls anyway to prevent stuck calls
         activeCalls.delete(userId);
     }
@@ -392,7 +421,7 @@ async function handleEndCall(userId: string, ws: WebSocket): Promise<void> {
  * @returns AI response text
  */
 async function processAIResponse(
-    userId: string, 
+    userId: string,
     transcript: Array<{ role: 'user' | 'assistant', content: string }>
 ): Promise<string> {
     try {
@@ -413,10 +442,10 @@ async function processAIResponse(
 
         // Get the voice model
         const llm = llmGetModel(LlmClients.REFLECT, LlmApiMode.REALTIME_VOICE);
-        
+
         // Create the chain and generate response
         const chain = promptTemplate.pipe(llm);
-        
+
         // Generate response
         const result = await chain.invoke({
             chat_history: messages
@@ -446,7 +475,7 @@ async function saveTranscript(
     try {
         const transcriptId = utlNewId('trans');
         const timestamp = Timestamp.now();
-        
+
         const transcript = new CallTranscript({
             transcriptId,
             sessionId,
@@ -455,9 +484,9 @@ async function saveTranscript(
             role,
             timestamp
         });
-        
+
         await dbCreateOrUpdate(CallTranscript, transcriptId, transcript, sessionId);
-        
+
         log.debug('Transcript saved', { sessionId, role });
     } catch (error) {
         log.error('Error saving transcript', { error, sessionId, userId });
