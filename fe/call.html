@@ -300,6 +300,26 @@
             }
         }
 
+        /* Speaking animation for virtual character */
+        @keyframes pulse-speaking {
+            0% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(67, 97, 238, 0);
+                transform: scale(1.05);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+                transform: scale(1);
+            }
+        }
+
+        #virtual-character.speaking {
+            animation: pulse-speaking 1.5s infinite;
+        }
+
         /* Call controls */
         .call-controls-container {
             position: absolute;
@@ -1000,16 +1020,24 @@
 
                 // Handle AI response
                 function handleAIResponse(message) {
-                    // Show speaking animation
-                    waveContainer.classList.add('active');
+                    console.log('Received AI response message:', message);
                     
-                    // Add transcript to UI
+                    // Add AI response to UI
                     addTranscriptToUI('assistant', message.text);
-                    
-                    // Stop the speaking animation after a short delay
-                    setTimeout(() => {
-                        waveContainer.classList.remove('active');
-                    }, 2000);
+
+                    // Implement speech synthesis for voice out
+                    if (message.useSpeechSynthesis) {
+                        console.log('Speech synthesis requested with options:', message.voiceOptions);
+                        speakAIResponse(message.text, message.voiceOptions);
+                    } else {
+                        console.log('Speech synthesis not requested in message');
+                        // Try speech synthesis anyway as fallback
+                        speakAIResponse(message.text, {
+                            voice: null,
+                            rate: 1.0,
+                            pitch: 1.0
+                        });
+                    }
                 }
 
                 // Handle call ended event
@@ -1140,6 +1168,133 @@
                     transcriptsContainer.appendChild(transcript);
                     transcriptsContainer.scrollTop = transcriptsContainer.scrollHeight;
                 }
+
+                // Function to speak AI response using Web Speech API
+                function speakAIResponse(text, voiceOptions) {
+                    console.log('speakAIResponse called with text:', text.substring(0, 50) + '...');
+                    console.log('voiceOptions:', voiceOptions);
+                    
+                    try {
+                        if ('speechSynthesis' in window) {
+                            console.log('Speech synthesis is supported by browser');
+                            
+                            // Stop any ongoing speech
+                            window.speechSynthesis.cancel();
+
+                            const utterance = new SpeechSynthesisUtterance(text);
+                            console.log('SpeechSynthesisUtterance created');
+                            
+                            // Set voice options if provided
+                            if (voiceOptions) {
+                                // Set voice if specified and available
+                                if (voiceOptions.voice) {
+                                    const voices = window.speechSynthesis.getVoices();
+                                    console.log('Available voices:', voices.length);
+                                    
+                                    if (voices.length === 0) {
+                                        console.warn('No voices available yet, using default voice');
+                                    } else {
+                                        console.log('Voice names:', voices.map(v => v.name).join(', '));
+                                        const preferredVoice = voices.find(v => 
+                                            v.name === voiceOptions.voice || 
+                                            v.voiceURI.includes(voiceOptions.voice)
+                                        );
+                                        if (preferredVoice) {
+                                            console.log('Selected voice:', preferredVoice.name);
+                                            utterance.voice = preferredVoice;
+                                        } else {
+                                            console.log('Preferred voice not found, using default');
+                                        }
+                                    }
+                                }
+                                
+                                // Set rate and pitch if specified
+                                if (voiceOptions.rate) {
+                                    utterance.rate = voiceOptions.rate;
+                                    console.log('Set speech rate:', voiceOptions.rate);
+                                }
+                                if (voiceOptions.pitch) {
+                                    utterance.pitch = voiceOptions.pitch;
+                                    console.log('Set speech pitch:', voiceOptions.pitch);
+                                }
+                            }
+
+                            // Optional: Show visual indication that AI is speaking
+                            virtualCharacter.classList.add('speaking');
+                            console.log('Added speaking class to virtual character');
+                            
+                            // Speech events
+                            utterance.onstart = () => {
+                                console.log('Speech started');
+                                statusIndicator.style.backgroundColor = 'var(--accent)';
+                                callStatus.textContent = 'AI is speaking...';
+                            };
+                            
+                            utterance.onend = () => {
+                                console.log('Speech ended');
+                                statusIndicator.style.backgroundColor = 'var(--success)';
+                                callStatus.textContent = 'Connected';
+                                virtualCharacter.classList.remove('speaking');
+                            };
+                            
+                            utterance.onerror = (event) => {
+                                console.error('Speech synthesis error', event);
+                                statusIndicator.style.backgroundColor = 'var(--success)';
+                                callStatus.textContent = 'Connected';
+                                virtualCharacter.classList.remove('speaking');
+                            };
+                            
+                            // Speak the text
+                            console.log('Attempting to speak...');
+                            window.speechSynthesis.speak(utterance);
+                            console.log('Speech synthesis request submitted');
+                            
+                            // Force Chrome to not cut off speech (known Chrome bug)
+                            if (window.chrome) {
+                                console.log('Applying Chrome workaround for speech synthesis');
+                                const fixChromeSpeechBug = setInterval(() => {
+                                    if (!window.speechSynthesis.speaking) {
+                                        clearInterval(fixChromeSpeechBug);
+                                        return;
+                                    }
+                                    window.speechSynthesis.pause();
+                                    window.speechSynthesis.resume();
+                                }, 5000);
+                            }
+                        } else {
+                            console.warn('Speech synthesis not supported in this browser');
+                            showNotification('Speech synthesis not supported in your browser', 'warning');
+                        }
+                    } catch (error) {
+                        console.error('Error in speech synthesis:', error);
+                        showNotification('Error with speech synthesis: ' + error.message, 'error');
+                    }
+                }
+
+                // Function to initialize voices (needed for some browsers)
+                function initializeVoices() {
+                    return new Promise((resolve) => {
+                        if ('speechSynthesis' in window) {
+                            // Get voices (may be async in some browsers)
+                            const voices = window.speechSynthesis.getVoices();
+                            if (voices.length > 0) {
+                                resolve(voices);
+                            } else {
+                                // Wait for voices to be loaded in Chrome
+                                window.speechSynthesis.onvoiceschanged = () => {
+                                    resolve(window.speechSynthesis.getVoices());
+                                };
+                            }
+                        } else {
+                            resolve([]);
+                        }
+                    });
+                }
+                
+                // Initialize voices on page load
+                initializeVoices().then(voices => {
+                    console.log(`${voices.length} speech synthesis voices available`);
+                });
 
                 // Fetch call transcripts
                 async function fetchCallTranscripts(sessionId) {

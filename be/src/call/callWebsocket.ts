@@ -335,11 +335,19 @@ async function handleUserTranscript(userId: string, text: string, ws: WebSocket)
             transcript
         });
 
-        // Send AI response to client
+        // Send AI response to client with voice synthesis options
         ws.send(JSON.stringify({
             type: 'ai-response',
-            text: aiResponse
+            text: aiResponse,
+            useSpeechSynthesis: true,
+            voiceOptions: {
+                voice: 'en-US-Neural2-F', // Female voice
+                rate: 1.0,
+                pitch: 1.0
+            }
         }));
+
+        log.info('AI response sent', { userId, aiResponseLength: aiResponse.length, useSpeechSynthesis: true });
 
         log.info('AI response sent', { userId, aiResponse });
     } catch (error) {
