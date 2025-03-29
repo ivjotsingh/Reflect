@@ -675,26 +675,161 @@
                 box-shadow: 0 0 0 0 rgba(56, 176, 0, 0);
             }
         }
+
+        /* Agent speaking animation improvements */
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 5px 0 rgba(76, 201, 240, 0.5);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 30px 10px rgba(76, 201, 240, 0.7);
+                transform: scale(1.05);
+            }
+
+            100% {
+                box-shadow: 0 0 5px 0 rgba(76, 201, 240, 0.5);
+                transform: scale(1);
+            }
+        }
+
+        .agent-speaking {
+            animation: pulse-glow 2s ease-in-out infinite;
+            transition: all 0.5s ease;
+        }
+
+        .visualization-orb {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .audio-wave {
+            transition: height 0.1s ease-in-out;
+        }
+
+        /* New advanced animation for voice activity */
+        .wave-group {
+            display: flex;
+            align-items: center;
+            height: 50px;
+            gap: 3px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .wave-group.active {
+            opacity: 1;
+        }
+
+        .wave-bar {
+            width: 3px;
+            height: 5px;
+            background: linear-gradient(to top, var(--accent), rgba(76, 201, 240, 0.3));
+            border-radius: var(--radius-full);
+            animation: wave-animation 1.2s ease infinite;
+        }
+
+        @keyframes wave-animation {
+
+            0%,
+            100% {
+                height: 5px;
+            }
+
+            50% {
+                height: 30px;
+            }
+        }
+
+        /* Create a staggered effect for the wave bars */
+        .wave-bar:nth-child(1) {
+            animation-delay: 0.0s;
+        }
+
+        .wave-bar:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .wave-bar:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .wave-bar:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .wave-bar:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .wave-bar:nth-child(6) {
+            animation-delay: 0.3s;
+        }
+
+        .wave-bar:nth-child(7) {
+            animation-delay: 0.2s;
+        }
+
+        .wave-bar:nth-child(8) {
+            animation-delay: 0.1s;
+        }
+
+        .wave-bar:nth-child(9) {
+            animation-delay: 0.0s;
+        }
+
+        .brand-name {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <a href="chat.html" class="brand">
+        <div class="brand">
             <svg class="brand-logo" width="36" height="36" viewBox="0 0 100 100" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="45" fill="#4361EE" />
                 <path
-                    d="M35 65C35 57.268 41.268 51 49 51H51C58.732 51 65 57.268 65 65V65C65 66.105 64.105 67 63 67H37C35.895 67 35 66.105 35 65V65Z"
+                    d="M50 0C22.4 0 0 22.4 0 50C0 77.6 22.4 100 50 100C77.6 100 100 77.6 100 50C100 22.4 77.6 0 50 0ZM50 90C27.9 90 10 72.1 10 50C10 27.9 27.9 10 50 10C72.1 10 90 27.9 90 50C90 72.1 90 50 90Z"
                     fill="white" />
-                <circle cx="50" cy="37" r="12" fill="white" />
+                <path
+                    d="M65 35C65 43.3 58.3 50 50 50C41.7 50 35 43.3 35 35C35 26.7 41.7 20 50 20C58.3 20 65 26.7 65 35Z"
+                    fill="white" />
+                <path
+                    d="M35 65C35 56.7 41.7 50 50 50C58.3 50 65 56.7 65 65C65 73.3 58.3 80 50 80C41.7 80 35 73.3 35 65Z"
+                    fill="white" />
             </svg>
-            <span>ReflectAI</span>
-        </a>
-        <div class="nav-links">
+            <div class="brand-name">ReflectAI</div>
+        </div>
+
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
             <a href="chat.html" class="nav-link">Chat</a>
             <a href="simulator.html" class="nav-link">Life Simulator</a>
             <a href="call.html" class="nav-link active">Voice Call</a>
+        </nav>
+
+        <div class="user-area">
+            <div class="user-avatar">U</div>
         </div>
     </header>
 
@@ -727,6 +862,18 @@
                     <div class="wave"></div>
                     <div class="wave"></div>
                     <div class="wave"></div>
+                </div>
+                <!-- New enhanced wave animation -->
+                <div class="wave-group" id="enhanced-wave-group">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
                 </div>
             </div>
 
@@ -834,6 +981,7 @@
         let transcriptsContainer = null;
         let waveContainer = null;
         let soundWaveContainer = null;
+        let enhancedWaveGroup = null;
 
         // Helper function to ensure consistent userId retrieval throughout the app
         function getConsistentUserId() {
@@ -897,6 +1045,7 @@
                 transcriptsContainer = document.getElementById('transcripts-container');
                 waveContainer = document.getElementById('wave-container');
                 soundWaveContainer = document.getElementById('sound-wave-container');
+                enhancedWaveGroup = document.getElementById('enhanced-wave-group');
 
                 // Add subtle movement to character
                 addIdleAnimation();
@@ -911,7 +1060,8 @@
                     transcriptsContainer: !!transcriptsContainer,
                     statusIndicator: !!statusIndicator,
                     waveContainer: !!waveContainer,
-                    soundWaveContainer: !!soundWaveContainer
+                    soundWaveContainer: !!soundWaveContainer,
+                    enhancedWaveGroup: !!enhancedWaveGroup
                 });
 
                 if (!startCallBtn || !endCallBtn || !virtualCharacter || !callStatus || !callTimer || !transcriptsContainer) {
@@ -1160,9 +1310,10 @@
                     callActive = false;
 
                     // Update UI
-                    virtualCharacter.classList.remove('active');
+                    virtualCharacter.classList.remove('active', 'speaking', 'agent-speaking');
                     waveContainer.classList.remove('active');
                     soundWaveContainer.classList.remove('active');
+                    enhancedWaveGroup.classList.remove('active');
                     statusIndicator.classList.remove('active', 'ending');
                     statusIndicator.classList.add('ready');
                     callStatus.textContent = 'Ready';
@@ -1232,12 +1383,20 @@
                     } else if (sender === 'assistant') {
                         avatar = 'A';
                         senderName = 'AI Therapist';
-                        // Activate speaking animation
+                        // Activate speaking animation - old animation remains for compatibility
                         virtualCharacter.classList.add('speaking');
                         soundWaveContainer.classList.add('active');
+
+                        // Add new enhanced animations
+                        virtualCharacter.classList.add('agent-speaking');
+                        enhancedWaveGroup.classList.add('active');
+
                         setTimeout(() => {
                             virtualCharacter.classList.remove('speaking');
                             soundWaveContainer.classList.remove('active');
+
+                            // Don't remove the enhanced animations here as they'll be handled
+                            // by the speech synthesis events for a more accurate experience
                         }, 2000);
                     } else {
                         avatar = 'i';
@@ -1305,15 +1464,20 @@
                                 }
                             }
 
-                            // Optional: Show visual indication that AI is speaking
-                            virtualCharacter.classList.add('speaking');
-                            console.log('Added speaking class to virtual character');
+                            // Optional: Show visual indication that AI is speaking with enhanced animations
+                            virtualCharacter.classList.add('speaking', 'agent-speaking');
+                            enhancedWaveGroup.classList.add('active');
+                            console.log('Added speaking classes and activated wave animations');
 
                             // Speech events
                             utterance.onstart = () => {
                                 console.log('Speech started');
                                 statusIndicator.style.backgroundColor = 'var(--accent)';
                                 callStatus.textContent = 'AI is speaking...';
+
+                                // Ensure animations are active
+                                virtualCharacter.classList.add('speaking', 'agent-speaking');
+                                enhancedWaveGroup.classList.add('active');
 
                                 // Pause speech recognition while AI is speaking to prevent feedback
                                 if (recognition) {
@@ -1330,26 +1494,24 @@
                                 console.log('Speech ended');
                                 statusIndicator.style.backgroundColor = 'var(--success)';
                                 callStatus.textContent = 'Connected';
-                                virtualCharacter.classList.remove('speaking');
-
-                                // Restart speech recognition after a short delay
-                                setTimeout(() => {
-                                    if (callActive && recognition) {
-                                        try {
-                                            recognition.start();
-                                            console.log('Speech recognition restarted after AI finished speaking');
-                                        } catch (e) {
-                                            console.error('Error restarting recognition:', e);
-                                        }
+                                virtualCharacter.classList.remove('speaking', 'agent-speaking');
+                                enhancedWaveGroup.classList.remove('active');
+                                if (callActive && recognition) {
+                                    try {
+                                        recognition.start();
+                                        console.log('Speech recognition restarted after AI finished speaking');
+                                    } catch (e) {
+                                        console.error('Error restarting recognition:', e);
                                     }
-                                }, 10); // 10ms delay before restarting recognition
+                                }
                             };
 
                             utterance.onerror = (event) => {
                                 console.error('Speech synthesis error', event);
                                 statusIndicator.style.backgroundColor = 'var(--success)';
                                 callStatus.textContent = 'Connected';
-                                virtualCharacter.classList.remove('speaking');
+                                virtualCharacter.classList.remove('speaking', 'agent-speaking');
+                                enhancedWaveGroup.classList.remove('active');
                             };
 
                             // Speak the text

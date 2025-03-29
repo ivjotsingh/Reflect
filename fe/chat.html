@@ -1052,6 +1052,7 @@
             <a href="index.html" class="nav-link">Home</a>
             <a href="chat.html" class="nav-link active">Chat</a>
             <a href="simulator.html" class="nav-link">Life Simulator</a>
+            <a href="call.html" class="nav-link">Voice Call</a>
         </nav>
 
         <div class="user-area">
@@ -1661,7 +1662,6 @@
                 // DOM Elements
                 const messageForm = document.getElementById('message-form');
                 const messageInput = document.getElementById('message-input');
-                const loader = document.getElementById('loader');
                 const chatMessages = document.getElementById('chat-messages');
                 const logoutBtn = document.getElementById('logout-btn');
 
@@ -2086,7 +2086,6 @@
             function closeBreathingModal() {
                 breathingModal.style.display = 'none';
                 resetExerciseState();
-                showSelectionView();
             }
 
             // Select breathing pattern
