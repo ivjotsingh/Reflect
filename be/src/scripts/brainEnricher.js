@@ -8,13 +8,16 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { v4: uuidv4 } = require('uuid');
 
 // Create brain directory if it doesn't exist
 const BRAIN_DIR = path.join(__dirname, '../../brain');
 if (!fs.existsSync(BRAIN_DIR)) {
     fs.mkdirSync(BRAIN_DIR, { recursive: true });
 }
+
+// Track processed URLs to avoid duplicates
+const processedUrls = new Set();
+const processedTitles = new Set();
 
 // Simple logger
 const logger = {
@@ -275,22 +278,22 @@ function cleanText(text) {
         .replace(/\s+/g, ' ')
         .replace(/\n+/g, '\n')
         .trim();
-    
+
     // Remove redundant whitespace
     cleaned = cleaned.replace(/\n\s*\n/g, '\n\n');
-    
+
     // Remove long sequences of special characters
     cleaned = cleaned.replace(/([.,;:!?()[\]{}]){3,}/g, '$1');
-    
+
     // Fix paragraph breaks to improve readability
     cleaned = cleaned.replace(/\.\s+/g, '.\n\n');
     cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
-    
+
     // Try to break text into sections if no clear sections exist
     if (!cleaned.includes('\n\n')) {
         cleaned = cleaned.replace(/(?<=[.!?])\s+(?=[A-Z])/g, '\n\n');
     }
-    
+
     return cleaned;
 }
 
@@ -308,10 +311,10 @@ function extractText(html, selector) {
         // If selector doesn't work, try some common content selectors
         if (!mainContent || mainContent.trim().length < 500) {
             const commonSelectors = [
-                'article', '.post-content', '.entry-content', '.content', 
+                'article', '.post-content', '.entry-content', '.content',
                 '.post', '.article', 'main', '#content', '.main-content'
             ];
-            
+
             for (const altSelector of commonSelectors) {
                 const altContent = $(altSelector).text();
                 if (altContent && altContent.trim().length > mainContent.trim().length) {
@@ -334,13 +337,23 @@ function extractText(html, selector) {
 // Helper function: Save text to file
 function saveToFile(content, title, source) {
     try {
+        // Skip if we already processed this title
+        if (processedTitles.has(title.toLowerCase())) {
+            logger.info('Skipping duplicate title', { title });
+            return '';
+        }
+
+        // Register this title as processed
+        processedTitles.add(title.toLowerCase());
+
         const safeTitle = title
             .replace(/[^a-zA-Z0-9]/g, '_')
             .replace(/_+/g, '_')
             .toLowerCase()
             .substring(0, 50);
 
-        const fileName = `${safeTitle}_${uuidv4().substring(0, 8)}.txt`;
+        // Generate a consistent filename based on the title instead of using UUID
+        const fileName = `${safeTitle}.txt`;
         const filePath = path.join(BRAIN_DIR, fileName);
 
         const contentWithMetadata = `TITLE: ${title}\nSOURCE: ${source}\nDATE: ${new Date().toISOString()}\n\n${content}`;
@@ -358,7 +371,16 @@ function saveToFile(content, title, source) {
 // Main function: Scrape a URL
 async function scrapeUrl(url, selector, sourceName) {
     try {
+        // Skip if we've already processed this URL
+        if (processedUrls.has(url)) {
+            logger.info('Skipping already processed URL', { url });
+            return null;
+        }
+
         logger.info('Scraping URL', { url });
+
+        // Mark this URL as processed
+        processedUrls.add(url);
 
         const response = await axios.get(url, {
             headers: {
@@ -375,21 +397,21 @@ async function scrapeUrl(url, selector, sourceName) {
             $('h1').first().text(),
             $('title').text()
         ].filter(Boolean);
-        
+
         const title = titleElements[0] || `Content from ${sourceName}`;
-        
+
         // Get content from the page
         const content = extractText(response.data, selector);
 
         // Improved content validation - make sure it's relevant mental health content
         const mentalHealthKeywords = [
-            'therapy', 'mental health', 'depression', 'anxiety', 'stress', 
+            'therapy', 'mental health', 'depression', 'anxiety', 'stress',
             'psychological', 'counseling', 'treatment', 'coping', 'symptom',
             'cognitive', 'behavioral', 'emotional', 'disorder', 'psychotherapy',
             'trauma', 'therapist', 'psychiatry', 'wellbeing', 'mindfulness'
         ];
-        
-        const hasRelevantContent = mentalHealthKeywords.some(keyword => 
+
+        const hasRelevantContent = mentalHealthKeywords.some(keyword =>
             content && content.toLowerCase().includes(keyword)
         );
 
@@ -426,25 +448,25 @@ async function findArticleLinks(source, topic) {
         $('a').each((_, element) => {
             const href = $(element).attr('href');
             const linkText = $(element).text().toLowerCase();
-            
+
             // Improved filtering for actual content links
-            if (href && 
-                !href.includes('#') && 
-                !href.endsWith('.pdf') && 
+            if (href &&
+                !href.includes('#') &&
+                !href.endsWith('.pdf') &&
                 !href.endsWith('.jpg') &&
-                (linkText.includes('therapy') || 
-                 linkText.includes('mental health') || 
-                 linkText.includes('depression') || 
-                 linkText.includes('anxiety') || 
-                 linkText.includes('treatment') ||
-                 linkText.includes('coping'))) {
-                
+                (linkText.includes('therapy') ||
+                    linkText.includes('mental health') ||
+                    linkText.includes('depression') ||
+                    linkText.includes('anxiety') ||
+                    linkText.includes('treatment') ||
+                    linkText.includes('coping'))) {
+
                 const absoluteUrl = href.startsWith('http')
                     ? href
                     : `${source.baseUrl}${href.startsWith('/') ? '' : '/'}${href}`;
 
                 // Apply source-specific content filters
-                if (absoluteUrl.includes(source.baseUrl.replace(/https?:\/\//, '')) && 
+                if (absoluteUrl.includes(source.baseUrl.replace(/https?:\/\//, '')) &&
                     (!source.contentFilter || source.contentFilter(absoluteUrl))) {
                     links.push(absoluteUrl);
                 }
@@ -472,6 +494,10 @@ function cleanOutputDirectory() {
 
             logger.info('Cleaned output directory', { directory: BRAIN_DIR });
         }
+
+        // Reset our tracking of processed URLs and titles
+        processedUrls.clear();
+        processedTitles.clear();
     } catch (error) {
         logger.error('Error cleaning output directory', { error });
     }
