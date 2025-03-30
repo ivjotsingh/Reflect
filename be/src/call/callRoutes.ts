@@ -22,7 +22,7 @@ async function callGetHistoryHandler(request: FastifyRequest, reply: FastifyRepl
         if (!userId) {
             return reply.status(400).send({
                 status: 'error',
-                message: 'User ID is required'
+                message: 'User Name is required'
             });
         }
 
@@ -65,7 +65,7 @@ async function callGetTranscriptsHandler(request: FastifyRequest, reply: Fastify
         // Query call session to verify it exists
         const sessionRef = db.collection(CallSession._collection()).doc(sessionId);
         const sessionDoc = await sessionRef.get();
-        
+
         if (!sessionDoc.exists) {
             return reply.status(404).send({
                 status: 'error',
@@ -104,10 +104,10 @@ async function callGetTranscriptsHandler(request: FastifyRequest, reply: Fastify
 export function callRoutesInit(path: string, server: FastifyInstance): void {
     // Initialize WebSocket server
     callWebsocketInit(server);
-    
+
     // HTTP routes for call history and transcript retrieval
     srvAddRoute('GET', server, `${path}/v1/calls/:userId`, callGetHistoryHandler);
     srvAddRoute('GET', server, `${path}/v1/calls/:sessionId/transcripts`, callGetTranscriptsHandler);
-    
+
     log.info('Call routes initialized');
 }

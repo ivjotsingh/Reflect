@@ -103,7 +103,7 @@ export class ReflectFirestoreChatMessageHistory extends FirestoreChatMessageHist
 
 /**
  * Creates a chat memory instance for the given user and chat
- * @param userId The user ID
+ * @param userId The user name
  * @returns ReflectFirestoreChatMessageHistory instance
  */
 export async function chatMemory(userId: string) {

@@ -11,7 +11,7 @@ import { UserMood, MoodType, MoodResponse } from './moodTrackerModels';
 
 /**
  * Save a mood entry for a user
- * @param userId The user ID
+ * @param userId The user name
  * @param mood The mood value (Great, Good, Okay, Down, Stressed, Angry)
  * @returns The saved mood entry
  */
@@ -24,7 +24,7 @@ export async function saveMood(userId: string, mood: string): Promise<MoodRespon
 
     const timestamp = Timestamp.now();
     const todayDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-    
+
     // Create or update mood for the current day
     const userMood = new UserMood({
       userId,
@@ -46,7 +46,7 @@ export async function saveMood(userId: string, mood: string): Promise<MoodRespon
 
 /**
  * Get the mood history for a user (last 5 entries)
- * @param userId The user ID
+ * @param userId The user name
  * @returns Array of mood entries
  */
 export async function getMoodHistory(userId: string): Promise<MoodResponse[]> {

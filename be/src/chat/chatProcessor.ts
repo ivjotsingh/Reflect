@@ -70,7 +70,7 @@ const userContextCache: Record<string, UserContext> = {};
 
 /**
  * Gets response from AI using LangChain, system prompt, and memory
- * @param userId User ID
+ * @param userId User Name
  * @param message User's message
  * @returns AI response content
  */
@@ -206,7 +206,7 @@ export async function chatGetResponse(userId: string, message: string): Promise<
 
 /**
  * Analyzes user message and chat history to update user context
- * @param userId User ID 
+ * @param userId User Name 
  * @param message Current message
  * @param chatHistory Chat history
  */
@@ -287,7 +287,7 @@ async function updateUserContext(userId: string, message: string, chatHistory: B
 
 /**
  * Generates a personalized context prompt based on user's history
- * @param userId User ID
+ * @param userId User Name
  * @param message Current message
  * @returns Context prompt string
  */
@@ -358,7 +358,7 @@ async function generateContextPrompt(userId: string, message?: string): Promise<
 
 /**
  * Saves an AI response message to the database
- * @param userId User ID
+ * @param userId User Name
  * @param content Message content
  * @returns ChatMessage object that was saved
  */

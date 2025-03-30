@@ -51,7 +51,7 @@ export interface GetInsightsRequest {
 
 /**
  * Generate an emotional profile based on a user's chat history
- * @param userId The user ID
+ * @param userId The user name
  * @returns A record of emotions and their intensity levels
  */
 export async function generateEmotionalProfile(userId: string): Promise<Record<string, number>> {

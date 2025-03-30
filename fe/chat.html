@@ -1132,8 +1132,10 @@
                             <div class="feature-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M21 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                                    <path d="M21 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"></polyline>
                                 </svg>
                             </div>
                             <span>CBT Tools</span>
@@ -1711,7 +1713,7 @@
                 // Show loader
                 loader.classList.add('active');
 
-                // Get user ID from local storage or create a new one
+                // Get user name from local storage or create a new one
                 const userId = getConsistentUserId();
 
                 console.log('Initializing application for user:', userId);
@@ -3129,7 +3131,7 @@
 
         /**
          * Save the user's mood to the backend
-         * @param {string} userId - The user ID
+         * @param {string} userId - The user name
          * @param {string} mood - The selected mood
          */
         function saveMood(userId, mood) {
@@ -3171,7 +3173,7 @@
 
         /**
          * Fetch the user's mood history from the backend
-         * @param {string} userId - The user ID
+         * @param {string} userId - The user name
          */
         function fetchMoodHistory(userId) {
             try {

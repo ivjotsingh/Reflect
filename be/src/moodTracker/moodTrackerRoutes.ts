@@ -26,7 +26,7 @@ async function saveMoodHandler(request: FastifyRequest, reply: FastifyReply): Pr
     if (!userId || !mood) {
       return reply.status(400).send({
         status: 'error',
-        message: 'User ID and mood are required'
+        message: 'User Name and mood are required'
       });
     }
 
@@ -53,7 +53,7 @@ async function getMoodHistoryHandler(request: FastifyRequest, reply: FastifyRepl
     if (!userId) {
       return reply.status(400).send({
         status: 'error',
-        message: 'User ID is required'
+        message: 'User Name is required'
       });
     }
 

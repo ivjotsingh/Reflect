@@ -881,11 +881,28 @@
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
         }
-        
+
         .shake {
             animation: shake 0.5s ease;
         }
@@ -1008,7 +1025,7 @@
             emotionalProfile: {}
         };
 
-        // Generate a unique user ID if not already present
+        // Generate a unique user name if not already present
         let userId = localStorage.getItem('reflectai-userid');
 
         // DOM elements
@@ -1401,10 +1418,10 @@
                 }, 500);
                 return;
             }
-            
+
             // Hide error message if it was shown
             inputErrorElement.classList.add('hidden');
-            
+
             // Continue with story generation
             generateStory(false);
         });

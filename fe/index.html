@@ -428,16 +428,15 @@
             <div class="welcome-text">
                 <h1>Welcome to ReflectAI</h1>
                 <p>A safe space to share your thoughts and feelings with an AI therapist designed to provide support,
-                    guidance, and a listening ear. Enter your user ID to begin your journey toward better mental
+                    guidance, and a listening ear. Enter your user name to begin your journey toward better mental
                     well-being.</p>
             </div>
 
             <div class="card">
-                <h2 class="form-title">Simple Access - Please Remember Your User ID</h2>
+                <h2 class="form-title">Simple Access - Please Remember Your User Name</h2>
                 <form class="login-form" id="login-form">
                     <div class="form-group">
-                        <label for="userId">User ID</label>
-                        <input type="text" id="userId" name="userId" placeholder="Enter your user ID" required>
+                        <input type="text" id="userId" name="userId" placeholder="Enter your user name" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Start Therapy Session</button>
                 </form>
@@ -502,7 +501,7 @@
         const CONFIG = {
             // Storage keys
             storage: {
-                // Key to use for storing user ID in local storage
+                // Key to use for storing user name in local storage
                 userIdKey: 'reflectai-userid',
             },
             // UI settings
@@ -552,11 +551,11 @@
                 const userId = document.getElementById('userId').value.trim();
 
                 if (!userId) {
-                    alert('Please enter a valid user ID');
+                    alert('Please enter a valid user name');
                     return;
                 }
 
-                // Store user ID in local storage
+                // Store user name in local storage
                 localStorage.setItem(CONFIG.storage.userIdKey, userId);
 
                 // Add a small visual indication that form is being submitted

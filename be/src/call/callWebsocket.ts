@@ -55,7 +55,7 @@ export function callWebsocketInit(fastifyServer: FastifyInstance): void {
 
         if (!userId) {
             log.warn('WebSocket connection attempt without userId');
-            ws.close(1008, 'User ID is required');
+            ws.close(1008, 'User Name is required');
             return;
         }
 
@@ -138,7 +138,7 @@ export function callWebsocketInit(fastifyServer: FastifyInstance): void {
 
 /**
  * Handle start call request from client
- * @param userId - User ID
+ * @param userId - User Name
  * @param ws - WebSocket connection
  */
 async function handleStartCall(userId: string, ws: WebSocket): Promise<void> {
@@ -233,7 +233,7 @@ async function handleStartCall(userId: string, ws: WebSocket): Promise<void> {
 
 /**
  * Handle audio chunk from client
- * @param userId - User ID
+ * @param userId - User Name
  * @param audioData - Audio data (base64 encoded)
  * @param ws - WebSocket connection
  */
@@ -255,7 +255,7 @@ async function handleAudioChunk(userId: string, audioData: string, ws: WebSocket
 
 /**
  * Handle user transcript from client
- * @param userId - User ID
+ * @param userId - User Name
  * @param text - User's transcribed text
  * @param ws - WebSocket connection
  */
@@ -338,7 +338,7 @@ async function handleUserTranscript(userId: string, text: string, ws: WebSocket)
 
 /**
  * Handle end call request from client
- * @param userId - User ID
+ * @param userId - User Name
  * @param ws - WebSocket connection
  */
 async function handleEndCall(userId: string, ws: WebSocket): Promise<void> {
@@ -401,7 +401,7 @@ async function handleEndCall(userId: string, ws: WebSocket): Promise<void> {
 
 /**
  * Process AI response based on conversation history
- * @param userId - User ID
+ * @param userId - User Name
  * @param transcript - Conversation transcript
  * @returns AI response text
  */
@@ -451,7 +451,7 @@ async function processAIResponse(
 /**
  * Save transcript entry to the database
  * @param sessionId - Call session ID
- * @param userId - User ID
+ * @param userId - User Name
  * @param content - Message content
  * @param role - Message role (user or assistant)
  */
