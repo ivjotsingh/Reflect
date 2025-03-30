@@ -15,6 +15,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 import { utlNewId } from '../utl/utl';
 import { HumanMessage, AIMessage } from '@langchain/core/messages';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
+import { RagService } from '../rag/ragService';
 
 // WebSocket clients mapped by userId
 const clients: Map<string, WebSocket> = new Map();
@@ -400,6 +401,49 @@ async function handleEndCall(userId: string, ws: WebSocket): Promise<void> {
 }
 
 /**
+ * Generates a contextual prompt with relevant information from RAG system
+ * @param userId - User Name
+ * @param userInput - User's latest transcribed text
+ * @returns Context prompt string
+ */
+async function generateCallContextPrompt(userId: string, userInput: string): Promise<string> {
+    try {
+        // Default context prompt
+        let contextPrompt = "CONVERSATION CONTEXT:\n";
+        contextPrompt += "You are in a voice conversation. Keep responses concise, conversational, and in a natural speaking style.\n";
+
+        // If there's no user input, return basic context
+        if (!userInput) {
+            return contextPrompt;
+        }
+
+        // Use the RAG service to retrieve contextually relevant information
+        const ragService = RagService.getInstance();
+
+        try {
+            // Initialize the RAG service if not already initialized
+            await ragService.initialize();
+            const relevantContext = await ragService.generateRelevantContext(userInput);
+
+            // Add RAG context if available
+            if (relevantContext) {
+                console.log("Relevant call context:", relevantContext);
+                contextPrompt += "\nRELEVANT INFORMATION:\n" + relevantContext;
+                contextPrompt += "\n\nUse this information to inform your response, but do not explicitly mention that you're using this information unless directly relevant to the conversation.";
+            }
+        } catch (error) {
+            log.error('Error retrieving RAG context for call', { userId, error });
+            // Continue with basic context if RAG fails
+        }
+
+        return contextPrompt;
+    } catch (error) {
+        log.error('Error generating call context prompt', { userId, error });
+        return ""; // Return empty string if context generation fails
+    }
+}
+
+/**
  * Process AI response based on conversation history
  * @param userId - User Name
  * @param transcript - Conversation transcript
@@ -419,9 +463,22 @@ async function processAIResponse(
             }
         });
 
-        // Create the prompt template with system prompt and chat history
+        // Get the latest user message for context generation
+        let latestUserMessage = "";
+        for (let i = transcript.length - 1; i >= 0; i--) {
+            if (transcript[i].role === 'user') {
+                latestUserMessage = transcript[i].content;
+                break;
+            }
+        }
+
+        // Generate context prompt with RAG
+        const contextPrompt = await generateCallContextPrompt(userId, latestUserMessage);
+
+        // Create the prompt template with system prompt, context, and chat history
         const promptTemplate = ChatPromptTemplate.fromMessages([
             ['system', THERAPIST_SYSTEM_PROMPT],
+            ['system', contextPrompt],
             new MessagesPlaceholder('chat_history'),
         ]);
 

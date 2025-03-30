@@ -61,14 +61,14 @@ export class RagService {
     private async loadBrainDocuments(): Promise<void> {
         try {
             // Check if documents are already loaded by performing a sample query
-            const testResults = await this.vectorStore.similaritySearch("test", 1);
-            
+            const testResults = await this.vectorStore.similaritySearch("mind", 1);
+
             // If we already have documents indexed, skip loading
             if (testResults.length > 0) {
                 log.info('Documents already loaded in vector store, skipping load');
                 return;
             }
-            
+
             // Load all documents from the brain directory
             const documents = await DocumentLoader.loadFromDirectory(this.brainPath);
 
