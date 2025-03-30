@@ -234,6 +234,7 @@
 
         .chat-input-container {
             background-color: var(--surface);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: var(--radius-lg);
             padding: var(--space-md) var(--space-lg);
             box-shadow: var(--shadow-md);
@@ -284,47 +285,95 @@
 
         .send-button {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
             margin-left: var(--space-sm);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             transition: all 0.2s ease;
-            box-shadow: 0 2px 10px rgba(67, 97, 238, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .send-button:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            border: none;
         }
 
         .send-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
-        }
-
-        .send-button:hover:before {
-            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .send-button:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 5px rgba(67, 97, 238, 0.4);
+            transform: scale(0.95);
+        }
+
+        .send-button svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        /* Target message-bubble content specifically */
+        .message-bubble p,
+        .message-bubble div,
+        .message-bubble span,
+        .message-text,
+        .message-time {
+            color: rgba(255, 255, 255, 0.95) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Additional specific targeting for received messages */
+        .message.received .message-bubble p,
+        .message.received .message-bubble span,
+        .message.received .message-bubble div {
+            color: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        /* Fix chat input container size and styling */
+        .message-form-container {
+            width: 100%;
+            position: relative;
+            z-index: 100;
+            margin-top: 1rem;
+        }
+
+        .message-form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            position: relative;
+            z-index: 100;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--surface);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 10px 15px;
+            box-shadow: var(--shadow-md);
+            margin-top: 1rem;
+            transition: all var(--transition-normal);
+            width: 100%;
+        }
+
+        #message-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 16px;
+            padding: 10px 0;
+            min-height: 44px;
+            max-height: 150px;
+            overflow-y: auto;
+            resize: none;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            position: relative;
+            z-index: 101;
         }
 
         .chat-controls {
@@ -332,6 +381,132 @@
             align-items: center;
             margin-left: 10px;
             gap: 8px;
+        }
+
+        .chat-control-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: var(--space-sm);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        .send-button svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            margin-left: 15px;
+            z-index: 200;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+            transition: all var(--transition-normal);
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                position: relative;
+            }
+
+            .hamburger-menu {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                bottom: 0;
+                width: 280px;
+                max-width: 80%;
+                height: 100vh;
+                overflow-y: auto;
+                z-index: 100;
+                transition: transform var(--transition-normal);
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+                padding-top: 60px;
+            }
+
+            .sidebar.active {
+                transform: translateX(280px);
+            }
+
+            .chat-container {
+                width: 100%;
+                display: block;
+            }
+
+            .chat-area {
+                width: 100%;
+            }
+
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 90;
+            }
+
+            .overlay.active {
+                display: block;
+            }
+
+            header {
+                padding: 12px 16px;
+            }
+
+            .nav-links {
+                display: none;
+            }
         }
 
         /* Enhanced modal styling */
@@ -576,11 +751,10 @@
             border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: var(--radius-lg);
             padding: 10px 15px;
-            width: 100%;
-            min-height: 50px;
             box-shadow: var(--shadow-md);
-            position: relative;
-            z-index: 100;
+            margin-top: 1rem;
+            transition: all var(--transition-normal);
+            width: 100%;
         }
 
         #message-input {
@@ -590,7 +764,7 @@
             color: var(--text);
             font-size: 16px;
             padding: 10px 0;
-            min-height: 20px;
+            min-height: 44px;
             max-height: 150px;
             overflow-y: auto;
             resize: none;
@@ -628,7 +802,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 8px;
+            margin-left: var(--space-sm);
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             transition: all 0.2s ease;
@@ -647,90 +821,6 @@
         .send-button svg {
             width: 22px;
             height: 22px;
-            fill: white;
-        }
-
-        /* Target message-bubble content specifically */
-        .message-bubble p,
-        .message-bubble div,
-        .message-bubble span,
-        .message-text,
-        .message-time {
-            color: rgba(255, 255, 255, 0.95) !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Additional specific targeting for received messages */
-        .message.received .message-bubble p,
-        .message.received .message-bubble span,
-        .message.received .message-bubble div {
-            color: rgba(255, 255, 255, 0.95) !important;
-        }
-
-        /* Enhanced chat input styling */
-        .chat-input-container {
-            display: flex;
-            align-items: center;
-            background-color: var(--surface);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--radius-lg);
-            padding: 8px 16px;
-            box-shadow: var(--shadow-md);
-            margin-top: 1rem;
-            transition: all var(--transition-normal);
-            width: 100%;
-        }
-
-        .chat-input-container:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-        }
-
-        .chat-input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            font-size: 16px;
-            color: var(--text);
-            padding: 10px 0;
-            min-height: 44px;
-            outline: none;
-            resize: none;
-        }
-
-        .chat-input::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.7;
-        }
-
-        /* Improved send button styling */
-        .send-button {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 8px;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            border: none;
-            transition: all var(--transition-normal);
-        }
-
-        .send-button:hover {
-            transform: scale(1.05);
-            box-shadow: var(--shadow-md);
-        }
-
-        .send-button:active {
-            transform: scale(0.95);
-        }
-
-        .send-button svg {
-            width: 20px;
-            height: 20px;
             fill: white;
         }
 
@@ -1067,6 +1157,11 @@
 
 <body>
     <header>
+        <div class="hamburger-menu" id="hamburger-menu">
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+        </div>
         <div class="brand">
             <svg class="brand-logo" width="36" height="36" viewBox="0 0 100 100" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -1096,6 +1191,7 @@
     </header>
 
     <div class="main-container">
+        <div class="overlay" id="sidebar-overlay"></div>
         <div class="chat-container">
             <div class="sidebar">
                 <div class="sidebar-section">
@@ -3315,6 +3411,47 @@
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             return `${day}/${month}`;
         }
+    </script>
+
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function () {
+            const hamburger = document.getElementById('hamburger-menu');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            // Toggle menu function
+            function toggleMenu() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+
+                // Toggle hamburger icon animation (optional)
+                hamburger.classList.toggle('active');
+            }
+
+            // Event listeners
+            hamburger.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            // Close sidebar when clicking on a feature
+            const featureItems = document.querySelectorAll('.feature-item');
+            featureItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    if (window.innerWidth <= 768) {
+                        toggleMenu();
+                    }
+                });
+            });
+
+            // Close sidebar on window resize if width is greater than 768px
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768 && sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    hamburger.classList.remove('active');
+                }
+            });
+        });
     </script>
 
     <script>
