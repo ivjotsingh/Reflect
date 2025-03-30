@@ -40,7 +40,7 @@ async function llmInitOpenAiModels() {
             modelName: 'gpt-4o-mini-2024-07-18',
             maxTokens: 800,
             openAIApiKey: conf.env.credentials.openAIAPIKey,
-            temperature: 0.5, // Lower temperature for more consistent therapy responses
+            temperature: 0.3, // Lower temperature for more consistent therapy responses
             verbose: true,
         });
 
@@ -56,7 +56,7 @@ async function llmInitOpenAiModels() {
             modelName: 'gpt-4o',
             maxTokens: 1000,
             openAIApiKey: conf.env.credentials.openAIAPIKey,
-            temperature: 0.4, // Lower temperature for more consistent therapy responses
+            temperature: 0.3, // Lower temperature for more consistent therapy responses
             verbose: true,
             presencePenalty: 0.2, // Slight presence penalty for more diverse responses
             frequencyPenalty: 0.3, // Discourage repetitiveness in therapy
