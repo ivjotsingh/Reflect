@@ -982,7 +982,7 @@
             api: {
                 baseUrl: window.location.hostname === 'https://ivjot.testngg.net:8080',
                 callWsEndpoint: (userId) => {
-                    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'wss:';
                     const host = window.location.hostname === 'ivjot.testngg.net:8080';
                     return `${protocol}//${host}/reflect/api/call/ws?userId=${userId}`;
                 },
@@ -1204,7 +1204,7 @@
                         console.log('window.location.port:', window.location.port);
 
                         // Temporarily hardcode the WebSocket URL for testing
-                        const wsUrl = 'ws://ivjot.testngg.net:8080/reflect/api/call/ws?userId=' + userId;
+                        const wsUrl = 'wss://ivjot.testngg.net:8080/reflect/api/call/ws?userId=' + userId;
                         console.log('Using WebSocket URL:', wsUrl);
 
                         // Connect WebSocket
