@@ -517,8 +517,8 @@
             const moonIcon = document.getElementById('moon-icon');
             const sunIcon = document.getElementById('sun-icon');
 
-            // Check for saved theme preference or default to light
-            const savedTheme = localStorage.getItem(CONFIG.ui.themeStorageKey) || 'light';
+            // Check for saved theme preference or default to dark
+            const savedTheme = localStorage.getItem(CONFIG.ui.themeStorageKey) || 'dark';
 
             // Apply the saved theme
             if (savedTheme === 'dark') {
