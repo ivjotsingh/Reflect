@@ -270,7 +270,6 @@
         .virtual-character {
             width: 100%;
             height: 100%;
-            /* background-image: url('https://i.imgur.com/QbKahvA.png'); */
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -984,7 +983,7 @@
                 baseUrl: window.location.hostname === 'https://ivjot.testngg.net:8080',
                 callWsEndpoint: (userId) => {
                     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-                    const host = window.location.hostname === '13.126.236.202:8080';
+                    const host = window.location.hostname === 'ivjot.testngg.net:8080';
                     return `${protocol}//${host}/reflect/api/call/ws?userId=${userId}`;
                 },
                 endpoints: {
@@ -1205,7 +1204,7 @@
                         console.log('window.location.port:', window.location.port);
 
                         // Temporarily hardcode the WebSocket URL for testing
-                        const wsUrl = 'ws://13.126.236.202:8080/reflect/api/call/ws?userId=' + userId;
+                        const wsUrl = 'ws://ivjot.testngg.net:8080/reflect/api/call/ws?userId=' + userId;
                         console.log('Using WebSocket URL:', wsUrl);
 
                         // Connect WebSocket
