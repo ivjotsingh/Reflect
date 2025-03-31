@@ -73,7 +73,7 @@ export async function srvInit() {
     // Enable CORS
     await srvServer.register(cors, {
         origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'https://ifp-demo.abctest.in',
-            'https://reflectai.com'],
+            'https://reflectai.com', 'https://ivjotsingh.github.io'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization']
     });
