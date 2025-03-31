@@ -65,7 +65,7 @@ export const simulatorGenerateStory = async (
         const sessionId = utlNewId('story');
 
         // Use GPT-4o for generating rich, nuanced stories
-        const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.OPENAI_JSON);
+        const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.GPT_4O_JSON);
 
         // Create prompt for story generation
         const storyPrompt = [
@@ -84,6 +84,7 @@ export const simulatorGenerateStory = async (
               "content": "Story introduction text...",
               "imagePrompt": "Brief description for image generation",
               "choices": [
+                { "text": "Choice text", "emotionalResponse": "Emotion" },
                 { "text": "Choice text", "emotionalResponse": "Emotion" },
                 { "text": "Choice text", "emotionalResponse": "Emotion" },
                 { "text": "Choice text", "emotionalResponse": "Emotion" }

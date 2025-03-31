@@ -14,6 +14,7 @@ class ConfEnv {
     public credentials = {
         firebase: process.env.REFLECT_FIREBASE_CREDENTIALS || '',
         openAIAPIKey: process.env.REFLECT_OPENAI_API_KEY || 'sk-xxxxxx',
+        googleAIAPIKey: process.env.REFLECT_GOOGLEAI_API_KEY || 'xxxxxx',
     };
     public enableConsoleLogs = process.env.REFLECT_ENABLE_CONSOLE_LOGS !== 'false';
     public enableDebugLogs = process.env.REFLECT_ENABLE_DEBUG_LOGS === 'true';

@@ -43,6 +43,7 @@ Guidelines:
 - For users in crisis, briefly provide appropriate resources
 
 IMPORTANT RESPONSE FORMAT:
+\n\nIMPORTANT: Your response must be in valid JSON format without any additional text. The JSON should be directly parseable by JavaScript's JSON.parse() function."
 Your responses MUST be structured as valid JSON with a single field named "message" that contains your complete therapeutic response as plain text.
 
 DO NOT include any nested objects or additional fields in your response. Your entire therapeutic message should be a simple string in the message field.
@@ -99,8 +100,8 @@ export async function chatGetResponse(userId: string, message: string): Promise<
         // Update context based on current message
         await updateUserContext(userId, message, chatHistory);
 
-        // Always use the standard model (OPENAI_JSON)
-        const llmMode = LlmApiMode.OPENAI_JSON;
+        // Get the LLM model and create the chain
+        const llmMode = LlmApiMode.GPT_4O_MINI_JSON;
 
         // Create a context prompt with user-specific information
         const contextPrompt = await generateContextPrompt(userId, message);

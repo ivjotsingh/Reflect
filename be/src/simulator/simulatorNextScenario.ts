@@ -98,7 +98,7 @@ export const simulatorGenerateNextScenario = async (
         }
 
         // Otherwise, generate the next scenario
-        const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.OPENAI_JSON);
+        const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.GPT_4O_JSON);
 
         const messages = [
             {
@@ -115,6 +115,7 @@ export const simulatorGenerateNextScenario = async (
             "imagePrompt": "Brief description for image generation",
             "isEnding": false,
             "choices": [
+              { "text": "Choice text", "emotionalResponse": "Emotion" },
               { "text": "Choice text", "emotionalResponse": "Emotion" },
               { "text": "Choice text", "emotionalResponse": "Emotion" },
               { "text": "Choice text", "emotionalResponse": "Emotion" }

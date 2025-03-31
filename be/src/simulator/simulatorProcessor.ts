@@ -72,7 +72,7 @@ export async function generateEmotionalProfile(userId: string): Promise<Record<s
     }));
 
     // Get the LLM model
-    const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.OPENAI_JSON);
+    const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.GPT_4O_MINI_JSON);
 
     // Create prompt for emotional profile analysis
     const analysisPrompt = [

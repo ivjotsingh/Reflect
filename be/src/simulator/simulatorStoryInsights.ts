@@ -92,7 +92,7 @@ export const simulatorGenerateStoryInsights = async (
             .join(', ');
 
         // Generate insights
-        const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.OPENAI_JSON);
+        const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.GPT_4O_MINI_JSON);
 
         const messages = [
             {
