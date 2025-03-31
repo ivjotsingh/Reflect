@@ -6,6 +6,7 @@
 
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import cors from '@fastify/cors';
+import fs from 'fs';
 import { conf } from '../conf';
 import { log } from '../log/log';
 import { srvLogInfoWithRequestId } from './srvLog';
@@ -31,7 +32,11 @@ declare module 'fastify' {
 export const srvServer: FastifyInstance = fastify({
     logger: false,
     keepAliveTimeout: 60000,
-    bodyLimit: 10 * 1024 * 1024 // 10MB
+    bodyLimit: 10 * 1024 * 1024, // 10MB
+    https: {
+        key: fs.readFileSync('/Users/bluestacks/Desktop/ReflectAI/be/certs/server.key'),
+        cert: fs.readFileSync('/Users/bluestacks/Desktop/ReflectAI/be/certs/server.crt')
+    }
 });
 let server: any;
 
