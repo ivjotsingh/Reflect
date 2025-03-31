@@ -98,7 +98,7 @@ export const simulatorGenerateNextScenario = async (
         }
 
         // Otherwise, generate the next scenario
-        const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.GPT_4O_JSON);
+        const model = llmGetModel(LlmClients.REFLECT, LlmApiMode.GPT_4O_MINI_JSON);
 
         const messages = [
             {
